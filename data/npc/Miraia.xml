@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Miraia" script="data/npc/scripts/default.lua" walkinterval="2000" floorchange="0">
+    <health now="100" max="100"/>
+    <look type="150" head="95" body="0" legs="7" feet="115" addons="2"/>
+    <parameters>
+        <parameter key="message_greet" value="Greetings, |PLAYERNAME|. I'm Miraia the Food Shopkeeper. May I offer you in some Food?"/>
+        <parameter key="message_farewell" value="Good Bye, |PLAYERNAME|"/>
+        <parameter key="module_keywords" value="1" />
+        <parameter key="keywords" value="job;" />
+        <parameter key="keyword_reply1" value="Iam the owner of the tavern Enlightened Oasis." />
+
+        <parameter key="module_shop" value="1"/>
+        <parameter key="shop_buyable" value="bread,2689,4;cheese,2696,6;ham,2671,8;meat,2666,5;scarab cheese,8112,100;vial of lemonade,7477,3;" />
+        <parameter key="shop_sellable" value=";" />
+    </parameters>
+</npc>
+
+
+
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Miles, The Guard" script="default.lua" walkinterval="2000" floorchange="0">
+    <health now="100" max="100"/>
+    <look type="131" head="19" body="0" legs="38" feet="19" addons="3"/>
+    <parameters>
+        <parameter key="message_greet" value="LONG LIVE THE KING!"/>
+        <parameter key="message_farewell" value="LONG LIVE THE KING!"/>
+        <parameter key="module_keywords" value="1" />
+        <parameter key="keywords" value="job;trouble;authorities;also for the gods;trouble will arise in near future;" />
+        <parameter key="keyword_reply1" value="It's my duty to protect the city." />
+	<parameter key="keyword_reply2" value="I'm fine. There's no trouble at all." />
+	<paramater key="keyword_reply3" value="Well, of course. we live in safety and peace." />
+	<parameter key="keyword_reply4" value="I think the gods are looking after us and their hands shield us from evil." />
+	<parameter key="keyword_reply5" value="I think the gods and the government do their best to keep away harm from the citizens." />
+
+        
+    </parameters>
+</npc>

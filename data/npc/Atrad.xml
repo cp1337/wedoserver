@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Atrad" script="default.lua" walkinterval="2000" floorchange="0">
+<health now="100" max="100"/>
+<look type="152" head="114" body="114" legs="114" feet="114" addons="3"/>
+	<parameters>
+		<parameter key="message_greet" value="Hello |PLAYERNAME|."/>
+        <parameter key="message_farewell" value="Good bye."/>
+		<parameter key="message_walkaway" value="Farewell then.." />
+		
+		<parameter key="module_shop" value="1"/>
+        <parameter key="shop_buyable" value="" />
+        <parameter key="shop_sellable" value="assassin star,7368,100" />
+    </parameters>
+</npc>

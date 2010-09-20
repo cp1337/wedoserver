@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Habdel" script="data/npc/scripts/default.lua" walkinterval="4000" floorchange="0">
+    <health now="100" max="100"/>
+    <look type="146" head="96" body="1" legs="0" feet="97" addons="1"/>
+    <parameters>
+        <parameter key="message_greet" value="Greetings, |PLAYERNAME|. I'm Habdel the Weapon Shopkeeper. May I offer you in some Weapons?"/>
+        <parameter key="message_farewell" value="Good Bye, |PLAYERNAME|"/>
+        <parameter key="module_keywords" value="1" />
+        <parameter key="keywords" value="job;" />
+        <parameter key="keyword_reply1" value="Iam a Weapon Shopkeeper in Darashia." />
+
+        <parameter key="module_shop" value="1"/>
+        <parameter key="shop_buyable" value="battle axe,2378,235;battle hammer,2417,350;club,2382,5;mace,2398,90;morning star,2394,430;dagger,2379,5;rapier,2384,15;sabre,2385,25;sword,2376,85;two handed sword,2377,950;spear,2389,10;throwing star,2399,42;" />
+        <parameter key="shop_sellable" value="battle axe,2378,75;double axe,2387,260;halberd,2381,310;club,2382,1;battle hammer,2417,50;mace,2398,23;morning star,2394,100;war hammer,2391,470;dagger,2379,1;rapier,2384,3;sabre,2385,5;sword,2376,15;carlin sword,2395,118;two handed sword,2377,190;spear,2389,1;" />
+    </parameters>
+</npc>
+
+
+
+

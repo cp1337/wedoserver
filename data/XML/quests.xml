@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quests>
+<quest name="Anihileator!" startstorageid="5010" startstoragevalue="1"></quest>
+<quest name="Demon Oak!" startstorageid="12900" startstoragevalue="1"></quest>
+<quest name="Pits of Infernum!" startstorageid="8742" startstoragevalue="1"></quest>
+<quest name="Inquisition Quest!" startstorageid="8560" startstoragevalue="1"></quest>
+<quest name="Arena Quest!" startstorageid="42361" startstoragevalue="1"></quest>
+</quests>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<npc name="Hairycles" script="shaman.lua" access="5" lookdir="2" walkinterval="2000">
+  <mana now="800" max="800" />
+  <health now="200" max="200" />
+  <look type="117" head="0" body="0" legs="0" feet="0" addons="3" />
+  <parameters>
+    <parameter key="message_greet" value="Greetings. I have more powers then all the apes in this world." />
+        <parameter key="message_farewell" value="Good bye."/>
+		<parameter key="message_walkaway" value="Farewell then.." />
+    </parameters>
+</npc>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<globalevents>
+	<!-- XTibia.com -->
+	<globalevent name="save" interval="1800" event="script" value="save.lua"/>
+	<globalevent name="clean" interval="7200" event="script" value="clean.lua"/>
+	<globalevent name="playersrecord" type="record" event="script" value="record.lua"/>
+	<globalevent name="raid" interval="108000" event="script" value="raid.lua"/>
+	<globalevent name="serverstart" type="start" event="script" value="start.lua"/>
+</globalevents>

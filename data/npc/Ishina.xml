@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Ishina" script="data/npc/scripts/default.lua" walkinterval="4000" floorchange="0">
+    <health now="100" max="100"/>
+    <look type="150" head="95" body="8" legs="87" feet="95" addons="0"/>
+    <parameters>
+        <parameter key="message_greet" value="Greetings, |PLAYERNAME|. I'm Ishina the Jewelry Shopkeeper. May I offer you in some Jewelry?"/>
+        <parameter key="message_farewell" value="Good Bye, |PLAYERNAME|"/>
+        <parameter key="module_keywords" value="1" />
+        <parameter key="keywords" value="job;" />
+        <parameter key="keyword_reply1" value="Iam a Jewelry Shopkeeper in Darashia." />
+
+        <parameter key="module_shop" value="1"/>
+        <parameter key="shop_buyable" value="small amethyst,2150,400;small diamond,2145,600;small emerald,2149,500;small ruby,2147,500;small sapphire,2146,500;bronz goblet,5807,2000;golden goblet,5805,5000;golden amulet,2130,6600;ruby necklace,2133,3560;wedding ring,2121,990;black pearl,2144,560;white pearl,2143,320;" />
+        <parameter key="shop_sellable" value="gold ingot,9971,5000;wedding ring,2121,100;small amethyst,2150,200;small diamond,2145,300;small emerald,2149,250;small ruby,2147,250;small sapphire,2146,250;black pearl,2144,280;white pearl,2143,160;" />
+    </parameters>
+</npc>
+
+
+
+

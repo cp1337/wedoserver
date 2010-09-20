@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Iyad" script="default.lua" walkinterval="2000" floorchange="0">
+<health now="100" max="100"/>
+<look type="130" head="76" body="5" legs="17" feet="76" addons="0"/>
+ <parameters>
+        <parameter key="module_travel" value="1"/>
+		<parameter key="message_greet" value="Daraman's blessings, traveller |PLAYERNAME|."/>
+        <parameter key="travel_destinations" value="edron,33192,31783,3,0;femor hills,32535,31837,4,0;darashia,33269,32440,6,0;"/>
+    </parameters>
+</npc>

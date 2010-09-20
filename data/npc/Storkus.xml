@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Storkus" script="data/npc/scripts/Quest/vampirehunter.lua" walkinterval="2000" floorchange="0">
+	<health now="100" max="100"/>
+      <look type="69" head="57" body="59" legs="118" feet="114" corpse="6007"/>
+ 	<parameters>
+		<parameter key="message_greet" value="Hello |PLAYERNAME|. Bring me {vampire lord token} to advance in the ranks needed. "/>
+        <parameter key="message_farewell" value="Good bye."/>
+		<parameter key="message_walkaway" value="Farewell then.." />
+    </parameters>
+</npc>
