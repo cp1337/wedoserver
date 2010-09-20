@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Henricus" script="default.lua" walkinterval="2000" floorchange="0">
+    <health now="100" max="100"/>
+    <look type="132" head="79" body="19" legs="132" feet="0" addons="0"/>
+    	<parameters>
+		<parameter key="message_greet" value="Hello |PLAYERNAME|."/>
+        	<parameter key="message_farewell" value="Good bye."/>
+		<parameter key="message_walkaway" value="Farewell then.." />
+
+		<parameter key="module_keywords" value="1" />
+		<parameter key="keywords" value="inquisitor;join;yes;mission;continue;" />
+		<parameter key="keyword_reply1" value="The churches of the gods entrusted me with the enormous and responsible task to lead the inquisition. I leave the field work to inquisitors who I recruit from fitting people that cross my way." />
+		<parameter key="keyword_reply2" value="Do you wish to join the inquisition?" />
+		<parameter key="keyword_reply3" value="So be it. Now you are a member of the inquisition. You may ask me for a mission to raise in my esteem." />
+		<parameter key="keyword_reply4" value="Let's see if you are worthy. Take and inquisitor's field guide from the box in the back room...{continue}" />
+		<parameter key="keyword_reply5" value="Follow the instructions in the guide to talk to the Thaian Guards that protect the walls and gates of the city and test their loyalty. The report to me about your mission." />
+    </parameters>
+</npc>

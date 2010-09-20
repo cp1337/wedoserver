@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Elvith" script="default.lua" walkinterval="2000" floorchange="0">
+    <health now="100" max="100"/>
+    <look type="159" head="19" body="86" legs="87" feet="76" addons="1"/>
+	<parameters>
+		<parameter key="message_greet" value="Hello |PLAYERNAME|."/>
+        <parameter key="message_farewell" value="Good bye."/>
+		<parameter key="message_walkaway" value="Farewell then.." />
+        
+<parameter key="module_shop" value="1"/>
+        <parameter key="shop_buyable" value="lyre,2071,120;lute,2072,195;drum,2073,140;simple fanfare,2075,150;love poem,5952,200" />
+        <parameter key="shop_sellable" value="" />
+    
+    </parameters>
+</npc>

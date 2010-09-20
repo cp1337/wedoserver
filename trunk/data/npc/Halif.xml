@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Halif" script="data/npc/scripts/default.lua" walkinterval="4000" floorchange="0">
+    <health now="100" max="100"/>
+    <look type="146" head="95" body="2" legs="9" feet="115" addons="0"/>
+    <parameters>
+        <parameter key="message_greet" value="Greetings, |PLAYERNAME|. I'm Halif the Equipment Shopkeeper. May I offer you in some Equipments?"/>
+        <parameter key="message_farewell" value="Good Bye, |PLAYERNAME|"/>
+        <parameter key="module_keywords" value="1" />
+   </parameters>
+</npc>
+
+
+
+

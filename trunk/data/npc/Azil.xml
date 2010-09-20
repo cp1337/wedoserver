@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Azil" script="data/npc/scripts/default.lua" walkinterval="4000" floorchange="0">
+    <health now="100" max="100"/>
+    <look type="146" head="95" body="9" legs="12" feet="119" addons="0"/>
+    <parameters>
+        <parameter key="message_greet" value="Greetings, |PLAYERNAME|. I'm a armor shopkeeper, feel free to take a look"/>
+        <parameter key="message_farewell" value="Good Bye, |PLAYERNAME|"/>
+        <parameter key="module_keywords" value="1" />
+        <parameter key="keywords" value="job;" />
+        <parameter key="keyword_reply1" value="Iam a armor shopkeeper here in Darashia." />
+
+        <parameter key="module_shop" value="1"/>
+        <parameter key="shop_buyable" value="brass armor,2465,450;chain armor,2464,200;leather armor,2467,35;brass helmet,2460,120;chain helmet,2458,52;leather helmet,2461,12;viking helmet,2473,265;brass legs,2478,195;chain legs,2648,80;brass shield,2511,65;plate shield,2510,125;wooden shield,2512,15;" />
+        <parameter key="shop_sellable" value="brass armor,2465,112;chain armor,2464,40;leather armor,2467,5;plate armor,2463,240;brass helmet,2460,30;chain helmet,2458,12;leather helmet,2461,3;steel helmet,2457,293;viking helmet,2473,66;brass legs,2478,49;chain legs,2648,20;brass shield,2511,16;battle shield,2513,60;plate shield,2510,45;wooden shield,2512,3;" />
+    </parameters>
+</npc>
+
+
+
+

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Avar Tar" script="default.lua" walkinterval="2000" floorchange="0">
+    <health now="100" max="100"/>
+    <look type="73" head="20" body="30" legs="40" feet="50" addons="0"/>
+	<parameters>
+		<parameter key="message_greet" value="Hello |PLAYERNAME|. What are you doing here? I don't have any {quest} for you."/>
+        <parameter key="message_farewell" value="Go away then, leave me here all alone."/>
+		<parameter key="message_walkaway" value="Goodbye, never come back" />
+		
+		<parameter key="module_keywords" value="1" />
+        <parameter key="keywords" value="job;name;quest;" />
+        <parameter key="keyword_reply1" value="Im an Avar Tar, you know.. a picture on a forum." />
+        <parameter key="keyword_reply2" value="I'd got the name from my master. Nobody understands it." />
+		<parameter key="keyword_reply3" value="I know some quests but.. i don't think you will finish them, you low level noob.." />
+        
+    </parameters>
+</npc>
