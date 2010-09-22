@@ -9,7 +9,6 @@
 
 ==Versão - 0.1.0 - 18/08/10==
 	
-{{{
 		M = Distro está 99.5% estável. (Comedinhas, Aluxes e Cykotitan)
 
 		A = Adicionado todas as features 8.60. (Comedinhas)
@@ -36,7 +35,6 @@
 
 
 				Entre outras diversas alterações. (We Do Team)
-}}}
 
 ===Versão - 1.0.0 - Imprevisto===
 		A = Suporte para tibia 8.61. (Comedinhas, Tfs Team)
