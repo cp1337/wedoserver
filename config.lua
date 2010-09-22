@@ -84,12 +84,12 @@
 	retryTimeout = 5 * 1000
 	loginTimeout = 60 * 1000
 	maxPlayers = 1000
-	motd = "Welcome to the We Do OTS!"
+	motd = "Welcome to the WeDo OTS SVN!"
 	displayOnOrOffAtCharlist = false
 	onePlayerOnlinePerAccount = true
 	allowClones = false
-	serverName = "We Do"
-	loginMessage = "Welcome to the We Do OTS!"
+	serverName = "WeDo SVN"
+	loginMessage = "Welcome to the WeDo OTS SVN!"
 	statusTimeout = 5 * 60 * 1000
 	replaceKickOnLogin = true
 	forceSlowConnectionsToDisconnect = false
