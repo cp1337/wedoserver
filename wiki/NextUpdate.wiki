@@ -1,1 +1,24 @@
-[Construção]
+	Legenda:
+		D = Deletado
+		M = Modificado
+		A = Adicionado
+
+(	Versão - 0.1.0 - 18/08/10
+		M = Distro está 99.5% estável. (Comedinhas, Aluxes e Cykotitan)
+		A = Adicionado todas as features 8.60. (Comedinhas)
+		M = Follow ataque está funconando perfeitamente. (Cykotitan e Comedinhas)
+		A = Os itens estão com todas as features do Tibia Global. (Comedinhas)
+		M = Potions e runes estão identicas ao Tibia Global. (Doidin e Comedinhas)
+		A = Contagem de runes e potions por hotkey funcionando! (Comedinhas)
+		M = Spells estão 90% iguais ao Tibia Global. (Doidin)
+		M = Bugs no mapa foram arrumados! (Doidin)
+		M = A maioria dos os scripts do servidor foram revisados. (Doidin)
+		M = Deathlist e unban estão funcionando. (Doidin) 
+		D = Retirado o sistema de VIP's. (Doidin)
+		M = Arrumada algumas tables na database SQLite. (Doidin)
+
+				Entre outras diversas alterações. (We Do Team)
+)
+(	Versão - 1.0.0 - Imprevisto
+		A = Suporte para tibia 8.61. (Comedinhas, Tfs Team)
+)
