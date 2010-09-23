@@ -13,7 +13,7 @@ CREATE TABLE "server_motd" (
 	UNIQUE ("id", "world_id")
 );
 
-INSERT INTO "server_motd" VALUES (1, 0, 'Welcome to The Forgotten Server!');
+INSERT INTO "server_motd" VALUES (1, 0, 'Welcome to the Real Server, developed by Doidin. Acess: XTibia.com');
 
 CREATE TABLE "server_record" (
 	"record" INTEGER NOT NULL,
@@ -47,6 +47,7 @@ CREATE TABLE "accounts" (
 	"blocked" BOOLEAN NOT NULL DEFAULT 0,
 	"warnings" INTEGER NOT NULL DEFAULT 0,
 	"group_id" INTEGER NOT NULL DEFAULT 1,
+	"vip_time" INTEGER NOT NULL DEFAULT 0,
 	UNIQUE ("name")
 );
 
@@ -108,7 +109,7 @@ CREATE TABLE "players" (
 	FOREIGN KEY ("account_id") REFERENCES "accounts" ("id")
 );
 
-INSERT INTO "players" VALUES (1, 'Account Manager', 0, 1, 1, 1, 0, 150, 150, 0, 0, 0, 0, 0, 110, 0, 0, 0, 0, 0, 0, 0, 50, 50, 7, '', 400, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 201660000, 0, 100, 100, 100, 100, 100, 0, 0, 0, 0, 0, '');
+INSERT INTO "players" VALUES (1, 'Account Manager', 0, 1, 1, 1, 0, 150, 150, 0, 0, 0, 0, 0, 110, 0, 0, 0, 0, 0, 0, 0, 32360, 31782, 7, '', 400, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 201660000, 0, 100, 100, 100, 100, 100, 0, 0, 0, 0, 0, '');
 
 CREATE TABLE "account_viplist" (
 	"account_id" INTEGER NOT NULL,

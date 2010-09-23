@@ -14,7 +14,7 @@ CREATE TABLE "server_motd"
 	PRIMARY KEY ("id")
 );
 
-INSERT INTO "server_motd" VALUES (1, 'Welcome to The Forgotten Server!');
+INSERT INTO "server_motd" VALUES (1, 'Welcome to the Real Server, developed by Doidin. Acess: XTibia.com');
 
 CREATE TABLE "server_record"
 (
@@ -71,6 +71,7 @@ CREATE TABLE "accounts"
 	"blocked" SMALLINT NOT NULL DEFAULT 0,
 	"warnings" INT NOT NULL DEFAULT 0,
 	"group_id" INT NOT NULL DEFAULT 1,
+	"vip_time" INT NOT NULL DEFAULT 0,
 	PRIMARY KEY ("id"), UNIQUE ("name"),
 	FOREIGN KEY ("group_id") REFERENCES "groups" ("id")
 );
@@ -132,7 +133,7 @@ CREATE TABLE "players"
 	FOREIGN KEY ("group_id") REFERENCES "groups"("id")
 );
 
-INSERT INTO "players" VALUES (nextval('players_id_seq'::regclass), 'Account Manager', 1, 1, 1, 0, 150, 150, 0, 0, 0, 0, 0, 110, 0, 0, 0, 0, 0, 0, 0, 50, 50, 7, '', 400, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 201660000, 0, 10, 10, 10, 10, 0, 0, 0, 0, 0);
+INSERT INTO "players" VALUES (nextval('players_id_seq'::regclass), 'Account Manager', 1, 1, 1, 0, 150, 150, 0, 0, 0, 0, 0, 110, 0, 0, 0, 0, 0, 0, 0, 32360, 31782, 7, '', 400, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 201660000, 0, 10, 10, 10, 10, 0, 0, 0, 0, '');
 
 CREATE TABLE "bans"
 (
