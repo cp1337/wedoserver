@@ -36,5 +36,7 @@
 
 				Entre outras diversas alterações. (We Do Team)
 
-===Versão - 1.0.0 - Imprevisto===
+===Versão - 1.0.0 - 23/09/10 ou 24/09/10===
 		A = Suporte para tibia 8.61. (Comedinhas, Tfs Team)
+		M = Arrumado talkactions. (Comedinhas, Tfs Team)
+		M = Rule Violations arrumado. (Comedinhas, Tfs Team)
