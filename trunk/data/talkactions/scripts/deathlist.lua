@@ -3,7 +3,6 @@ local config = {
 	maxDeathRecords = getConfigValue('maxDeathRecords'),
 	limit = ""
 }
-
 if(config.deathAssistCount > 0) then
 	config.limit = " LIMIT 0, " .. config.deathAssistCount
 end
