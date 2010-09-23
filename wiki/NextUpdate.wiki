@@ -1,3 +1,4 @@
+#labels Phase-Support,Featured
 =Legenda:=
 
 	D = Deletado
@@ -36,7 +37,14 @@
 
 				Entre outras diversas alterações. (We Do Team)
 
-===Versão - 1.0.0 - 23/09/10 ou 24/09/10===
+===Versão - 0.1.1 - 23/09/10===
 		A = Suporte para tibia 8.61. (Comedinhas, Tfs Team)
 		M = Arrumado talkactions. (Comedinhas, Tfs Team)
 		M = Rule Violations arrumado. (Comedinhas, Tfs Team)
+		A = Adiconado 90% das features da nova versão. (Comedinhas e Doidin)
+		M = Arrumado diversos bugs no mapa. (Doidin)
+		M = Poi funcionando perfeitamente! (Doidin)
+		M = Arrumado bugs dos monsters. (Doidin e zafirus)
+		A = Adicionada a função "executeQuery". (Doidin)
+		
+				Entre outras diversas alterações. (We Do Team)
