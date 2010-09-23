@@ -18,7 +18,6 @@
 	<event type="death" name="bluelegs" event="script" value="bluelegs.lua"/>
 	<event type="death" name="PlayerDeath" event="script" value="playerdeath.lua"/>
 	<event type="attack" name="AttackGuild" script="attackguild.lua"/>
-	<event type="login" name="FimVip" event="script" value="vip.lua"/>
 	<event type="logout" name="demonOakLogout" event="script" value="demonOakLogout.lua"/>
 	<event type="death" name="demonOakDeath" event="script" value="demonOakDeath.lua"/> 
 	<event type="death" name="Azerus" event="script" value="azerus.lua"/>  

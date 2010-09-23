@@ -3,9 +3,6 @@
 	<health now="75" max="75"/>
 	<look type="296" corpse="6002"/>
 	<targetchange interval="10000" chance="0"/>
-	<script>
-        <event name="KillingInTheNameOf"/>
-</script>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>

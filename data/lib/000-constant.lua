@@ -283,27 +283,27 @@ TALKTYPE_MONSTER_YELL = 14
 TALKTYPE_LAST = TALKTYPE_MONSTER_YELL
 
 TALKTYPE_TYPES = {
-	["say"] = TALKTYPE_SAY,
-	["whisper"] = TALKTYPE_WHISPER,
-	["yell"] = TALKTYPE_YELL,
-	["private-playernpc"] = TALKTYPE_PRIVATE_PN,
-	["private-npcplayer"] = TALKTYPE_PRIVATE_NP,
-	["private"] = TALKTYPE_PRIVATE,
-	["channel-yellow"] = TALKTYPE_CHANNEL_Y,
-	["channel-white"] = TALKTYPE_CHANNEL_W,
-	["rvr-channel"] = TALKTYPE_RVR_CHANNEL,
-	["rvr-answer"] = TALKTYPE_RVR_ANSWER,
-	["rvr-continue"] = TALKTYPE_RVR_CONTINUE,
-	["broadcast"] = TALKTYPE_BROADCAST,
-	["channel-red"] = TALKTYPE_CHANNEL_RN,
-	["private-red"] = TALKTYPE_PRIVATE_RED,
-	["channel-orange"] = TALKTYPE_CHANNEL_O,
-	["monster"] = TALKTYPE_MONSTER,
-	["monster-yell"] = TALKTYPE_MONSTER_YELL,
-	["rvr-channel"] = TALKTYPE_RVR_CHANNEL,
-	["rvr-answer"] = TALKTYPE_RVR_ANSWER,	
-	["rvr-continue"] = TALKTYPE_RVR_CONTINUE,	
-	["channel-redanonymous"] = TALKTYPE_CHANNEL_RA
+        ["say"] = TALKTYPE_SAY,
+        ["whisper"] = TALKTYPE_WHISPER,
+        ["yell"] = TALKTYPE_YELL,
+        ["private-playernpc"] = TALKTYPE_PRIVATE_PN,
+        ["private-npcplayer"] = TALKTYPE_PRIVATE_NP,
+        ["private"] = TALKTYPE_PRIVATE,
+        ["channel-yellow"] = TALKTYPE_CHANNEL_Y,
+        ["channel-white"] = TALKTYPE_CHANNEL_W,
+        ["rvr-channel"] = TALKTYPE_RVR_CHANNEL,
+        ["rvr-answer"] = TALKTYPE_RVR_ANSWER,
+        ["rvr-continue"] = TALKTYPE_RVR_CONTINUE,
+        ["broadcast"] = TALKTYPE_BROADCAST,
+        ["channel-red"] = TALKTYPE_CHANNEL_RN,
+        ["private-red"] = TALKTYPE_PRIVATE_RED,
+        ["channel-orange"] = TALKTYPE_CHANNEL_O,
+        ["monster"] = TALKTYPE_MONSTER,
+        ["monster-yell"] = TALKTYPE_MONSTER_YELL,
+        ["rvr-channel"] = TALKTYPE_RVR_CHANNEL,
+        ["rvr-answer"] = TALKTYPE_RVR_ANSWER,   
+        ["rvr-continue"] = TALKTYPE_RVR_CONTINUE,       
+        ["channel-redanonymous"] = TALKTYPE_CHANNEL_RA
 }
 
 MESSAGE_FIRST = 12
@@ -320,17 +320,17 @@ MESSAGE_STATUS_CONSOLE_RED = 21
 MESSAGE_LAST = MESSAGE_STATUS_CONSOLE_RED
 
 MESSAGE_TYPES = {
-	["advance"] = MESSAGE_EVENT_ADVANCE,
-	["event"] = MESSAGE_EVENT_DEFAULT,
-	["white"] = MESSAGE_EVENT_DEFAULT,
-	["orange"] = MESSAGE_STATUS_CONSOLE_ORANGE,
-	["info"] = MESSAGE_INFO_DESCR,
-	["green"] = MESSAGE_INFO_DESCR,
-	["small"] = MESSAGE_STATUS_SMALL,
-	["blue"] = MESSAGE_STATUS_CONSOLE_BLUE,
-	["red"] = MESSAGE_STATUS_CONSOLE_RED,
-	["warning"] = MESSAGE_STATUS_WARNING,
-	["status"] = MESSAGE_STATUS_DEFAULT
+        ["advance"] = MESSAGE_EVENT_ADVANCE,
+        ["event"] = MESSAGE_EVENT_DEFAULT,
+        ["white"] = MESSAGE_EVENT_DEFAULT,
+        ["orange"] = MESSAGE_STATUS_CONSOLE_ORANGE,
+        ["info"] = MESSAGE_INFO_DESCR,
+        ["green"] = MESSAGE_INFO_DESCR,
+        ["small"] = MESSAGE_STATUS_SMALL,
+        ["blue"] = MESSAGE_STATUS_CONSOLE_BLUE,
+        ["red"] = MESSAGE_STATUS_CONSOLE_RED,
+        ["warning"] = MESSAGE_STATUS_WARNING,
+        ["status"] = MESSAGE_STATUS_DEFAULT
 }
 
 COLOR_BLACK = 0
@@ -427,30 +427,30 @@ SKILL__MAGLEVEL = 7
 SKILL__LEVEL = 8
 
 SKILL_NAMES = {
-	[SKILL_FIST] = "fist fighting",
-	[SKILL_CLUB] = "club fighting",
-	[SKILL_SWORD] = "sword fighting",
-	[SKILL_AXE] = "axe fighting",
-	[SKILL_DISTANCE] = "distance fighting",
-	[SKILL_SHIELD] = "shielding",
-	[SKILL_FISHING] = "fishing",
-	[SKILL__LEVEL] = "level",
-	[SKILL__MAGLEVEL] = "magic level"
+        [SKILL_FIST] = "fist fighting",
+        [SKILL_CLUB] = "club fighting",
+        [SKILL_SWORD] = "sword fighting",
+        [SKILL_AXE] = "axe fighting",
+        [SKILL_DISTANCE] = "distance fighting",
+        [SKILL_SHIELD] = "shielding",
+        [SKILL_FISHING] = "fishing",
+        [SKILL__LEVEL] = "level",
+        [SKILL__MAGLEVEL] = "magic level"
 }
 
 SKILL_IDS = {
-	["fist"] = SKILL_FIST,
-	["club"] = SKILL_CLUB,
-	["sword"] = SKILL_SWORD,
-	["axe"] = SKILL_AXE,
-	["distance"] = SKILL_DISTANCE,
-	["dist"] = SKILL_DISTANCE,
-	["shielding"] = SKILL_SHIELD,
-	["shield"] = SKILL_SHIELD,
-	["fishing"] = SKILL_FISHING,
-	["fish"] = SKILL_FISHING,
-	["level"] = SKILL__LEVEL,
-	["magic"] = SKILL__MAGLEVEL
+        ["fist"] = SKILL_FIST,
+        ["club"] = SKILL_CLUB,
+        ["sword"] = SKILL_SWORD,
+        ["axe"] = SKILL_AXE,
+        ["distance"] = SKILL_DISTANCE,
+        ["dist"] = SKILL_DISTANCE,
+        ["shielding"] = SKILL_SHIELD,
+        ["shield"] = SKILL_SHIELD,
+        ["fishing"] = SKILL_FISHING,
+        ["fish"] = SKILL_FISHING,
+        ["level"] = SKILL__LEVEL,
+        ["magic"] = SKILL__MAGLEVEL
 }
 
 GUILDLEVEL_MEMBER = 1
@@ -706,7 +706,7 @@ PLAYERFLAG_45 = 45 -- ignore
 PLAYERFLAG_CANNOTBESEEN = 46
 
 PLAYERCUSTOMFLAG_ALLOWIDLE = 0
-PLAYERCUSTOMFLAG_CANSEEPOSITION	= 1
+PLAYERCUSTOMFLAG_CANSEEPOSITION = 1
 PLAYERCUSTOMFLAG_CANSEEITEMDETAILS = 2
 PLAYERCUSTOMFLAG_CANSEECREATUREDETAILS = 3
 PLAYERCUSTOMFLAG_NOTSEARCHABLE = 4
@@ -743,28 +743,74 @@ keys = {2086, 2087, 2088, 2089, 2090, 2091, 2092, 10032, 10091}
 enchantableGems = {2147, 2146, 2149, 2150}
 enchantableItems = {2383, 7383, 7384, 7406, 7402, 2429, 2430, 7389, 7380, 2454, 2423, 2445, 7415, 7392, 2391, 2544, 8905}
 enchantingAltars = {
-	{7504, 7505, 7506, 7507},
-	{7508, 7509, 7510, 7511},
-	{7516, 7517, 7518, 7519},
-	{7512, 7513, 7514, 7515}
+        {7504, 7505, 7506, 7507},
+        {7508, 7509, 7510, 7511},
+        {7516, 7517, 7518, 7519},
+        {7512, 7513, 7514, 7515}
 }
 enchantedGems = {7760, 7759, 7761, 7762}
 enchantedItems = {
-	[2383] = {7744, 7763, 7854, 7869},
-	[7383] = {7745, 7764, 7855, 7870},
-	[7384] = {7746, 7765, 7856, 7871},
-	[7406] = {7747, 7766, 7857, 7872},
-	[7402] = {7748, 7767, 7858, 7873},
-	[2429] = {7749, 7768, 7859, 7874},
-	[2430] = {7750, 7769, 7860, 7875},
-	[7389] = {7751, 7770, 7861, 7876},
-	[7380] = {7752, 7771, 7862, 7877},
-	[2454] = {7753, 7772, 7863, 7878},
-	[2423] = {7754, 7773, 7864, 7879},
-	[2445] = {7755, 7774, 7865, 7880},
-	[7415] = {7756, 7775, 7866, 7881},
-	[7392] = {7757, 7776, 7867, 7882},
-	[2391] = {7758, 7777, 7868, 7883},
-	[2544] = {7840, 7839, 7850, 7838},
-	[8905] = {8906, 8907, 8909, 8908}
+        [2383] = {7744, 7763, 7854, 7869},
+        [7383] = {7745, 7764, 7855, 7870},
+        [7384] = {7746, 7765, 7856, 7871},
+        [7406] = {7747, 7766, 7857, 7872},
+        [7402] = {7748, 7767, 7858, 7873},
+        [2429] = {7749, 7768, 7859, 7874},
+        [2430] = {7750, 7769, 7860, 7875},
+        [7389] = {7751, 7770, 7861, 7876},
+        [7380] = {7752, 7771, 7862, 7877},
+        [2454] = {7753, 7772, 7863, 7878},
+        [2423] = {7754, 7773, 7864, 7879},
+        [2445] = {7755, 7774, 7865, 7880},
+        [7415] = {7756, 7775, 7866, 7881},
+        [7392] = {7757, 7776, 7867, 7882},
+        [2391] = {7758, 7777, 7868, 7883},
+        [2544] = {7840, 7839, 7850, 7838},
+        [8905] = {8906, 8907, 8909, 8908}
 }
+
+-- arena script
+InitArenaScript = 0
+arena_room_max_time = 240
+arenaKickPosition = {x=597, y=593, z=6} -- position where kick from arena when you leave/you did arena level
+arena_monsters = {}
+arena_monsters[42300] = 'frostfur' -- first monster from 1 arena
+arena_monsters[42301] = 'bloodpaw'
+arena_monsters[42302] = 'bovinus'
+arena_monsters[42303] = 'achad'
+arena_monsters[42304] = 'colerian the barbarian'
+arena_monsters[42305] = 'the hairy one'
+arena_monsters[42306] = 'axeitus headbanger'
+arena_monsters[42307] = 'rocky'
+arena_monsters[42308] = 'cursed gladiator'
+arena_monsters[42309] = 'orcus the cruel'
+arena_monsters[42310] = 'avalanche' -- first monster from 2 arena
+arena_monsters[42311] = 'kreebosh the exile'
+arena_monsters[42312] = 'the dark dancer'
+arena_monsters[42313] = 'the hag'
+arena_monsters[42314] = 'slim'
+arena_monsters[42315] = 'grimgor guteater'
+arena_monsters[42316] = 'drasilla'
+arena_monsters[42317] = 'spirit of earth'
+arena_monsters[42318] = 'spirit of water'
+arena_monsters[42319] = 'spirit of fire'
+arena_monsters[42320] = 'webster' -- first monster from 3 arena
+arena_monsters[42321] = 'darakan the executioner'
+arena_monsters[42322] = 'norgle glacierbeard'
+arena_monsters[42323] = 'the pit lord'
+arena_monsters[42324] = 'svoren the mad'
+arena_monsters[42325] = 'the masked marauder'
+arena_monsters[42326] = 'gnorre chyllson'
+arena_monsters[42327] = "fallen mooh'tah master ghar"
+arena_monsters[42328] = 'deathbringer'
+arena_monsters[42329] = 'the obliverator'
+
+function getArenaMonsterIdByName(name)
+    name = string.lower(tostring(name))
+    for i = 42300, 42329 do
+        if tostring(arena_monsters[i]) == name then
+            return i
+        end
+    end
+    return 0
+end  

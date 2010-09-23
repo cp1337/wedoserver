@@ -63,7 +63,6 @@
 				<item id="2463" chance="2000"/><!-- plate armor -->
 				<item id="2150" countmax="4" chance="1750"/><!-- small amethyst -->
 				<item id="2645" chance="250"/><!-- steel boots -->
-					    <item id="2429" chance="600"/><!-- Barbarian Axe -->
 				<item id="2377" chance="3200"/><!-- two handed sword -->
 				<item id="2393" chance="900"/><!-- giant sword -->
 				<item id="7591" chance="925"/><!-- great health potion  -->

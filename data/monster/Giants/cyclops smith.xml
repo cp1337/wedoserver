@@ -4,9 +4,6 @@
 	<look type="277" corpse="7740"/>
 	<targetchange interval="2000" chance="5"/>
 	<strategy attack="70" defense="0"/>
-	<script>
-        <event name="KillingInTheNameOf"/>
-</script>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -50,7 +47,6 @@
 		<item id="2442" chance="1800"/><!-- heavy machete -->
 		<item id="1987" chance="100000"><!-- bag -->
 			<inside>
-				    <item id="2429" chance="600"/><!-- Barbarian Axe -->
 			<item id="2387" chance="1200"/><!-- double axe -->
 			<item id="2490" chance="200"/><!-- dark helmet -->
 			<item id="7398" chance="120"/><!-- cyclops trophy -->

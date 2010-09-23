@@ -18,16 +18,13 @@
 		<flag runonhealth="5"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="25" poison="340"/>
+		<attack name="melee" interval="2000" skill="30" attack="25" poison="17"/>
 	</attacks>
 	<defenses armor="10" defense="5"/>
 	<elements>
 		<element earthPercent="100"/>
 		<element energyPercent="20"/>
 		<element firePercent="-10"/>
-		<element icePercent="-10"/>
+		<element icePercent="-5"/>
 	</elements>
-	<loot>
-		<item id="10567" chance="6100"/><!-- scorpion tail -->
-	</loot>
 </monster>
