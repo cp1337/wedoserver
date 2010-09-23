@@ -5,5 +5,7 @@
         <parameter key="message_greet" value="Hello, |PLAYERNAME|!" />
         <parameter key="message_needmoremoney" value="Try again when you have more money."/>
         <parameter key="message_decline" value="Why would you tease me like that?"/>
+                <parameter key="module_shop" value="1"/>
+        <parameter key="shop_buyable" value="The holy tible,1970,1000" />
     </parameters>
 </npc>

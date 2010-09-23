@@ -4,9 +4,6 @@
 	<look type="282" corpse="7930"/>
 	<targetchange interval="5000" chance="20"/>
 	<strategy attack="100" defense="0"/>
-	<script>
-        <event name="KillingInTheNameOf"/>
-</script>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>

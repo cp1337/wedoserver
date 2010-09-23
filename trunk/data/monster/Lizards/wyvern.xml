@@ -22,7 +22,7 @@
 		<attack name="poison" interval="3000" chance="12" length="8" spread="3" min="-30" max="-120">
 			<attribute key="areaEffect" value="poison"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="12" length="8" spread="3" min="-30" max="-120">
+		<attack name="melee" interval="2000" chance="12" length="8" spread="3" min="-30" max="-120">
 			<attribute key="areaEffect" value="rednote"/>
 		</attack>
 		<attack name="drunk" interval="4000" chance="2" range="7">

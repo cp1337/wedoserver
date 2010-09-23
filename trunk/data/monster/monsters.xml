@@ -123,6 +123,7 @@
 
 	<!-- Bosses -->
 	<monster name="Annihilon" file="Bosses/annihilon.xml"/>
+	<monster name="Pythius The Rotten" file="Bosses/Pythius The Rotten.xml"/>
 	<monster name="Apprentice Sheng" file="Bosses/apprentice sheng.xml"/>
 	<monster name="Barbaria" file="Bosses/barbaria.xml"/>
 	<monster name="Big Boss Trolliver" file="Bosses/big boss trolliver.xml"/>
@@ -233,6 +234,7 @@
 	<monster name="Frost Dragon" file="Dragons/frost dragon.xml"/>
 	<monster name="Frost Dragon Hatchling" file="Dragons/frost dragon hatchling.xml"/>
 	<monster name="Ghastly Dragon" file="Dragons/ghastly dragon.xml"/>
+	<monster name="Undead Dragon" file="Dragons/undead dragon.xml"/>
 	<monster name="Wyrm" file="Dragons/wyrm.xml"/>
 
 	<!-- Dwarves -->

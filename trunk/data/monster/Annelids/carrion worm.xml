@@ -4,9 +4,6 @@
 	<look type="192" corpse="6069"/>
 	<targetchange interval="2000" chance="0"/>
 	<strategy attack="100" defense="0"/>
-	<script>
-        <event name="KillingInTheNameOf"/>
-</script>
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -25,8 +22,8 @@
 	</attacks>
 	<defenses armor="8" defense="11"/>
 	<elements>
-		<element earthPercent="20"/>
-		<element energyPercent="10"/>
+		<element earthPercent="5"/>
+		<element energyPercent="5"/>
 		<element firePercent="-5"/>
 		<element icePercent="-5"/>
 	</elements>
@@ -38,9 +35,17 @@
 		<immunity invisible="0"/>
 	</immunities>
 	<loot>
-		<item id="2148" countmax="45" chance="18250"/><!-- gold coin -->
-		<item id="2666" chance="8000"/><!-- meat -->
-		<item id="3976" countmax="2" chance="1500"/><!-- worm -->
-		<item id="11186" chance="8000"/><!-- carrion worm fang -->
+		<item id="2148" countmax="49" chance="20750"/><!-- gold coin -->
+		<item id="2666" countmax="2" chance="20000"/><!-- meat -->
+		<item id="2671" chance="18000"/><!-- ham -->
+		<item id="3976" countmax="5" chance="50000"/><!-- worm -->
+		<item id="1987" chance="100000"><!-- bag -->
+			<inside>
+				<item id="2398" chance="9000"/><!-- mace -->
+				<item id="2376" chance="5000"/><!-- sword -->
+				<item id="2412" chance="1000"/><!-- katana -->
+				<item id="2530" chance="1000"/><!-- copper shield -->
+			</inside>
+		</item>
 	</loot>
 </monster>

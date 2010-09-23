@@ -4,9 +4,6 @@
 	<look type="22" corpse="5962"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
-	<script>
-        <event name="KillingInTheNameOf"/>
-</script>
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
@@ -47,7 +44,6 @@
 		<item id="2406" chance="7000"/><!-- short sword -->
 		<item id="1987" chance="100000"><!-- bag -->
 			<inside>
-				    <item id="2429" chance="600"/><!-- Barbarian Axe -->
 				<item id="2513" chance="2300"/><!-- battle shield -->
 				<item id="2129" chance="400"/><!-- wolf tooth chain -->
 				<item id="2381" chance="800"/><!-- halberd -->

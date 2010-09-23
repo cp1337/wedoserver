@@ -26,9 +26,9 @@
 		<element icePercent="50"/>
 		<element holyPercent="10"/>
 		<element energyPercent="20"/>
-		<element physicalPercent="10"/>
+		<element physicalPercent="5"/>
 		<element earthPercent="-10"/>
-		<element deathPercent="-5"/>
+		<element deathPercent="-7"/>
 	</elements>
 	<immunities>
 		<immunity drunk="1"/>
@@ -40,20 +40,20 @@
 		<voice sentence="Show that you are a worthy opponent."/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="38250"/><!-- gold coin -->
-		<item id="2050" chance="60000"/><!-- torch -->
-		<item id="2460" chance="21000"/><!-- brass helmet -->
-		<item id="2403" chance="14400"/><!-- knife -->
-		<item id="2473" chance="8200"/><!-- viking helmet -->
-		<item id="2483" chance="3750"/><!-- scale armor -->
-		<item id="2229" chance="3500"/><!-- skull -->
+		<item id="2148" countmax="30" chance="40000"/><!-- gold coin -->
+		<item id="2050" chance="47500"/><!-- torch -->
+		<item id="2460" chance="17000"/><!-- brass helmet -->
+		<item id="2403" chance="19250"/><!-- knife -->
+		<item id="2473" chance="9000"/><!-- viking helmet -->
+		<item id="2483" chance="3850"/><!-- scale armor -->
+		<item id="2229" chance="1300"/><!-- skull -->
 		<item id="1987" chance="100000"><!-- bag -->
 			<inside>
-		<item id="7449" chance="190"/><!-- crystal sword -->
-		<item id="5913" chance="700"/><!-- brown piece of cloth -->
-		<item id="2168" chance="190"/><!-- life ring -->
-		<item id="7462" chance="90"/><!-- ragnir helmet -->
-		<item id="7457" chance="90"/><!-- fur boots -->
+		<item id="7449" chance="450"/><!-- crystal sword -->
+		<item id="5913" chance="2500"/><!-- brown piece of cloth -->
+		<item id="2168" chance="750"/><!-- life ring -->
+		<item id="7462" chance="400"/><!-- ragnir helmet -->
+		<item id="7457" chance="300"/><!-- fur boots -->
 			</inside>
 		</item>
 	</loot>

@@ -23,14 +23,14 @@
 	<defenses armor="8" defense="8"/>
 	<elements>
 		<element earthPercent="100"/>
-		<element firePercent="-10"/>
+		<element firePercent="-4"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Grrrr"/>
 		<voice sentence="Groar"/>
 	</voices>
 	<loot>
-		<item id="2666" chance="50000"/><!-- meat -->
-		<item id="2671" chance="82500"/><!-- ham -->
+		<item id="2666" countmax="4" chance="17500"/><!-- meat -->
+		<item id="2671" countmax="2" chance="20000"/><!-- ham -->
 	</loot>
 </monster>
