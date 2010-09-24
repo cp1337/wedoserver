@@ -481,6 +481,7 @@ ResponseList Npc::loadInteraction(xmlNodePtr node)
 							}
 
 							li.itemId = intValue;
+							const ItemType& it = Item::items[li.itemId];
 							if(readXMLInteger(tmpNode, "sellprice", intValue))
 								li.sellPrice = intValue;
 
@@ -499,6 +500,13 @@ ResponseList Npc::loadInteraction(xmlNodePtr node)
 							//optional
 							if(readXMLInteger(tmpNode, "subtype", intValue))
 								li.subType = intValue;
+								else
+						{
+								if(it.stackable)
+								li.subType = 1;
+								else if(it.isFluidContainer() || it.isSplash())
+								li.subType = 0;
+						}
 
 							if(readXMLString(tmpNode, "name", strValue))
 								li.name = strValue;

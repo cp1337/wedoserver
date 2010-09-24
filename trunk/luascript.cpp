@@ -1371,6 +1371,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//getCreatureHealth(cid)
 	lua_register(m_luaState, "getCreatureHealth", LuaScriptInterface::luaGetCreatureHealth);
+	
+	//getItemParent(uid)
+	lua_register(m_luaState, "getItemParent", LuaScriptInterface::luaGetItemParent);
 
 	//getCreatureMaxHealth(cid)
 	lua_register(m_luaState, "getCreatureMaxHealth", LuaScriptInterface::luaGetCreatureMaxHealth);
@@ -8224,6 +8227,24 @@ int32_t LuaScriptInterface::luaGetCreatureHealth(lua_State* L)
 		lua_pushboolean(L, false);
 	}
 	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetItemParent(lua_State* L)
+{
+        //getItemParent(uid)
+        ScriptEnviroment* env = getEnv();
+
+        Item* item = env->getItemByUID(popNumber(L));
+        if(!item)
+        {
+                errorEx(getError(LUA_ERROR_ITEM_NOT_FOUND));
+                lua_pushnil(L);
+                return 1;
+        }
+
+        Item* container = item->getParent()->getItem();
+        pushThing(L, container, env->addThing(container));
+        return 1;
 }
 
 int32_t LuaScriptInterface::luaGetCreatureLookDirection(lua_State* L)

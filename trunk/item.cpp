@@ -235,10 +235,10 @@ void Item::onRemoved()
 
 void Item::setDefaultSubtype()
 {
-	count = 1;
-	const ItemType& it = items[id];
-	if(it.charges)
-		setCharges(it.charges);
+        setItemCount(1);
+        const ItemType& it = items[id];
+        if(it.charges)
+                setCharges(it.charges);
 }
 
 void Item::setID(uint16_t newId)
@@ -777,6 +777,8 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance, const
 			s << "\"" << it.runeSpellName << "\", ";
 
 		s << "Charges:" << subType << ")";
+		if(!it.runeSpellName.empty())
+		s << "(\"" << it.runeSpellName << "\")";
 		if(it.runeLevel > 0 || it.runeMagLevel > 0 || (it.vocationString != "" && it.wieldInfo == 0))
 		{
 			s << "." << std::endl << "It can only be used";
