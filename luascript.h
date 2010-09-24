@@ -312,6 +312,7 @@ class LuaScriptInterface
 
 		//lua functions
 		static int32_t luaDoRemoveItem(lua_State* L);
+		static int32_t luaGetItemParent(lua_State* L);
 		static int32_t luaDoFeedPlayer(lua_State* L);
 		static int32_t luaDoPlayerSendCancel(lua_State* L);
 		static int32_t luaDoSendDefaultCancel(lua_State* L);
