@@ -42,7 +42,7 @@ bool Outfits::parseOutfitNode(xmlNodePtr p)
 	Outfit newOutfit;
 	newOutfit.outfitId = intValue;
 
-	std::string name, strValue;
+	std::string strValue;
 	if(readXMLString(p, "default", strValue))
 		newOutfit.isDefault = booleanString(strValue);
 
@@ -50,10 +50,10 @@ bool Outfits::parseOutfitNode(xmlNodePtr p)
 	{
 		std::stringstream ss;
 		ss << "Outfit #" << newOutfit.outfitId;
-		ss >> name;
+		ss >> newOutfit.name;
 	}
 	else
-		name = strValue;
+		newOutfit.name = strValue;
 
 	bool override = false;
 	if(readXMLString(p, "override", strValue) && booleanString(strValue))
@@ -62,15 +62,15 @@ bool Outfits::parseOutfitNode(xmlNodePtr p)
 	if(readXMLInteger(p, "access", intValue))
 		newOutfit.accessLevel = intValue;
 
-	if(readXMLInteger(p, "quest", intValue))
+	if(readXMLString(p, "quest", strValue))
 	{
-		newOutfit.storageId = intValue;
+		newOutfit.storageId = strValue;
 		newOutfit.storageValue = "1";
 	}
 	else
 	{
-		if(readXMLInteger(p, "storageId", intValue))
-			newOutfit.storageId = intValue;
+		if(readXMLString(p, "storageId", strValue))
+			newOutfit.storageId = strValue;
 
 		if(readXMLString(p, "storageValue", strValue))
 			newOutfit.storageValue = strValue;
@@ -112,8 +112,9 @@ bool Outfits::parseOutfitNode(xmlNodePtr p)
 
 		if(readXMLString(listNode, "name", strValue))
 			outfit.name = strValue;
-		else
-			outfit.name = name;
+			
+		if(readXMLString(listNode, "premium", strValue))
+			outfit.isPremium = booleanString(strValue);
 
 		if(readXMLString(listNode, "requirement", strValue))
 		{
@@ -820,7 +821,7 @@ int16_t Outfits::getOutfitReflect(uint32_t lookType, uint16_t sex, CombatType_t 
 		if(it->second.lookType != lookType)
 			continue;
 
-		if(it->second.reflect[REFLECT_CHANCE][combat] < random_range(0, 100))
+		if(it->second.reflect[REFLECT_PERCENT][combat] && random_range(1, 100) < it->second.reflect[REFLECT_CHANCE][combat])
 			return it->second.reflect[REFLECT_PERCENT][combat];
 	}
 
