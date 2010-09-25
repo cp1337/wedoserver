@@ -168,6 +168,7 @@
 	bufferMutedOnSpellFailure = false
 	spellNameInsteadOfWords = false
 	emoteSpells = false
+	unifiedSpells = true
 
 	-- Outfits
 	allowChangeOutfit = true
