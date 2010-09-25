@@ -1799,25 +1799,6 @@ void Npc::doSay(const std::string& text, SpeakClasses type, Player* player)
 	}
 }
 
-void Npc::doTurn(Direction dir)
-{
-	g_game.internalCreatureTurn(this, dir);
-}
-
-void Npc::doMove(Direction dir)
-{
-	g_game.internalMoveCreature(this, dir);
-}
-
-void Npc::doMoveTo(Position target)
-{
-	std::list<Direction> listDir;
-	if(!g_game.getPathToEx(this, target, listDir, 1, 1, true, true))
-		return;
-
-	startAutoWalk(listDir);
-}
-
 uint32_t Npc::getListItemPrice(uint16_t itemId, ShopEvent_t type)
 {
 	for(ItemListMap::iterator it = itemListMap.begin(); it != itemListMap.end(); ++it)
@@ -2465,68 +2446,30 @@ void Npc::removeShopPlayer(const Player* player)
 
 void Npc::closeAllShopWindows()
 {
-	ShopPlayerList closeList = shopPlayerList;
-	for(ShopPlayerList::iterator it = closeList.begin(); it != closeList.end(); ++it)
-		(*it)->closeShopWindow();
+        ShopPlayerList closeList = shopPlayerList;
+        for(ShopPlayerList::iterator it = closeList.begin(); it != closeList.end(); ++it)
+                (*it)->closeShopWindow();
 }
 
-NpcScriptInterface* Npc::getInterface()
+NpcScript* Npc::getInterface()
 {
-	return m_interface;
+        return m_interface;
 }
 
-NpcScriptInterface::NpcScriptInterface() :
-	LuaScriptInterface("Npc interface")
+NpcScript::NpcScript() :
+        LuaInterface("NpcScript Interface")
 {
-	m_libLoaded = false;
-	initState();
+        initState();
 }
 
-
-NpcScriptInterface::~NpcScriptInterface()
+void NpcScript::registerFunctions()
 {
-	//
-}
-
-bool NpcScriptInterface::initState()
-{
-	return LuaScriptInterface::initState();
-}
-
-bool NpcScriptInterface::closeState()
-{
-	m_libLoaded = false;
-	return LuaScriptInterface::closeState();
-}
-
-bool NpcScriptInterface::loadNpcLib(std::string file)
-{
-	if(m_libLoaded)
-		return true;
-
-	if(!loadFile(file))
-	{
-		std::cout << "Warning: [NpcScriptInterface::loadNpcLib] Cannot load " << file << std::endl;
-		return false;
-	}
-
-	m_libLoaded = true;
-	return true;
-}
-
-void NpcScriptInterface::registerFunctions()
-{
-	LuaScriptInterface::registerFunctions();
-	lua_register(m_luaState, "selfFocus", NpcScriptInterface::luaActionFocus);
-	lua_register(m_luaState, "selfSay", NpcScriptInterface::luaActionSay);
-
-	lua_register(m_luaState, "selfTurn", NpcScriptInterface::luaActionTurn);
-	lua_register(m_luaState, "selfMove", NpcScriptInterface::luaActionMove);
-	lua_register(m_luaState, "selfMoveTo", NpcScriptInterface::luaActionMoveTo);
+	LuaInterface::registerFunctions();
+	lua_register(m_luaState, "selfFocus", NpcScript::luaActionFocus);
+	lua_register(m_luaState, "selfSay", NpcScript::luaActionSay);
 	lua_register(m_luaState, "selfFollow", NpcScriptInterface::luaActionFollow);
 
 	lua_register(m_luaState, "getNpcId", NpcScriptInterface::luaGetNpcId);
-	lua_register(m_luaState, "getNpcDistanceTo", NpcScriptInterface::luaGetNpcDistanceTo);
 	lua_register(m_luaState, "getNpcParameter", NpcScriptInterface::luaGetNpcParameter);
 
 	lua_register(m_luaState, "getNpcState", NpcScriptInterface::luaGetNpcState);
@@ -2581,41 +2524,6 @@ int32_t NpcScriptInterface::luaActionSay(lua_State* L)
 	}
 
 	npc->doSay(popString(L), (SpeakClasses)type, player);
-	return 0;
-}
-
-int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
-{
-	//selfTurn(direction)
-	ScriptEnviroment* env = getEnv();
-	if(Npc* npc = env->getNpc())
-		npc->doTurn((Direction)popNumber(L));
-
-	return 0;
-}
-
-int32_t NpcScriptInterface::luaActionMove(lua_State* L)
-{
-	//selfMove(direction)
-	ScriptEnviroment* env = getEnv();
-	if(Npc* npc = env->getNpc())
-		npc->doMove((Direction)popNumber(L));
-
-	return 0;
-}
-
-int32_t NpcScriptInterface::luaActionMoveTo(lua_State* L)
-{
-	//selfMoveTo(x, y, z)
-	Position pos;
-	pos.z = (uint16_t)popNumber(L);
-	pos.y = (uint16_t)popNumber(L);
-	pos.x = (uint16_t)popNumber(L);
-
-	ScriptEnviroment* env = getEnv();
-	if(Npc* npc = env->getNpc())
-		npc->doMoveTo(pos);
-
 	return 0;
 }
 
