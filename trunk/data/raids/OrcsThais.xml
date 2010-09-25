@@ -1,4 +1,4 @@
-<raid>
+ <raid>
   <!--Announcements-->
   <announce delay="1000" type="Event" message="Orc activity near Thais reported! Beware!" />
   <announce delay="60000" type="Event" message="Thais is under attack!" />

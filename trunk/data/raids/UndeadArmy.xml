@@ -1,4 +1,4 @@
-<raid>
+<<raid>
 <announce delay="1000" type="event" message="The dead of the plains of havoc are becoming restless!" />
 <announce delay="20000" type="event" message="A veritable army of undead is amassing in the plains of havoc, beware!" />
 <announce delay="60000" type="event" message="The dreaded banshee lead their undead minions to claim the plains of havoc!" />

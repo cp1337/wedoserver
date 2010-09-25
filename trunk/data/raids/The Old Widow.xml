@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <raid>
   <!--Announcements-->
   <announce delay="1000" type="Event" message="The mating season of the giant spiders is at hand. Leave the plains of havoc as fast as you can." />
