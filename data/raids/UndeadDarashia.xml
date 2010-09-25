@@ -11,8 +11,6 @@
     <monster name="beholder" amount="25" />
     <monster name="necromancer" amount="25" />
     <monster name="bone beast" amount="25" />
-    <monster name="tibia bug" amount="25" />
-    <monster name="hacker" amount="25" />
   </areaspawn>
 
 
