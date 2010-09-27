@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <quests>
-<quest name="Anihileator!" startstorageid="5010" startstoragevalue="1"></quest>
-<quest name="Demon Oak!" startstorageid="12900" startstoragevalue="1"></quest>
-<quest name="Pits of Infernum!" startstorageid="8742" startstoragevalue="1"></quest>
-<quest name="Inquisition Quest!" startstorageid="8560" startstoragevalue="1"></quest>
-<quest name="Arena Quest!" startstorageid="42361" startstoragevalue="1"></quest>
+<quest name="The Annihilator Quest!" startstorageid="5010" startstoragevalue="1"></quest>
+<quest name="The Demon Oak Quest!" startstorageid="12900" startstoragevalue="1"></quest>
+<quest name="The Pits of Inferno Quest!" startstorageid="8742" startstoragevalue="1"></quest>
+<quest name="The Inquisition Quest!" startstorageid="8560" startstoragevalue="1"></quest>
+<quest name="Barbarian Arena Quest!" startstorageid="42361" startstoragevalue="1"></quest>
+<quest name="The Demon Helmet Quest!" startstorageid="6074" startstoragevalue="1"></quest>
+<quest name="Koshei The Deathless Quest!" startstorageid="50013" startstoragevalue="1"></quest>
+<quest name="The Outlaw Camp Quest!" startstorageid="50028" startstoragevalue="1"></quest>
+<quest name="Crusader Helmet Quest!" startstorageid="60062" startstoragevalue="1"></quest>
+<quest name="Deeper Fibula Quest" startstorageid="30070" startstoragevalue="1"></quest>
+<quest name="Fire Axe Quest!" startstorageid="50032" startstoragevalue="1"></quest>
+<quest name="The Hidden City of Beregar Quest!" startstorageid="53090" startstoragevalue="1"></quest>
+<quest name="The Ancient Tombs Quest!" startstorageid="9923" startstoragevalue="1"></quest>
+<quest name="Medusa Shield Quest!" startstorageid=" 50015" startstoragevalue="1"></quest>
+<quest name="The Mermaid Marina Quest!" startstorageid="50016" startstoragevalue="1"></quest>
+<quest name="Naginata Quest!" startstorageid="50029" startstoragevalue="1"></quest>
+<quest name="Noble Armor Quest!" startstorageid="50009" startstoragevalue="1"></quest>
+<quest name="Orc Fortress Quest!" startstorageid="50006" startstoragevalue="1"></quest>
+<quest name="Stealth Ring Quest!" startstorageid="50011" startstoragevalue="1"></quest>
+<quest name="Vampire Shield Quest!" startstorageid="50030" startstoragevalue="1"></quest>
+<quest name="In Service of Yalahar Quest!" startstorageid="50001" startstoragevalue="1"></quest>
+
+
+ 
+
+
+
 </quests>
