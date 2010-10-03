@@ -507,7 +507,6 @@
 	<monster name="Pirate Skeleton" file="Skeletons/pirate skeleton.xml"/>
 	<monster name="Skeleton" file="Skeletons/skeleton.xml"/>
 	<monster name="Skeleton Warrior" file="Skeletons/skeleton warrior.xml"/>
-	<monster name="Undead Dragon" file="Skeletons/undead dragon.xml"/>
 	<monster name="Undead Gladiator" file="Skeletons/undead gladiator.xml"/>
 	<monster name="Undead Mine Worker" file="Skeletons/undead mine worker.xml"/>
 
