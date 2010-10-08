@@ -8231,23 +8231,24 @@ int32_t LuaScriptInterface::luaGetCreatureHealth(lua_State* L)
 
 int32_t LuaScriptInterface::luaGetItemParent(lua_State* L)
 {
-        //getItemParent(uid)
-        ScriptEnviroment* env = getEnv();
+	//getItemParent(uid)
+	ScriptEnviroment* env = getEnv();
 
-        Item* item = env->getItemByUID(popNumber(L));
-        if(!item)
-        {
-                errorEx(getError(LUA_ERROR_ITEM_NOT_FOUND));
-                lua_pushnil(L);
-                return 1;
-        }
+	Item* item = env->getItemByUID(popNumber(L));
+	if(!item)
+	{
+		errorEx(getError(LUA_ERROR_ITEM_NOT_FOUND));
+		lua_pushnil(L);
+		return 1;
+	}
 
-        Item* container = item->getParent()->getItem();
-        pushThing(L, container, env->addThing(container));
-        return 1;
+	Item* container = item->getParent()->getItem();
+	pushThing(L, container, env->addThing(container));
+	return 1;
 }
 
-int32_t LuaScriptInterface::luaGetCreatureLookDirection(lua_State* L)
+	//getItemParent(uid)
+	lua_register(m_luaState, "getItemParent", LuaScriptInterface::luaGetItemParent);
 {
 	//getCreatureLookDirection(cid)
 	ScriptEnviroment* env = getEnv();
