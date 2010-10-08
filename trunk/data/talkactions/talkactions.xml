@@ -6,7 +6,6 @@
 	<talkaction log="yes" words="/closeserver" access="5" event="script" value="closeopen.lua"/>
 	<talkaction log="yes" words="/openserver" access="5" event="script" value="closeopen.lua"/>
 	<talkaction log="yes" words="/promote;/demote" access="5" event="script" value="promote.lua"/>
-	<talkaction log="yes" words="/skill;/addskill" access="5" event="script" value="skill.lua"/>
 	<talkaction log="yes" words="/shutdown" access="5" event="script" value="shutdown.lua"/>
 	<talkaction log="yes" access="5" words="/mode" event="script" value="mode.lua"/>
 
@@ -46,7 +45,6 @@
 	<talkaction log="yes" words="/clean" access="3" event="script" value="clean.lua"/>
 	<talkaction log="yes" words="/reports" access="3" event="script" value="reports.lua"/>
 	<talkaction log="yes" words="/mc" access="3" event="script" value="multicheck.lua"/>
-	<talkaction log="yes" words="/mute" access="3" event="script" value="mute.lua"/>
 	<talkaction log="yes" access="3" words="/wp" event="script" value="waypoints.lua"/>
 	<talkaction log="yes" words="/jail;/unjail" access="3" event="script" value="jail.lua"/>
 
@@ -72,7 +70,6 @@
 	<talkaction words="!commands;/commands" event="script" value="commands.lua"/>
 	<talkaction words="!afk;/afk" event="script" value="afk.lua"/>
 	<talkaction words="!buybless;/buybless;!bless;/bless" script="bless.lua" />
-	<talkaction words="!software;/software" event="function" value="software"/>
 	<talkaction words="!changesex;/changesex;!changender;/changender" script="changesex.lua" />
 	<talkaction words="!buypremium;/buypremium;!premium;/premium" script="premium.lua" />
 
