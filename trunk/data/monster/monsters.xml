@@ -123,7 +123,6 @@
 
 	<!-- Bosses -->
 	<monster name="Annihilon" file="Bosses/annihilon.xml"/>
-	<monster name="Pythius The Rotten" file="Bosses/Pythius The Rotten.xml"/>
 	<monster name="Apprentice Sheng" file="Bosses/apprentice sheng.xml"/>
 	<monster name="Barbaria" file="Bosses/barbaria.xml"/>
 	<monster name="Big Boss Trolliver" file="Bosses/big boss trolliver.xml"/>
@@ -133,6 +132,7 @@
 	<monster name="Deadeye Devious" file="Bosses/deadeye devious.xml"/>
 	<monster name="Demodras" file="Bosses/demodras.xml"/>
 	<monster name="Dharalion" file="Bosses/dharalion.xml"/>
+	<monster name="Dire Penguin" file="Bosses/dire penguin.xml"/>
 	<monster name="Dracola" file="Bosses/dracola.xml"/>
 	<monster name="Fernfang" file="Bosses/fernfang.xml"/>
 	<monster name="Ferumbras" file="Bosses/ferumbras.xml"/>
@@ -173,6 +173,7 @@
 	<monster name="Tibia Bug" file="Bosses/tibia bug.xml"/>
 	<monster name="Tiquandas Revenge" file="Bosses/tiquandas revenge.xml"/>
 	<monster name="Undead Minion" file="Bosses/undead minion.xml"/>
+	<monster name="Ungreez" file="Bosses/ungreez.xml"/>
 	<monster name="Ushuriel" file="Bosses/ushuriel.xml"/>
 	<monster name="Xenia" file="Bosses/xenia.xml"/>
 	<monster name="Zugurosh" file="Bosses/zugurosh.xml"/>
