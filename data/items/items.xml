@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <items>
 	<!-- README:
 		We really appreciate if someone could help us
@@ -2918,7 +2918,7 @@
 		<attribute key="weaponType" value="distance" />
 		<attribute key="shootType" value="spear" />
 		<attribute key="range" value="5" />
-		<attribute key="breakChance" value="3" />
+		<attribute key="breakChance" value="0" />
 		<attribute key="ammoAction" value="moveback" />
 	</item>
 	<item id="2390" article="a" name="magic longsword">
