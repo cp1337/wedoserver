@@ -3833,11 +3833,25 @@ bool Player::canWearOutfit(uint32_t outfitId, uint32_t addons)
 		|| ((it->second.addons & addons) != addons && !hasCustomFlag(PlayerCustomFlag_CanWearAllAddons)))
 		return false;
 
-	if(!it->second.storageId)
+	if(it->second.storageId.empty())
 		return true;
 
 	std::string value;
-	return getStorage(it->second.storageId, value) && value == it->second.storageValue;
+	getStorage(it->second.storageId, value);
+	
+	bool ret = value == it->second.storageValue;
+	if(ret)
+	        return ret;
+	
+	int32_t tmp = atoi(value.c_str());
+	if(!tmp && value != "0")
+	        return ret;
+	
+	tmp = atoi(it->second.storageValue.c_str());
+	if(!tmp && it->second.storageValue != "0")
+	        return ret;
+	
+	return atoi(value.c_str()) >= tmp;
 }
 
 bool Player::addOutfit(uint32_t outfitId, uint32_t addons)

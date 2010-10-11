@@ -14,9 +14,7 @@
     <raid name="Scarabs" file="Scarabs.xml" interval2="30" margin="1800" enabled="yes"/>
     <raid name="The Old Widow" file="The Old Widow.xml" interval2="35" margin="1800" enabled="yes"/>
     <raid name="UndeadDarashia" file="UndeadDarashia.xml" interval2="30" margin="1800" enabled="yes"/>
-    <raid name="UndeadArmy" file="UndeadArmy.xml" interval2="30" margin="1800" enabled="yes"/>
     <raid name="Undead Jester" file="Undead Jester.xml" interval2="30" margin="1800" enabled="yes"/>
-    <raid name="Wolfsraid" file="Wolfsraid.xml" interval2="25" margin="1800" enabled="yes"/>
     <raid name="Halloweenhare" file="Halloweenhare.xml" interval2="40" margin="1800" enabled="yes"/>
     <raid name="HornedFox" file="HornedFox.xml" interval2="30" margin="1800" enabled="yes"/>
     <raid name="Fernfang" file="Fernfang.xml" interval2="30" margin="1800" enabled="yes"/>

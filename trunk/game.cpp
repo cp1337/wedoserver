@@ -6091,9 +6091,10 @@ void Game::shutdown()
 	std::cout << "- done." << std::endl;
 	if(services)
 		services->stop();
+		exit(1);
+		
 #if defined(WINDOWS) && !defined(__CONSOLE__)
 
-	exit(1);
 #endif
 }
 
