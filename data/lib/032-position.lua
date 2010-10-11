@@ -29,12 +29,10 @@ function getDirectionTo(pos1, pos2)
 		elseif(pos1.y < pos2.y) then
 			dir = SOUTHEAST
 		end
-	else
 		elseif(pos1.y > pos2.y) then
 			dir = NORTH
 		elseif(pos1.y < pos2.y) then
 			dir = SOUTH
-		end
 	end
 
 	return dir

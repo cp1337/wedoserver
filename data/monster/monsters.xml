@@ -109,7 +109,6 @@
 
 	<!-- Birds -->
 	<monster name="Chicken" file="Birds/chicken.xml"/>
-	<monster name="Dire Penguin" file="Birds/dire penguin.xml"/>
 	<monster name="Flamingo" file="Birds/flamingo.xml"/>
 	<monster name="Parrot" file="Birds/parrot.xml"/>
 	<monster name="Penguin" file="Birds/penguin.xml"/>

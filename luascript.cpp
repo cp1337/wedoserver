@@ -8246,9 +8246,8 @@ int32_t LuaScriptInterface::luaGetItemParent(lua_State* L)
 	pushThing(L, container, env->addThing(container));
 	return 1;
 }
-
-	//getItemParent(uid)
-	lua_register(m_luaState, "getItemParent", LuaScriptInterface::luaGetItemParent);
+	
+int32_t LuaScriptInterface::luaGetCreatureLookDirection(lua_State* L)
 {
 	//getCreatureLookDirection(cid)
 	ScriptEnviroment* env = getEnv();
