@@ -857,14 +857,14 @@ void Creature::changeMana(int32_t manaChange)
 
 bool Creature::getStorage(const uint32_t key, std::string& value) const
 {
-        StorageMap::const_iterator it = storageMap.find(key);
-        if(it != storageMap.end())
-        {
-                value = it->second;
-                return true;
-        }
+	StorageMap::const_iterator it = storageMap.find(key);
+	if(it != storageMap.end())
+	{
+		value = it->second;
+		return true;
+	}
 
-        value = "-1";
+	value = "-1";
 	return false;
 }
 

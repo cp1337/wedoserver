@@ -40,7 +40,7 @@ bool Condition::setParam(ConditionParam_t param, int32_t value)
 			return true;
 
 		case CONDITIONPARAM_BUFF:
-			buff = value;
+			buff = (value != 0);
 			return true;
 
 		case CONDITIONPARAM_SUBID:
@@ -106,7 +106,7 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 			if(!propStream.GET_VALUE(value))
 				return false;
 
-			buff = value;
+			buff = value != 0;
 			return true;
 		}
 
@@ -270,7 +270,7 @@ Condition* Condition::createCondition(PropStream& propStream)
 	if(!propStream.GET_ULONG(_subId))
 		return NULL;
 
-	return createCondition((ConditionId_t)_id, (ConditionType_t)_type, _ticks, 0, _buff, _subId);
+	return createCondition((ConditionId_t)_id, (ConditionType_t)_type, _ticks, 0, _buff != 0, _subId);
 }
 
 bool Condition::updateCondition(const Condition* addCondition)
@@ -915,10 +915,6 @@ bool ConditionDamage::setParam(ConditionParam_t param, int32_t value)
 			periodDamage = value;
 			break;
 
-		case CONDITIONPARAM_FIELD:
-			field = value;
-			break;
-
 		default:
 			break;
 	}
@@ -1156,8 +1152,8 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t damage)
 	if(creature->isSuppress(getType()))
 		return true;
 
-	Creature* attacker = g_game.getCreatureByID(owner);
 	CombatType_t combatType = Combat::ConditionToDamageType(conditionType);
+	Creature* attacker = g_game.getCreatureByID(owner);
 	if(g_game.combatBlockHit(combatType, attacker, creature, damage, false, false))
 		return false;
 
