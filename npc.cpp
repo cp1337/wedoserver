@@ -481,7 +481,6 @@ ResponseList Npc::loadInteraction(xmlNodePtr node)
 							}
 
 							li.itemId = intValue;
-							const ItemType& it = Item::items[li.itemId];
 							if(readXMLInteger(tmpNode, "sellprice", intValue))
 								li.sellPrice = intValue;
 
@@ -500,13 +499,6 @@ ResponseList Npc::loadInteraction(xmlNodePtr node)
 							//optional
 							if(readXMLInteger(tmpNode, "subtype", intValue))
 								li.subType = intValue;
-							else
-							{
-								if(it.stackable)
-								li.subType = 1;
-								else if(it.isFluidContainer() || it.isSplash())
-								li.subType = 0;
-							}
 
 							if(readXMLString(tmpNode, "name", strValue))
 								li.name = strValue;
@@ -1799,6 +1791,25 @@ void Npc::doSay(const std::string& text, SpeakClasses type, Player* player)
 	}
 }
 
+void Npc::doTurn(Direction dir)
+{
+	g_game.internalCreatureTurn(this, dir);
+}
+
+void Npc::doMove(Direction dir)
+{
+	g_game.internalMoveCreature(this, dir);
+}
+
+void Npc::doMoveTo(Position target)
+{
+	std::list<Direction> listDir;
+	if(!g_game.getPathToEx(this, target, listDir, 1, 1, true, true))
+		return;
+
+	startAutoWalk(listDir);
+}
+
 uint32_t Npc::getListItemPrice(uint16_t itemId, ShopEvent_t type)
 {
 	for(ItemListMap::iterator it = itemListMap.begin(); it != itemListMap.end(); ++it)
@@ -2462,16 +2473,24 @@ NpcScriptInterface::NpcScriptInterface() :
 	m_libLoaded = false;
 	initState();
 }
- 
- 	NpcScriptInterface::~NpcScriptInterface()
+
+
+NpcScriptInterface::~NpcScriptInterface()
 {
 	//
 }
+
 bool NpcScriptInterface::initState()
 {
-	m_libLoaded = false;
- 		return LuaScriptInterface::closeState();
+	return LuaScriptInterface::initState();
 }
+
+bool NpcScriptInterface::closeState()
+{
+	m_libLoaded = false;
+	return LuaScriptInterface::closeState();
+}
+
 bool NpcScriptInterface::loadNpcLib(std::string file)
 {
 	if(m_libLoaded)
@@ -2483,11 +2502,11 @@ bool NpcScriptInterface::loadNpcLib(std::string file)
 		return false;
 	}
 
- 		m_libLoaded = true;
+	m_libLoaded = true;
 	return true;
 }
 
- 	void NpcScriptInterface::registerFunctions()
+void NpcScriptInterface::registerFunctions()
 {
 	LuaScriptInterface::registerFunctions();
 	lua_register(m_luaState, "selfFocus", NpcScriptInterface::luaActionFocus);
@@ -2528,13 +2547,43 @@ int32_t NpcScriptInterface::luaActionFocus(lua_State* L)
 	return 0;
 }
 
+int32_t NpcScriptInterface::luaActionSay(lua_State* L)
+{
+	//selfSay(words[, target[, type]])
+	int32_t params = lua_gettop(L), target = 0;
+	SpeakClasses type = SPEAK_CLASS_NONE;
+	if(params > 2)
+		type = (SpeakClasses)popNumber(L);
+
+	if(params > 1)
+		target = popNumber(L);
+
+	ScriptEnviroment* env = getEnv();
+	Npc* npc = env->getNpc();
+	if(!npc)
+		return 0;
+
+	Player* player = env->getPlayerByUID(target);
+	if(type == SPEAK_CLASS_NONE)
+	{
+		if(player)
+			type = SPEAK_PRIVATE_NP;
+		else
+			type = SPEAK_SAY;
+	}
+
+	npc->doSay(popString(L), (SpeakClasses)type, player);
+	return 0;
+}
+
 int32_t NpcScriptInterface::luaActionTurn(lua_State* L)
 {
 	//selfTurn(direction)
 	ScriptEnviroment* env = getEnv();
 	if(Npc* npc = env->getNpc())
 		npc->doTurn((Direction)popNumber(L));
- 		return 0;
+
+	return 0;
 }
 
 int32_t NpcScriptInterface::luaActionMove(lua_State* L)
@@ -3108,5 +3157,4 @@ void NpcScript::onThink()
 	else
 		std::cout << "[Error - NpcScript::onThink] NPC Name: " << m_npc->getName() << " - Call stack overflow" << std::endl;
 }
-
 

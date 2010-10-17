@@ -501,4 +501,3 @@ class Npc : public Creature
 		friend class NpcScriptInterface;
 };
 #endif
-
