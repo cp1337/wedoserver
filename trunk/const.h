@@ -179,18 +179,18 @@ enum SpeakClasses
 
 enum MessageClasses
 {
-        MSG_CLASS_FIRST                         = 0x0D,
-        MSG_EVENT_ORANGE                        = MSG_CLASS_FIRST, /*Orange message in the console*/
-        MSG_STATUS_CONSOLE_ORANGE       = 0x0E, /*Orange message in the console*/
-        MSG_STATUS_WARNING                      = 0x0F, /*Red message in game window and in the console*/
-        MSG_EVENT_ADVANCE                       = 0x10, /*White message in game window and in the console*/
-        MSG_EVENT_DEFAULT                       = 0x11, /*White message at the bottom of the game window and in the console*/
-        MSG_STATUS_DEFAULT                      = 0x12, /*White message at the bottom of the game window and in the console*/
-        MSG_INFO_DESCR                          = 0x13, /*Green message in game window and in the console*/
-        MSG_STATUS_SMALL                        = 0x14, /*White message at the bottom of the game window"*/
-        MSG_STATUS_CONSOLE_BLUE         = 0x15, /*Blue message in the console*/
-        MSG_STATUS_CONSOLE_RED          = 0x16, /*Red message in the console*/
-        MSG_CLASS_LAST                          = MSG_STATUS_CONSOLE_RED
+	MSG_CLASS_FIRST			= 0x12,
+	MSG_STATUS_CONSOLE_RED		= MSG_CLASS_FIRST, /*Red message in the console*/
+	MSG_EVENT_ORANGE		= 0x13, /*Orange message in the console*/
+	MSG_STATUS_CONSOLE_ORANGE	= 0x14, /*Orange message in the console*/
+	MSG_STATUS_WARNING		= 0x15, /*Red message in game window and in the console*/
+	MSG_EVENT_ADVANCE		= 0x16, /*White message in game window and in the console*/
+	MSG_EVENT_DEFAULT		= 0x17, /*White message at the bottom of the game window and in the console*/
+	MSG_STATUS_DEFAULT		= 0x18, /*White message at the bottom of the game window and in the console*/
+	MSG_INFO_DESCR			= 0x19, /*Green message in game window and in the console*/
+	MSG_STATUS_SMALL		= 0x1A, /*White message at the bottom of the game window"*/
+	MSG_STATUS_CONSOLE_BLUE		= 0x1B, /*Blue message in the console*/
+	MSG_CLASS_LAST			= MSG_STATUS_CONSOLE_BLUE
 };
 
 enum MapMarks_t
