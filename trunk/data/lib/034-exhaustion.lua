@@ -1,36 +1,40 @@
 exhaustion =
 {
-    check = function (cid, storage)
-        if(getPlayerStorageValue(cid, storage) >= os.time(t)) then
-            return TRUE
-        end
+	check = function (cid, storage)
+		if(getPlayerFlagValue(cid, PLAYERFLAG_HASNOEXHAUSTION)) then
+			return false
+		end
 
-        return FALSE
-    end,
+		return getPlayerStorageValue(cid, storage) >= os.time(t)
+	end,
 
-    get = function (cid, storage)
-        local exhaust = getPlayerStorageValue(cid, storage)
-        if(exhaust > 0) then
-            local left = exhaust - os.time(t)
-            if(left >= 0) then
-                return left
-            end
-        end
+	get = function (cid, storage)
+		if(getPlayerFlagValue(cid, PLAYERFLAG_HASNOEXHAUSTION)) then
+			return false
+		end
 
-        return FALSE
-    end,
+		local exhaust = getPlayerStorageValue(cid, storage)
+		if(exhaust > 0) then
+			local left = exhaust - os.time(t)
+			if(left >= 0) then
+				return left
+			end
+		end
 
-    set = function (cid, storage, time)
-        setPlayerStorageValue(cid, storage, os.time(t) + time)
-    end,
+		return false
+	end,
 
-    make = function (cid, storage, time)
-        local exhaust = exhaustion.get(cid, storage)
-        if(not exhaust) then
-            exhaustion.set(cid, storage, time)
-            return TRUE
-        end
+	set = function (cid, storage, time)
+		setPlayerStorageValue(cid, storage, os.time(t) + time)
+	end,
 
-        return FALSE
-    end
+	make = function (cid, storage, time)
+		local exhaust = exhaustion.get(cid, storage)
+		if(not exhaust) then
+			exhaustion.set(cid, storage, time)
+			return true
+		end
+
+		return false
+	end
 }
