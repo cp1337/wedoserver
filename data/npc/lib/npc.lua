@@ -1,44 +1,30 @@
 -- Include the Advanced NPC System
 dofile(getDataDir() .. 'npc/lib/npcsystem/npcsystem.lua')
 
+function selfIdle()
+	following = false
+	attacking = false
+
+	selfAttackCreature(0)
+	target = 0
+end
+
 function selfSayChannel(cid, message)
 	return selfSay(message, cid, false)
 end
 
-function selfMoveToThing(id)
-        errors(false)
-        local thing = getThing(id)
-
-        errors(true)
-        if(thing.uid == 0) then
+function selfMoveToCreature(id)
+	if(not id or id == 0) then
 		return
 	end
 
-        local t = getThingPosition(id)
+	local t = getCreaturePosition(id)
+	if(not t.x or t.x == nil) then
+		return
+	end
+
 	selfMoveTo(t.x, t.y, t.z)
 	return
-end
-
-function selfMoveTo(x, y, z)
-        local position = {x = 0, y = 0, z = 0}
-        if(type(x) ~= "table") then
-                position = Position(x, y, z)
-        else
-                position = x
-        end
-
-        if(isValidPosition(position)) then
-                doSteerCreature(getNpcId(), position)
-        end
-end
-
-function selfMove(direction, flags)
-        local flags = flags or 0
-        doMoveCreature(getNpcId(), direction, flags)
-end
-
-function selfTurn(direction)
-        doCreatureSetLookDirection(getNpcId(), direction)
 end
 
 function getNpcDistanceToCreature(id)
@@ -131,10 +117,11 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 	return a, 0
 end
 
-function doRemoveItemIdFromPosition(id, n, position)
-        local thing = getThingFromPos({x = position.x, y = position.y, z = position.z, stackpos = 1})
-        if(thing.itemid ~= id) then
-                return false
+function doRemoveItemIdFromPos (id, n, position)
+	local thing = getThingFromPos({x = position.x, y = position.y, z = position.z, stackpos = 1})
+	if(thing.itemid == id) then
+		doRemoveItem(thing.uid, n)
+		return true
 	end
 
 	return false
@@ -145,23 +132,21 @@ function getNpcName()
 end
 
 function getNpcPos()
-        return getThingPosition(getNpcId())
+	return getCreaturePosition(getNpcId())
 end
 
 function selfGetPosition()
-        local t = getThingPosition(getNpcId())
-        return t.x, t.y, t.z
+	local t = getNpcPos()
+	return t.x, t.y, t.z
 end
 
 msgcontains = doMessageCheck
 moveToPosition = selfMoveTo
-moveToCreature = selfMoveToThing
-selfMoveToCreature = selfMoveToThing
+moveToCreature = selfMoveToCreature
 selfMoveToPosition = selfMoveTo
 selfGotoIdle = selfIdle
 isPlayerPremiumCallback = isPremium
-doPosRemoveItem = doRemoveItemIdFromPosition
-doRemoveItemIdFromPos = doRemoveItemIdFromPosition
+doPosRemoveItem = doRemoveItemIdFromPos
 doNpcBuyItem = doPlayerRemoveItem
 doNpcSetCreatureFocus = selfFocus
 getNpcCid = getNpcId
