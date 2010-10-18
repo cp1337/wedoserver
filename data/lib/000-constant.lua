@@ -815,3 +815,4 @@ function getArenaMonsterIdByName(name)
         end
     end
     return 0
+end
