@@ -179,18 +179,18 @@ enum SpeakClasses
 
 enum MessageClasses
 {
-	MSG_CLASS_FIRST			= 0x12,
-	MSG_STATUS_CONSOLE_RED		= MSG_CLASS_FIRST, /*Red message in the console*/
-	MSG_EVENT_ORANGE		= 0x13, /*Orange message in the console*/
-	MSG_STATUS_CONSOLE_ORANGE	= 0x14, /*Orange message in the console*/
-	MSG_STATUS_WARNING		= 0x15, /*Red message in game window and in the console*/
-	MSG_EVENT_ADVANCE		= 0x16, /*White message in game window and in the console*/
-	MSG_EVENT_DEFAULT		= 0x17, /*White message at the bottom of the game window and in the console*/
-	MSG_STATUS_DEFAULT		= 0x18, /*White message at the bottom of the game window and in the console*/
-	MSG_INFO_DESCR			= 0x19, /*Green message in game window and in the console*/
-	MSG_STATUS_SMALL		= 0x1A, /*White message at the bottom of the game window"*/
-	MSG_STATUS_CONSOLE_BLUE		= 0x1B, /*Blue message in the console*/
-	MSG_CLASS_LAST			= MSG_STATUS_CONSOLE_BLUE
+	MSG_CLASS_FIRST				= 0x0D,
+	MSG_EVENT_ORANGE			= MSG_CLASS_FIRST, /*Orange message in the console*/
+	MSG_STATUS_CONSOLE_ORANGE	= 0x0E, /*Orange message in the console*/
+	MSG_STATUS_WARNING			= 0x0F, /*Red message in game window and in the console*/
+	MSG_EVENT_ADVANCE			= 0x10, /*White message in game window and in the console*/
+	MSG_EVENT_DEFAULT			= 0x11, /*White message at the bottom of the game window and in the console*/
+	MSG_STATUS_DEFAULT			= 0x12, /*White message at the bottom of the game window and in the console*/
+	MSG_INFO_DESCR				= 0x13, /*Green message in game window and in the console*/
+	MSG_STATUS_SMALL			= 0x14, /*White message at the bottom of the game window"*/
+	MSG_STATUS_CONSOLE_BLUE		= 0x15, /*Blue message in the console*/
+	MSG_STATUS_CONSOLE_RED		= 0x16, /*Red message in the console*/
+	MSG_CLASS_LAST				= MSG_STATUS_CONSOLE_RED
 };
 
 enum MapMarks_t
@@ -300,30 +300,31 @@ enum SquareColor_t
 	SQ_COLOR_BLACK = 0,
 };
 
-enum TextColor_t
+enum Color_t
 {
-	TEXTCOLOR_BLUE		= 5,
-	TEXTCOLOR_GREEN		= 18,
-	TEXTCOLOR_TEAL		= 35,
-	TEXTCOLOR_LIGHTGREEN	= 66,
-	TEXTCOLOR_DARKBROWN	= 78,
-	TEXTCOLOR_LIGHTBLUE	= 89,
-	TEXTCOLOR_DARKPURPLE	= 112,
-	TEXTCOLOR_BROWN		= 120,
-	TEXTCOLOR_GREY		= 129,
-	TEXTCOLOR_DARKRED	= 144,
-	TEXTCOLOR_DARKPINK	= 152,
-	TEXTCOLOR_PURPLE	= 154,
-	TEXTCOLOR_DARKORANGE	= 156,
-	TEXTCOLOR_RED		= 180,
-	TEXTCOLOR_PINK		= 190,
-	TEXTCOLOR_ORANGE	= 192,
-	TEXTCOLOR_DARKYELLOW	= 205,
-	TEXTCOLOR_YELLOW	= 210,
-	TEXTCOLOR_WHITE		= 215,
+	COLOR_BLACK		= 0,
+	COLOR_BLUE		= 5,
+	COLOR_GREEN		= 18,
+	COLOR_LIGHTGREEN	= 66,
+	COLOR_DARKBROWN		= 78,
+	COLOR_LIGHTBLUE		= 89,
+	COLOR_DARKRED		= 108,
+	COLOR_DARKPURPLE	= 112,
+	COLOR_BROWN		= 120,
+	COLOR_GREY		= 129,
+	COLOR_TEAL		= 143,
+	COLOR_DARKPINK		= 152,
+	COLOR_PURPLE		= 154,
+	COLOR_DARKORANGE	= 156,
+	COLOR_RED		= 180,
+	COLOR_PINK		= 190,
+	COLOR_ORANGE		= 192,
+	COLOR_DARKYELLOW	= 205,
+	COLOR_YELLOW		= 210,
+	COLOR_WHITE		= 215,
 
-	TEXTCOLOR_NONE		= 255,
-	TEXTCOLOR_UNKNOWN	= 256
+	COLOR_NONE		= 255,
+	COLOR_UNKNOWN		= 256
 };
 
 enum Icons_t
