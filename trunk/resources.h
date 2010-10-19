@@ -76,9 +76,9 @@
 	#define ID_MENU_RELOAD_ALL 237
 #endif
 
-#define CLIENT_VERSION_MIN 860
+#define CLIENT_VERSION_MIN 861
 #define CLIENT_VERSION_MAX 861
-#define CLIENT_VERSION_STRING "Only clients with protocol 8.60 & 8.61 allowed!"
+#define CLIENT_VERSION_STRING "Only clients with protocol 8.61 allowed!"
 
 #define STATUS_SERVER_NAME "We do Server"
 #define STATUS_SERVER_VERSION "0.0.1"
