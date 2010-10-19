@@ -111,8 +111,8 @@ CursorRow=1
 TopLine=31
 LeftChar=1
 [Editor_22]
-Open=1
-Top=1
+Open=0
+Top=0
 CursorCol=22
 CursorRow=308
 TopLine=174
@@ -177,7 +177,7 @@ Top=0
 Open=0
 Top=0
 [Editor_40]
-Open=1
+Open=0
 Top=0
 CursorCol=13
 CursorRow=24
@@ -454,11 +454,11 @@ Top=0
 Open=0
 Top=0
 [Editor_112]
-Open=0
-Top=0
-CursorCol=32
-CursorRow=76
-TopLine=68
+Open=1
+Top=1
+CursorCol=38
+CursorRow=66
+TopLine=63
 LeftChar=1
 [Editor_113]
 Open=0
