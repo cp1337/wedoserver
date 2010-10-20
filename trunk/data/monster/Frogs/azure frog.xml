@@ -9,24 +9,25 @@
 		<flag attackable="1"/>
 		<flag hostile="1"/>
 		<flag illusionable="0"/>
-		<flag convinceable="0"/>
-		<flag pushable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
 		<flag canpushitems="0"/>
 		<flag canpushcreatures="0"/>
 		<flag staticattack="90"/>
 		<flag targetdistance="1"/>
-		<flag runonhealth="0"/>
+		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="25"/>
+		<attack name="melee" interval="2000" skill="10" attack="24"/>
 	</attacks>
 	<defenses armor="8" defense="8"/>
 	<elements>
-		<element icePercent="22"/>
+		<element icePercent="10"/>
 		<element firePercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Ribbit, ribbit!"/>
+		<voice sentence="Ribbit!"/>
 	</voices>
 	<loot>
 		<item id="2148" countmax="11" chance="23500"/><!-- gold coin -->

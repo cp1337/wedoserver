@@ -8,25 +8,29 @@
 		<flag summonable="1"/>
 		<flag attackable="1"/>
 		<flag hostile="1"/>
-		<flag illusionable="0"/>
+		<flag illusionable="1"/>
 		<flag convinceable="0"/>
 		<flag pushable="1"/>
 		<flag canpushitems="1"/>
 		<flag canpushcreatures="0"/>
 		<flag staticattack="90"/>
 		<flag targetdistance="1"/>
-		<flag runonhealth="20"/>
+		<flag runonhealth="60"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="15"/>
-		<attack name="physical" interval="1000" chance="15" range="7" min="-5" max="-20">
+		<attack name="melee" interval="2000" skill="10" attack="30"/>
+		<attack name="physical" interval="1000" chance="15" range="7" min="-0" max="-30">
 			<attribute key="shootEffect" value="poison"/>
 		</attack>
 	</attacks>
-	<defenses armor="12" defense="10"/>
+	<defenses armor="25" defense="25">
+		<defense name="speed" interval="2000" chance="7" speedchange="50" duration="4000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
 	<elements>
-		<element earthPercent="40"/>
-		<element icePercent="25"/>
+		<element earthPercent="20"/>
+		<element icePercent="20"/>
 		<element firePercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="30">
@@ -34,14 +38,13 @@
 		<voice sentence="Ribbit!"/>
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="41000"/><!-- gold coin -->
-		<item id="2666" countmax="2" chance="10500"/><!-- meat -->
-		<item id="2667" chance="25000"/><!-- fish -->
-		<item id="2398" chance="4500"/><!-- mace -->
-		<item id="2382" chance="7000"/><!-- club -->
+		<item id="2148" countmax="20" chance="8231"/><!-- gold coin -->
+		<item id="2667" chance="1963"/><!-- fish -->
+		<item id="2398" chance="286"/><!-- mace -->
 		<item id="1987" chance="100000"><!-- bag -->
 			<inside>
-		<item id="2391" chance="250"/><!-- war hammer -->
+		<item id="2391" chance="10"/><!-- war hammer -->
+		<item id="10557" chance="542"/><!-- poisonus slime -->
 			</inside>
 		</item>
 	</loot>
