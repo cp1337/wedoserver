@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Infernal Frog" nameDescription="a infernal frog" race="venom" experience="190" speed="230" manacost="0">
+	<health now="655" max="655"/>
+	<look type="224" head="69" body="66" legs="69" feet="66" corpse="6079"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="40"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="20"/>
+		<attack name="physical" interval="1000" chance="15" range="7" min="-16" max="-32">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="speed" interval="2000" chance="7" speedchange="100" duration="4000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ribbit!"/>
+		<voice sentence="Ribbit! Ribbit!"/>
+		<voice sentence="No Kisses for you!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="5000"/><!-- gold coin -->
+		<item id="2148" countmax="63" chance="5000"/><!-- gold coin -->
+	</loot>
+</monster>
