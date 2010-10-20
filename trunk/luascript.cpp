@@ -3529,9 +3529,9 @@ int32_t LuaScriptInterface::luaDoCreatureAddHealth(lua_State* L)
 	if(params > 4)
 		force = popNumber(L);
 
-	TextColor_t hitColor = TEXTCOLOR_UNKNOWN;
+	Color_t hitColor = COLOR_UNKNOWN;
 	if(params > 3)
-		hitColor = (TextColor_t)popNumber(L);
+		hitColor = (Color_t)popNumber(L);
 
 	MagicEffect_t hitEffect = MAGIC_EFFECT_UNKNOWN;
 	if(params > 2)
