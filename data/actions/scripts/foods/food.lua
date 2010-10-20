@@ -92,7 +92,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
         end
 
         doPlayerFeed(cid, food[1] * 4)
-        doCreatureSay(cid, food[2], TALKTYPE_ORANGE_1)
+        doCreatureSay(cid, food[2], TALKTYPE_MONSTER)
         doRemoveItem(item.uid, 1)
         return true
 end
