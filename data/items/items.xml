@@ -4331,7 +4331,8 @@ at knife">
 	<item id="2695" article="an" name="egg" plural="eggs">
 		<attribute key="weight" value="30" />
 	</item>
-	<item id="8112" name="cheese">
+	<item id="2696" article="a" name="scarab cheese">
+		<attribute key="description" value="It smells horrible and should not be in the sun for too long." />
 		<attribute key="weight" value="400" />
 	</item>
 	<item id="2697" article="a" name="snowy dead tree" />
@@ -14105,12 +14106,11 @@ at knife">
 	<item id="8110" article="a" name="present">
 		<attribute key="weight" value="600" />
 	</item>
+	<item id="8112" name="cheese">
+		<attribute key="weight" value="400" />
+	</item>
 	<item id="8111" article="a" name="exploding cookie" plural="exploding cookies">
 		<attribute key="weight" value="10" />
-	</item>
-	<item id="2696" article="a" name="scarab cheese">
-		<attribute key="description" value="It smells horrible and should not be in the sun for too long." />
-		<attribute key="weight" value="400" />
 	</item>
 	<item id="8139" article="a" name="snowy pine tree" />
 	<item fromid="8168" toid="8169" name="earth" />
