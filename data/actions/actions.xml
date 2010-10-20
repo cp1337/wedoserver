@@ -457,7 +457,7 @@
 	<action itemid="2793" event="script" value="foods/food.lua"/>
 	<action itemid="2794" event="script" value="foods/food.lua"/>
 	<action itemid="2795" event="script" value="foods/food.lua"/>
-	<action itemid="2796" event="script" value="foods/food.lua"/>
+	<action itemid="8112" event="script" value="foods/food.lua"/>
 	<action itemid="5097" event="script" value="foods/food.lua"/>
 	<action itemid="5678" event="script" value="foods/food.lua"/>
 	<action itemid="6125" event="script" value="foods/food.lua"/>
