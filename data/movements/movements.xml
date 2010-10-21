@@ -2,7 +2,7 @@
 <movements>
 	<!-- Others -->
 	<movevent type="StepIn" actionid="1668" event="script" value="remove.lua" />
-
+	
 	<!--- Ankrahmun Tomb Mystic Fires -->
     <movement type="StepIn" uniqueid="60063" event="script" value="tomb.lua" />
     <movement type="StepIn" uniqueid="60064" event="script" value="tomb.lua" />

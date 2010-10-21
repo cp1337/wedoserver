@@ -1,4 +1,4 @@
-  local config =  {
+local config = {
         transferDisabledVocations = {0} -- disable non vocation characters
 }
 
@@ -69,6 +69,12 @@ if(not getPlayerBalance) then
                 end
 
                 doPlayerSetBalance(cid, getPlayerBalance(cid) - amount)
+                return true
+        end
+end
+
+if(not doPlayerSave) then
+        local function doPlayerSave(cid)
                 return true
         end
 end
@@ -163,6 +169,7 @@ function creatureSayCallback(cid, type, msg)
                                 selfSay("You don\'t have enough gold.", cid)
                         else
                                 selfSay("Alright, we have added the amount of " .. count[cid] .. " gold to your balance. You can withdraw your money anytime you want to. Your account balance is " .. getPlayerBalance(cid) .. ".", cid)
+                                doPlayerSave(cid)
                         end
                 elseif msgcontains(msg, 'no') then
                         selfSay("As you wish. Is there something else I can do for you?", cid)
@@ -189,6 +196,7 @@ function creatureSayCallback(cid, type, msg)
                         else
                                 selfSay("Here you are, " .. count[cid] .. " gold. Please let me know if there is something else I can do for you.", cid)
                                 talkState[cid] = 0
+                                doPlayerSave(cid)
                         end
                 elseif msgcontains(msg, 'no') then
                         selfSay("As you wish. Is there something else I can do for you?", cid)
@@ -205,6 +213,7 @@ function creatureSayCallback(cid, type, msg)
                         talkState[cid] = 0
                         return true
                 end
+
 
                 if isValidMoney(count[cid]) then
                         selfSay("Who would you like transfer " .. count[cid] .. " gold to?", cid)
@@ -242,13 +251,14 @@ function creatureSayCallback(cid, type, msg)
                         else
                                 selfSay("You have transferred " .. count[cid] .. " gold to \"" .. transfer[cid] .."\".", cid)
                                 transfer[cid] = nil
+                                doPlayerSave(cid)
                         end
                 elseif msgcontains(msg, 'no') then
                         selfSay("As you wish. Is there something else I can do for you?", cid)
                 end
                 talkState[cid] = 0
 ---------------------------- money exchange --------------
-        elseif msgcontains(msg, 'changhdeytwetdfnkjipe gçlPAOKDKold') then
+        elseif msgcontains(msg, 'change gold') then
                 npcHandler:say("How many platinum coins would you like to get?", cid)
                 talkState[cid] = 14
         elseif talkState[cid] == 14 then
@@ -261,7 +271,7 @@ function creatureSayCallback(cid, type, msg)
                         talkState[cid] = 15
                 end
         elseif talkState[cid] == 15 then
-                if msgcontains(msg, 'ylllkkassieieiieees') then
+                if msgcontains(msg, 'yes') then
                         if doPlayerRemoveItem(cid, 2148, count[cid] * 100) then
                                 doPlayerAddItem(cid, 2152, count[cid])
                                 npcHandler:say("Here you are.", cid)
@@ -272,14 +282,14 @@ function creatureSayCallback(cid, type, msg)
                         npcHandler:say("Well, can I help you with something else?", cid)
                 end
                 talkState[cid] = 0
-        elseif msgcontains(msg, 'chansaffsdgsdgge platasdfgasddfsdhcbxinum') then
+        elseif msgcontains(msg, 'change platinum') then
                 npcHandler:say("Would you like to change your platinum coins into gold or crystal?", cid)
                 talkState[cid] = 16
         elseif talkState[cid] == 16 then
-                if msgcontains(msg, 'gosassadasddadgfsdgld') then
+                if msgcontains(msg, 'gold') then
                         npcHandler:say("How many platinum coins would you like to change into gold?", cid)
                         talkState[cid] = 17
-                elseif msgcontains(msg, 'crysfafasrteyiukjhgnstal') then
+                elseif msgcontains(msg, 'crystal') then
                         npcHandler:say("How many crystal coins would you like to get?", cid)
                         talkState[cid] = 19
                 else
@@ -296,7 +306,7 @@ function creatureSayCallback(cid, type, msg)
                         talkState[cid] = 18
                 end
         elseif talkState[cid] == 18 then
-                if msgcontains(msg, 'yeasasass') then
+                if msgcontains(msg, 'yes') then
                         if doPlayerRemoveItem(cid, 2152, count[cid]) then
                                 npcHandler:say("Here you are.", cid)
                                 doPlayerAddItem(cid, 2148, count[cid] * 100)
@@ -317,7 +327,7 @@ function creatureSayCallback(cid, type, msg)
                         talkState[cid] = 20
                 end
         elseif talkState[cid] == 20 then
-                if msgcontains(msg, 'yasdcsxxcsxxxxes') then
+                if msgcontains(msg, 'yes') then
                         if doPlayerRemoveItem(cid, 2152, count[cid] * 100) then
                                 npcHandler:say("Here you are.", cid)
                                 doPlayerAddItem(cid, 2160, count[cid])
@@ -328,7 +338,7 @@ function creatureSayCallback(cid, type, msg)
                         npcHandler:say("Well, can I help you with something else?", cid)
                 end
                 talkState[cid] = 0
-        elseif msgcontains(msg, 'changeadsdxxxsadas crysaddxxxxxasstal') then
+        elseif msgcontains(msg, 'change crystal') then
                 npcHandler:say("How many crystal coins would you like to change into platinum?", cid)
                 talkState[cid] = 21
         elseif talkState[cid] == 21 then
@@ -341,7 +351,7 @@ function creatureSayCallback(cid, type, msg)
                         talkState[cid] = 22
                 end
         elseif talkState[cid] == 22 then
-                if msgcontains(msg, 'yeghdfghfdghhs') then
+                if msgcontains(msg, 'yes') then
                         if doPlayerRemoveItem(cid, 2160, count[cid])  then
                                 npcHandler:say("Here you are.", cid)
                                 doPlayerAddItem(cid, 2152, count[cid] * 100)
@@ -352,7 +362,7 @@ function creatureSayCallback(cid, type, msg)
                         npcHandler:say("Well, can I help you with something else?", cid)
                 end
                 talkState[cid] = 0
-        elseif msgcontains(msg, 'chansadsadasdxxxvvvvccccccge') then
+        elseif msgcontains(msg, 'change') then
                 npcHandler:say("There are three different coin types in Tibia: 100 gold coins equal 1 platinum coin, 100 platinum coins equal 1 crystal coin. So if you'd like to change 100 gold into 1 platinum, simply say '{change gold}' and then '1 platinum'.", cid)
                 talkState[cid] = 0
         end
@@ -362,4 +372,4 @@ end
 
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
-npcHandler:addModule(FocusModule:new()) 
+npcHandler:addModule(FocusModule:new())
