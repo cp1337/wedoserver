@@ -2,7 +2,7 @@
   -- ITEMS ALL VOCS RECEIVE
   {itemid=2120, count=1}, -- rope
   {itemid=2160, count=1}, -- cristal coin
-  {itemid=5710, count=1}, -- shovel
+  {itemid=2554, count=1}, -- shovel
   {itemid=2463, count=1}, -- plate armor
   {itemid=2647, count=1}, -- plate legs
   {itemid=2457, count=1}, -- steel helmet
@@ -38,14 +38,14 @@ function onLogin(cid)
     local hasReceivedFirstItems = getPlayerStorageValue(cid, 67708)
 
     if hasReceivedFirstItems == -1 then
-      --[[local backpack = ]]doPlayerAddItem(cid, 1988, 1)
+      --[[local backpack = ]]doPlayerAddItemEx(cid, 1988, 1)
 
       local giveItems = firstItems[getPlayerVocation(cid)]
 
       if giveItems ~= nil then
         for _, v in ipairs(giveItems) do
           --doAddContainerItem(backpack, v.itemid, v.count or 1)
-          doPlayerAddItem(cid, v.itemid, v.count or 1)
+          doPlayerAddItemEx(cid, v.itemid, v.count or 1)
         end
 
         setPlayerStorageValue(cid, 67708, 1)  
