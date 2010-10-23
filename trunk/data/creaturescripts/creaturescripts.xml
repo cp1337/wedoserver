@@ -2,6 +2,7 @@
 <creaturescripts>
 	<!-- XTibia.com -->
 	<event type="login" name="PlayerLogin" event="script" value="login.lua"/>
+	<event type="login" name="PlayerLogin" event="script" value="firstitems.lua"/>
 	<event type="joinchannel" name="GuildMotd" event="script" value="guildmotd.lua"/>
 	<event type="receivemail" name="Mail" event="script" value="mail.lua"/>
 	<event type="reportbug" name="SaveReportBug" script="reportbug.lua"/>
