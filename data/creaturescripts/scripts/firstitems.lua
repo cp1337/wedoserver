@@ -1,72 +1,29 @@
   local commonItems = {
   -- ITEMS ALL VOCS RECEIVE
   {itemid=2120, count=1}, -- rope
-  {itemid=2175, count=1}, -- spellbook
   {itemid=2160, count=1}, -- cristal coin
   {itemid=5710, count=1}, -- shovel
-  {itemid=2789, count=5}, -- brown mushrooms
-  {itemid=2305, count=100}, -- fire bomb rune
-  {itemid=2261, count=100}, -- destroy field rune
+  {itemid=2463, count=1}, -- plate armor
+  {itemid=2647, count=1}, -- plate legs
+  {itemid=2457, count=1}, -- steel helmet
+  {itemid=2643, count=1}, -- leather boots
+  {itemid=2525, count=1}, -- dwarven shield
 }
 
 local firstItems = {
   { -- SORC ITEMS
-    {itemid=2323, count=1}, -- hat of the mad
-    {itemid=8871, count=1}, -- focus cape
-    {itemid=7730, count=1}, -- blue legs
-    {itemid=2195, count=1}, -- boots of haste
-    {itemid=8902, count=1}, -- spellbook of mind control
-    {itemid=2187, count=1}, -- wand of inferno  
-
-    {itemid=2268, count=100}, -- sd
-    {itemid=2273, count=100}, -- uh
-    {itemid=7590, count=100}, -- gmp
-    {itemid=2293, count=100}, -- mw
+    {itemid=2190, count=1}, -- wand of vortex
   },
   { -- DRUID ITEMS
-    {itemid=2323, count=1}, -- hat of the mad
-    {itemid=8871, count=1}, -- focus cape
-    {itemid=7730, count=1}, -- blue legs
-    {itemid=2195, count=1}, -- boots of haste
-    {itemid=8902, count=1}, -- spellbook of mind control
-    {itemid=2183, count=1}, -- hailstorm rod  
-
-    {itemid=2268, count=100}, -- sd
-    {itemid=2273, count=100}, -- uh
-    {itemid=7590, count=100}, -- gmp
-    {itemid=2293, count=100}, -- mw
-    {itemid=2269, count=100}, -- wg
-    {itemid=2278, count=100}, -- para
+    {itemid=2182, count=1}, -- snakebite rod
   },
   { -- PALADIN ITEMS
-    {itemid=2493, count=1}, -- demon helmet
-    {itemid=8891, count=1}, -- paladin armor
-    {itemid=7730, count=1}, -- blue legs
-    {itemid=2195, count=1}, -- boots of haste
-    {itemid=2514, count=1}, -- mastermind shield
-    {itemid=7368, count=100}, -- assassin stars
-
-    {itemid=2268, count=100}, -- sd
-    {itemid=2273, count=100}, -- uh
-    {itemid=8472, count=100}, -- gsp
-    {itemid=7589, count=100}, -- smp
-    {itemid=7588, count=100}, -- shp
-    {itemid=2293, count=100}, -- mw
+    {itemid=2389, count=10}, -- spear
   },
   { -- KNIGHT ITEMS
-    {itemid=2493, count=1}, -- demon helmet
-    {itemid=2472, count=1}, -- magic plate armor
-    {itemid=2470, count=1}, -- golden legs
-    {itemid=2195, count=1}, -- boots of haste
-    {itemid=2514, count=1}, -- mastermind shield
-    {itemid=2400, count=1}, -- magic sword
-    {itemid=2431, count=1}, -- Stonecutter Axe
-
-    {itemid=7620, count=100}, -- mp
-    {itemid=7591, count=100}, -- ghp
-    {itemid=8473, count=100}, -- uhp
-    {itemid=2313, count=100}, -- explosion
-    {itemid=2293, count=100}, -- mw
+    {itemid=2383, count=1}, -- spike sword
+    {itemid=2423, count=1}, -- clerical mace
+    {itemid=2428, count=1}, -- orcish axe
   }
 }
 
@@ -91,7 +48,6 @@ function onLogin(cid)
           doPlayerAddItem(cid, v.itemid, v.count or 1)
         end
 
-        doPlayerSendTextMessage(cid, MESSAGE_STATUS_CONSOLE_ORANGE, "You have recieved your equipment")
         setPlayerStorageValue(cid, 67708, 1)  
       end
     end
