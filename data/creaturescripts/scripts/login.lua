@@ -50,6 +50,7 @@ function onLogin(cid)
 	registerCreatureEvent(cid, "PlayerKill")
 	registerCreatureEvent(cid, "KillingInTheNameOf")
 	registerCreatureEvent(cid, "PythiusDead")
+	registerCreatureEvent(cid, "FirstItems")
 
     if (InitArenaScript ~= 0) then
     InitArenaScript = 1
