@@ -1312,6 +1312,7 @@ void Player::onCreatureAppear(const Creature* creature)
 		g_moveEvents->onPlayerEquip(this, item, (slots_t)slot, false);
 	}
 
+	//updateWeapon(); # FIXME: make it actually work, lol
 	if(BedItem* bed = Beds::getInstance()->getBedBySleeper(guid))
 		bed->wakeUp();
 
@@ -3302,15 +3303,16 @@ void Player::doAttacking(uint32_t interval)
 		return;
 	}
 
-	Item* tool = getWeapon();
-	if(const Weapon* weapon = g_weapons->getWeapon(tool))
+	Item* item = getWeapon(false);
+	if(const Weapon* _weapon = g_weapons->getWeapon(item))
 	{
-		if(weapon->interruptSwing() && !canDoAction())
+		if(_weapon->interruptSwing() && !canDoAction())
 		{
-			SchedulerTask* task = createSchedulerTask(getNextActionTime(), boost::bind(&Game::checkCreatureAttack, &g_game, getID()));
+			SchedulerTask* task = createSchedulerTask(getNextActionTime(),
+			boost::bind(&Game::checkCreatureAttack, &g_game, getID()));
 			setNextActionTask(task);
 		}
-		else if((!weapon->hasExhaustion() || !hasCondition(CONDITION_EXHAUST, EXHAUST_COMBAT)) && weapon->useWeapon(this, tool, attackedCreature))
+		else if((!_weapon->hasExhaustion() || !hasCondition(CONDITION_EXHAUST, EXHAUST_COMBAT)) && _weapon->useWeapon(this, item, attackedCreature))
 			lastAttack = OTSYS_TIME();
 	}
 	else if(Weapon::useFist(this, attackedCreature))
@@ -3408,7 +3410,7 @@ void Player::getCreatureLight(LightInfo& light) const
 		light = itemsLight;
 }
 
-void Player::updateItemsLight(bool internal /*=false*/)
+void Player::updateItemsLight(bool internal/* = false*/)
 {
 	LightInfo maxLight;
 	LightInfo curLight;

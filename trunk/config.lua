@@ -9,7 +9,7 @@
 	newPlayerSpawnPosZ = 7
 	newPlayerTownId = 2
 	newPlayerLevel = 8
-	newPlayerMagicLevel = 2
+	newPlayerMagicLevel = 0
 	generateAccountNumber = false
 
 	-- Unjustified kills
