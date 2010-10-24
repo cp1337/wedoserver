@@ -8797,7 +8797,7 @@ at knife">
 	<item id="5878" article="a" name="minotaur leather" plural="minotaur leathers">
 		<attribute key="weight" value="40" />
 	</item>
-	<item id="5879" article="a" name="giant spider silk" plural="giant spider silks">
+	<item id="5879" article="a" name="spider silk" plural="spider silks">
 		<attribute key="weight" value="10" />
 	</item>
 	<item id="5880" article="an" name="iron ore" plural="iron ores">
