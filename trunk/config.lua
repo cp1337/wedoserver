@@ -84,12 +84,12 @@
 	retryTimeout = 5 * 1000
 	loginTimeout = 60 * 1000
 	maxPlayers = 1000
-	motd = "Welcome to the WeDo OTS SVN!"
+	motd = "Welcome to the We Do OTS Beta!"
 	displayOnOrOffAtCharlist = false
 	onePlayerOnlinePerAccount = true
 	allowClones = false
-	serverName = "WeDo SVN"
-	loginMessage = "Welcome to the WeDo OTS SVN!"
+	serverName = "We Do Beta"
+	loginMessage = "Welcome to the We Do OTS Beta!"
 	statusTimeout = 5 * 60 * 1000
 	replaceKickOnLogin = true
 	forceSlowConnectionsToDisconnect = false
@@ -130,14 +130,14 @@
 	buyableAndSellableHouses = true
 	houseNeedPremium = true
 	bedsRequirePremium = true
-	levelToBuyHouse = 1
+	levelToBuyHouse = 8
 	housesPerAccount = 0
 	houseRentAsPrice = false
 	housePriceAsRent = false
 	housePriceEachSquare = 1000
 	houseRentPeriod = "never"
 	houseCleanOld = 0
-	guildHalls = false
+	guildHalls = true
 
 	-- Item usage
 	timeBetweenActions = 200
@@ -146,7 +146,7 @@
 
 	-- Map
 	mapName = "wedo"
-	mapAuthor = "Doidin"
+	mapAuthor = "We Do Team"
 	randomizeTiles = true
 	storeTrash = true
 	cleanProtectedZones = true
@@ -275,8 +275,8 @@
 	-- Status
 	ownerName = ""
 	ownerEmail = "@XTibia.com"
-	url = "http://XTibia.com/"
-	location = "Europe"
+	url = "http://xtibia.com/forum"
+	location = "Brasil"
 	displayGamemastersWithOnlineCommand = false
 
 	-- Logs
