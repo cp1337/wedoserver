@@ -524,7 +524,7 @@ bool checkText(std::string text, std::string str)
 	return asLowerCaseString(text) == str;
 }
 
-std::string generateRecoveryKey(int32_t fieldCount, int32_t fieldLenght, bool mixCase/* = false*/)
+std::string generateRecoveryKey(int32_t fieldCount, int32_t fieldLenght)
 {
 	std::stringstream key;
 	int32_t i = 0, j = 0, lastNumber = 99, number = 0;
@@ -536,7 +536,7 @@ std::string generateRecoveryKey(int32_t fieldCount, int32_t fieldLenght, bool mi
 		do
 		{
 			madeNumber = madeCharacter = false;
-			if((mixCase && !random_range(0, 2)) || (!mixCase && (bool)random_range(0, 1)))
+			if((bool)random_range(0, 1))
 			{
 				number = random_range(2, 9);
 				if(number != lastNumber)
@@ -548,10 +548,7 @@ std::string generateRecoveryKey(int32_t fieldCount, int32_t fieldLenght, bool mi
 			}
 			else
 			{
-                if(mixCase && (bool)random_range(0,1) )
-                character = (char)random_range(97, 122);
-				character = (char)random_range(65, 90);
-				
+				character = (char)random_range(65, 90);		
 				if(character != lastCharacter)
 				{
 					key << character;

@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // OpenTibia - an opensource roleplaying game
 ////////////////////////////////////////////////////////////////////////
 // This program is free software: you can redistribute it and/or modify
@@ -26,172 +26,175 @@ extern ConfigManager g_config;
 
 bool DatabaseManager::optimizeTables()
 {
-	Database* db = Database::getInstance();
-	DBQuery query;
-	switch(db->getDatabaseEngine())
-	{
-		case DATABASE_ENGINE_MYSQL:
-		{
-			query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::SQL_DB)) << " AND `DATA_FREE` > 0;";
-			DBResult* result;
-			if(!(result = db->storeQuery(query.str())))
-				break;
+        Database* db = Database::getInstance();
+        DBQuery query;
+        switch(db->getDatabaseEngine())
+        {
+                case DATABASE_ENGINE_MYSQL:
+                {
+                        query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::SQL_DB)) << " AND `DATA_FREE` > 0;";
+                        DBResult* result;
+                        if(!(result = db->storeQuery(query.str())))
+                                break;
 
-			query.str("");
-			do
-			{
-				std::cout << "> Optimizing table: " << result->getDataString("TABLE_NAME") << "... ";
-				query << "OPTIMIZE TABLE `" << result->getDataString("TABLE_NAME") << "`;";
-				if(db->executeQuery(query.str()))
-					std::cout << "[success]" << std::endl;
-				else
-					std::cout << "[failure]" << std::endl;
+                        query.str("");
+                        do
+                        {
+                                std::cout << "> Optimizing table: " << result->getDataString("TABLE_NAME") << "... ";
+                                query << "OPTIMIZE TABLE `" << result->getDataString("TABLE_NAME") << "`;";
+                                if(db->executeQuery(query.str()))
+                                        std::cout << "[success]" << std::endl;
+                                else
+                                        std::cout << "[failure]" << std::endl;
 
-				query.str("");
-			}
-			while(result->next());
+                                query.str("");
+                        }
+                        while(result->next());
 
-			result->free();
-			return true;
-		}
+                        result->free();
+                        return true;
+                }
 
-		case DATABASE_ENGINE_SQLITE:
-		{
-			if(!db->executeQuery("VACUUM;"))
-				break;
+                case DATABASE_ENGINE_SQLITE:
+                {
+                        if(!db->executeQuery("VACUUM;"))
+                                break;
 
-			std::cout << "> Optimized database." << std::endl;
-			return true;
-		}
+                        std::cout << "> Optimized database." << std::endl;
+                        return true;
+                }
 
-		case DATABASE_ENGINE_POSTGRESQL:
-		{
-			if(!db->executeQuery("VACUUM FULL;"))
-				break;
+                case DATABASE_ENGINE_POSTGRESQL:
+                {
+                        if(!db->executeQuery("VACUUM FULL;"))
+                                break;
 
-			std::cout << "> Optimized database." << std::endl;
-			return true;
-		}
+                        std::cout << "> Optimized database." << std::endl;
+                        return true;
+                }
 
-		default:
-			break;
-	}
+                default:
+                        break;
+        }
 
-	return false;
+        return false;
 }
 
 bool DatabaseManager::triggerExists(std::string trigger)
 {
-	Database* db = Database::getInstance();
-	DBQuery query;
-	switch(db->getDatabaseEngine())
-	{
-		case DATABASE_ENGINE_SQLITE:
-			query << "SELECT `name` FROM `sqlite_master` WHERE `type` = 'trigger' AND `name` = " << db->escapeString(trigger) << ";";
-			break;
+        Database* db = Database::getInstance();
+        DBQuery query;
+        switch(db->getDatabaseEngine())
+        {
+                case DATABASE_ENGINE_SQLITE:
+                        query << "SELECT `name` FROM `sqlite_master` WHERE `type` = 'trigger' AND `name` = " << db->escapeString(trigger) << ";";
+                        break;
 
-		case DATABASE_ENGINE_MYSQL:
-			query << "SELECT `TRIGGER_NAME` FROM `information_schema`.`triggers` WHERE `TRIGGER_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::SQL_DB)) << " AND `TRIGGER_NAME` = " << db->escapeString(trigger) << ";";
-			break;
+                case DATABASE_ENGINE_MYSQL:
+                        query << "SELECT `TRIGGER_NAME` FROM `information_schema`.`triggers` WHERE `TRIGGER_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::SQL_DB)) << " AND `TRIGGER_NAME` = " << db->escapeString(trigger) << ";";
+                        break;
 
-		case DATABASE_ENGINE_POSTGRESQL:
-			//TODO: PostgreSQL support
-			return true;
+                case DATABASE_ENGINE_POSTGRESQL:
+                        //TODO: PostgreSQL support
+                        return true;
 
-		default:
-			return false;
-	}
+                default:
+                        return false;
+        }
 
-	DBResult* result;
-	if(!(result = db->storeQuery(query.str())))
-		return false;
+        DBResult* result;
+        if(!(result = db->storeQuery(query.str())))
+                return false;
 
-	result->free();
-	return true;
+        result->free();
+        return true;
 }
 
 bool DatabaseManager::tableExists(std::string table)
 {
-	Database* db = Database::getInstance();
-	DBQuery query;
-	switch(db->getDatabaseEngine())
-	{
-		case DATABASE_ENGINE_SQLITE:
-			query << "SELECT `name` FROM `sqlite_master` WHERE `type` = 'table' AND `name` = " << db->escapeString(table) << ";";
-			break;
+        Database* db = Database::getInstance();
+        DBQuery query;
+        switch(db->getDatabaseEngine())
+        {
+                case DATABASE_ENGINE_SQLITE:
+                        query << "SELECT `name` FROM `sqlite_master` WHERE `type` = 'table' AND `name` = " << db->escapeString(table) << ";";
+                        break;
 
-		case DATABASE_ENGINE_MYSQL:
-			query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::SQL_DB)) << " AND `TABLE_NAME` = " << db->escapeString(table) << ";";
-			break;
+                case DATABASE_ENGINE_MYSQL:
+                        query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::SQL_DB)) << " AND `TABLE_NAME` = " << db->escapeString(table) << ";";
+                        break;
 
-		case DATABASE_ENGINE_POSTGRESQL:
-			//TODO: PostgreSQL support
-			return true;
+                case DATABASE_ENGINE_POSTGRESQL:
+                        //TODO: PostgreSQL support
+                        return true;
 
-		default:
-			return false;
-	}
+                default:
+                        return false;
+        }
 
-	DBResult* result;
-	if(!(result = db->storeQuery(query.str())))
-		return false;
+        DBResult* result;
+        if(!(result = db->storeQuery(query.str())))
+                return false;
 
-	result->free();
-	return true;
+        result->free();
+        return true;
 }
 
 bool DatabaseManager::isDatabaseSetup()
 {
-	Database* db = Database::getInstance();
-	switch(db->getDatabaseEngine())
-	{
-		case DATABASE_ENGINE_MYSQL:
-		{
-			DBQuery query;
-			query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::SQL_DB)) << ";";
+        Database* db = Database::getInstance();
+        switch(db->getDatabaseEngine())
+        {
+                case DATABASE_ENGINE_MYSQL:
+                {
+                        DBQuery query;
+                        query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db->escapeString(g_config.getString(ConfigManager::SQL_DB)) << ";";
 
-			DBResult* result;
-			if(!(result = db->storeQuery(query.str())))
-				return false;
+                        DBResult* result;
+                        if(!(result = db->storeQuery(query.str())))
+                                return false;
 
-			result->free();
-			return true;
-		}
+                        result->free();
+                        return true;
+                }
 
-		case DATABASE_ENGINE_SQLITE:
-			//a pre-setup sqlite database is already included
-			return true;
+                case DATABASE_ENGINE_SQLITE:
+                        //a pre-setup sqlite database is already included
+                        return true;
 
-		case DATABASE_ENGINE_POSTGRESQL:
-			//TODO: PostgreSQL support
-			return true;
+                case DATABASE_ENGINE_POSTGRESQL:
+                        //TODO: PostgreSQL support
+                        return true;
 
-		default:
-			break;
-	}
+                default:
+                        break;
+        }
 
-	return false;
+        return false;
 }
 
 int32_t DatabaseManager::getDatabaseVersion()
 {
-	if(!tableExists("server_config"))
-		return 0;
+        if(!tableExists("server_config"))
+                return 0;
 
-	int32_t value = 0;
-	if(getDatabaseConfig("db_version", value))
-		return value;
+        int32_t value = 0;
+        if(getDatabaseConfig("db_version", value))
+                return value;
 
-	return 1;
+        return 1;
 }
 
 uint32_t DatabaseManager::updateDatabase()
 {
         Database* db = Database::getInstance();
         uint32_t version = getDatabaseVersion();
+        if(db->getDatabaseEngine() == DATABASE_ENGINE_ODBC)
+                return version;
+
         if(version < 6 && db->getDatabaseEngine() == DATABASE_ENGINE_POSTGRESQL)
         {
-                std::clog << "> WARNING: Couldn't update database - PostgreSQL support available since version 6, please use latest pgsql.sql schema." << std::endl;
+                std::cout << "> WARNING: Couldn't update database - PostgreSQL support available since version 6, please use latest pgsql.sql schema." << std::endl;
                 registerDatabaseConfig("db_version", 6);
                 return 6;
         }
@@ -201,7 +204,7 @@ uint32_t DatabaseManager::updateDatabase()
         {
                 case 0:
                 {
-                        std::clog << "> Updating database to version: 1..." << std::endl;
+                        std::cout << "> Updating database to version: 1..." << std::endl;
                         if(db->getDatabaseEngine() == DATABASE_ENGINE_SQLITE)
                                 db->executeQuery("CREATE TABLE IF NOT EXISTS `server_config` (`config` VARCHAR(35) NOT NULL DEFAULT '', `value` INTEGER NOT NULL);");
                         else
@@ -302,7 +305,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 1:
                 {
-                        std::clog << "> Updating database to version: 2..." << std::endl;
+                        std::cout << "> Updating database to version: 2..." << std::endl;
                         if(db->getDatabaseEngine() == DATABASE_ENGINE_SQLITE)
                                 db->executeQuery("ALTER TABLE `players` ADD `promotion` INTEGER NOT NULL DEFAULT 0;");
                         else
@@ -336,9 +339,9 @@ uint32_t DatabaseManager::updateDatabase()
                         }
 
                         if(db->getDatabaseEngine() == DATABASE_ENGINE_SQLITE)
-                                db->executeQuery("ALTER TABLE `players` ADD `deleted` INTEGER NOT NULL DEFAULT 0;");
+                                db->executeQuery("ALTER TABLE `players` ADD `deleted` BOOLEAN NOT NULL DEFAULT 0;");
                         else
-                                db->executeQuery("ALTER TABLE `players` ADD `deleted` INT NOT NULL DEFAULT 0;");
+                                db->executeQuery("ALTER TABLE `players` ADD `deleted` TINYINT(1) NOT NULL DEFAULT 0;");
 
                         if(db->getDatabaseEngine() == DATABASE_ENGINE_MYSQL)
                                 db->executeQuery("ALTER TABLE `player_items` CHANGE `attributes` `attributes` BLOB NOT NULL;");
@@ -349,14 +352,14 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 2:
                 {
-                        std::clog << "> Updating database to version: 3..." << std::endl;
+                        std::cout << "> Updating database to version: 3..." << std::endl;
                         db->executeQuery("UPDATE `players` SET `vocation` = `vocation` - 4 WHERE `vocation` >= 5 AND `vocation` <= 8;");
 
                         DBResult* result;
                         if((result = db->storeQuery("SELECT COUNT(`id`) AS `count` FROM `players` WHERE `vocation` > 4;"))
                                 && result->getDataInt("count"))
                         {
-                                std::clog << "[Warning] There are still " << result->getDataInt("count") << " players with vocation above 4, please mind to update them manually." << std::endl;
+                                std::cout << "[Warning] There are still " << result->getDataInt("count") << " players with vocation above 4, please mind to update them manually." << std::endl;
                                 result->free();
                         }
 
@@ -366,7 +369,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 3:
                 {
-                        std::clog << "> Updating database to version: 4..." << std::endl;
+                        std::cout << "> Updating database to version: 4..." << std::endl;
                         db->executeQuery("ALTER TABLE `houses` ADD `name` VARCHAR(255) NOT NULL;");
                         if(db->getDatabaseEngine() == DATABASE_ENGINE_SQLITE)
                         {
@@ -397,7 +400,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 4:
                 {
-                        std::clog << "> Updating database to version: 5..." << std::endl;
+                        std::cout << "> Updating database to version: 5..." << std::endl;
                         db->executeQuery("ALTER TABLE `player_deaths` ADD `altkilled_by` VARCHAR(255) NOT NULL;");
                         registerDatabaseConfig("db_version", 5);
                         return 5;
@@ -405,7 +408,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 5:
                 {
-                        std::clog << "> Updating database to version: 6..." << std::endl;
+                        std::cout << "> Updating database to version: 6..." << std::endl;
                         switch(db->getDatabaseEngine())
                         {
                                 case DATABASE_ENGINE_MYSQL:
@@ -449,7 +452,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 6:
                 {
-                        std::clog << "> Updating database to version: 7..." << std::endl;
+                        std::cout << "> Updating database to version: 7..." << std::endl;
                         if(g_config.getBool(ConfigManager::INGAME_GUILD_MANAGEMENT))
                         {
                                 if(DBResult* result = db->storeQuery("SELECT `r`.`id`, `r`.`guild_id` FROM `guild_ranks` r LEFT JOIN `guilds` g ON `r`.`guild_id` = `g`.`id` WHERE `g`.`ownerid` = `g`.`id` AND `r`.`level` = 3;"))
@@ -471,7 +474,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 7:
                 {
-                        std::clog << "> Updating database version to: 8..." << std::endl;
+                        std::cout << "> Updating database version to: 8..." << std::endl;
                         switch(db->getDatabaseEngine())
                         {
                                 case DATABASE_ENGINE_MYSQL:
@@ -525,7 +528,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 8:
                 {
-                        std::clog << "> Updating database to version: 9..." << std::endl;
+                        std::cout << "> Updating database to version: 9..." << std::endl;
                         db->executeQuery("ALTER TABLE `bans` ADD `statement` VARCHAR(255) NOT NULL;");
                         registerDatabaseConfig("db_version", 9);
                         return 9;
@@ -533,14 +536,14 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 9:
                 {
-                        std::clog << "> Updating database to version: 10..." << std::endl;
+                        std::cout << "> Updating database to version: 10..." << std::endl;
                         registerDatabaseConfig("db_version", 10);
                         return 10;
                 }
 
                 case 10:
                 {
-                        std::clog << "> Updating database to version: 11..." << std::endl;
+                        std::cout << "> Updating database to version: 11..." << std::endl;
                         db->executeQuery("ALTER TABLE `players` ADD `description` VARCHAR(255) NOT NULL DEFAULT '';");
                         if(tableExists("map_storage"))
                         {
@@ -570,7 +573,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 11:
                 {
-                        std::clog << "> Updating database to version: 12..." << std::endl;
+                        std::cout << "> Updating database to version: 12..." << std::endl;
                         db->executeQuery("UPDATE `players` SET `stamina` = 151200000 WHERE `stamina` > 151200000;");
                         db->executeQuery("UPDATE `players` SET `loss_experience` = `loss_experience` * 10, `loss_mana` = `loss_mana` * 10, `loss_skills` = `loss_skills` * 10, `loss_items` = `loss_items` * 10;");
                         switch(db->getDatabaseEngine())
@@ -606,7 +609,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 12:
                 {
-                        std::clog << "> Updating database to version: 13..." << std::endl;
+                        std::cout << "> Updating database to version: 13..." << std::endl;
                         std::string queryList[] = {
                                 "ALTER TABLE `accounts` DROP KEY `group_id`;",
                                 "ALTER TABLE `players` DROP KEY `group_id`;",
@@ -622,7 +625,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 13:
                 {
-                        std::clog << "> Updating database to version: 14..." << std::endl;
+                        std::cout << "> Updating database to version: 14..." << std::endl;
                         switch(db->getDatabaseEngine())
                         {
                                 case DATABASE_ENGINE_MYSQL:
@@ -665,7 +668,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 14:
                 {
-                        std::clog << "> Updating database to version: 15..." << std::endl;
+                        std::cout << "> Updating database to version: 15..." << std::endl;
                         db->executeQuery("DROP TABLE `player_deaths`;"); //no support for moving, sorry!
                         switch(db->getDatabaseEngine())
                         {
@@ -758,7 +761,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 15:
                 {
-                        std::clog << "> Updating database to version: 16..." << std::endl;
+                        std::cout << "> Updating database to version: 16..." << std::endl;
                         switch(db->getDatabaseEngine())
                         {
                                 case DATABASE_ENGINE_MYSQL:
@@ -802,7 +805,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 16:
                 {
-                        std::clog << "> Updating database to version: 17..." << std::endl;
+                        std::cout << "> Updating database to version: 17..." << std::endl;
                         switch(db->getDatabaseEngine())
                         {
                                 case DATABASE_ENGINE_MYSQL:
@@ -837,7 +840,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 17:
                 {
-                        std::clog << "> Updating database to version: 18..." << std::endl;
+                        std::cout << "> Updating database to version: 18..." << std::endl;
                         switch(db->getDatabaseEngine())
                         {
                                 case DATABASE_ENGINE_MYSQL:
@@ -888,7 +891,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 18:
                 {
-                        std::clog << "> Updating database to version: 19..." << std::endl;
+                        std::cout << "> Updating database to version: 19..." << std::endl;
                         switch(db->getDatabaseEngine())
                         {
                                 case DATABASE_ENGINE_MYSQL:
@@ -947,7 +950,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 19:
                 {
-                        std::clog << "> Updating database to version: 20..." << std::endl;
+                        std::cout << "> Updating database to version: 20..." << std::endl;
                         switch(db->getDatabaseEngine())
                         {
                                 case DATABASE_ENGINE_MYSQL:
@@ -987,7 +990,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 20:
                 {
-                        std::clog << "> Updating database to version: 21..." << std::endl;
+                        std::cout << "> Updating database to version: 21..." << std::endl;
                         std::string queryList[] = {
                                 "UPDATE `bans` SET `type` = 3 WHERE `type` = 5;",
                                 "UPDATE `bans` SET `param` = 2 WHERE `type` = 2;",
@@ -1002,7 +1005,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 21:
                 {
-                        std::clog << "> Updating database to version: 22..." << std::endl;
+                        std::cout << "> Updating database to version: 22..." << std::endl;
                         switch(db->getDatabaseEngine())
                         {
                                 case DATABASE_ENGINE_MYSQL:
@@ -1021,7 +1024,7 @@ uint32_t DatabaseManager::updateDatabase()
 
                 case 22:
                 {
-                        std::clog << "> Updating database to version 23..." << std::endl;
+                        std::cout << "> Updating database to version 23..." << std::endl;
                         if(g_config.getBool(ConfigManager::ACCOUNT_MANAGER))
                         {
                                 query << "SELECT `id`, `key` FROM `accounts` WHERE `key` ";
@@ -1057,81 +1060,6 @@ uint32_t DatabaseManager::updateDatabase()
                         return 23;
                 }
 
-                case 23:
-                {
-                        std::clog << "> Updating database to version 24..." << std::endl;
-                        query << "ALTER TABLE `guilds` ADD `checkdata` ";
-                        if(db->getDatabaseEngine() == DATABASE_ENGINE_SQLITE)
-                                query << "INTEGER NOT NULL;";
-                        else
-                                query << "INT NOT NULL AFTER `creationdata`;";
-
-                        db->executeQuery(query.str());
-                        query.str("");
-                        registerDatabaseConfig("db_version", 24);
-                        return 24;
-                }
-
-                case 24:
-                {
-                        std::clog << "> Updating database to version 25..." << std::endl;
-                        switch(db->getDatabaseEngine())
-                        {
-                                case DATABASE_ENGINE_SQLITE:
-                                {
-                                        query << "DROP TABLE `server_config`;";
-                                        db->executeQuery(query.str());
-
-                                        query << "CREATE TABLE `server_config` (`config` VARCHAR(35) NOT NULL DEFAULT '', `value` VARCHAR(255) NOT NULL DEFAULT '', UNIQUE (`config`));";
-                                        db->executeQuery(query.str());
-
-                                        registerDatabaseConfig("encryption", g_config.getNumber(ConfigManager::ENCRYPTION));
-                                        break;
-                                }
-
-                                case DATABASE_ENGINE_MYSQL:
-                                {
-                                        query << "ALTER TABLE `server_config` CHANGE `value` `value` VARCHAR(255) NOT NULL DEFAULT '';";
-                                        db->executeQuery(query.str());
-                                        break;
-                                }
-
-                                default:
-                                        break;
-                        }
-
-                        query.str("");
-                        registerDatabaseConfig("db_version", 25);
-                        return 25;
-                }
-                case 25:
-                {
-                        std::clog << "> Updating database to version 26..." << std::endl;
-                        switch(db->getDatabaseEngine())
-                        {
-                                case DATABASE_ENGINE_SQLITE:
-                                {
-                                        query << "ALTER TABLE `accounts` ADD `salt` VARCHAR(40) NOT NULL DEFAULT '';";
-                                        db->executeQuery(query.str());
-                                        break;
-                                }
-
-                                case DATABASE_ENGINE_MYSQL:
-                                {
-                                        query << "ALTER TABLE `accounts` ADD `salt` VARCHAR(40) NOT NULL DEFAULT '' AFTER `password`;";
-                                        db->executeQuery(query.str());
-                                        break;
-                                }
-
-                                default:
-                                        break;
-                        }
-
-                        query.str("");
-                        registerDatabaseConfig("db_version", 26);
-                        return 26;
-                }
-
                 default:
                         break;
         }
@@ -1139,358 +1067,357 @@ uint32_t DatabaseManager::updateDatabase()
         return 0;
 }
 
-
 bool DatabaseManager::getDatabaseConfig(std::string config, int32_t &value)
 {
-	value = 0;
+        value = 0;
 
-	Database* db = Database::getInstance();
-	DBResult* result;
+        Database* db = Database::getInstance();
+        DBResult* result;
 
-	DBQuery query;
-	query << "SELECT `value` FROM `server_config` WHERE `config` = " << db->escapeString(config) << ";";
-	if(!(result = db->storeQuery(query.str())))
-		return false;
+        DBQuery query;
+        query << "SELECT `value` FROM `server_config` WHERE `config` = " << db->escapeString(config) << ";";
+        if(!(result = db->storeQuery(query.str())))
+                return false;
 
-	value = result->getDataInt("value");
-	result->free();
-	return true;
+        value = result->getDataInt("value");
+        result->free();
+        return true;
 }
 
 void DatabaseManager::registerDatabaseConfig(std::string config, int32_t value)
 {
-	Database* db = Database::getInstance();
-	DBQuery query;
+        Database* db = Database::getInstance();
+        DBQuery query;
 
-	int32_t tmp = 0;
-	if(!getDatabaseConfig(config, tmp))
-		query << "INSERT INTO `server_config` VALUES (" << db->escapeString(config) << ", " << value << ");";
-	else
-		query << "UPDATE `server_config` SET `value` = " << value << " WHERE `config` = " << db->escapeString(config) << ";";
+        int32_t tmp = 0;
+        if(!getDatabaseConfig(config, tmp))
+                query << "INSERT INTO `server_config` VALUES (" << db->escapeString(config) << ", " << value << ");";
+        else
+                query << "UPDATE `server_config` SET `value` = " << value << " WHERE `config` = " << db->escapeString(config) << ";";
 
-	db->executeQuery(query.str());
+        db->executeQuery(query.str());
 }
 
 void DatabaseManager::checkEncryption()
 {
-	Encryption_t newValue = (Encryption_t)g_config.getNumber(ConfigManager::ENCRYPTION);
-	int32_t value = (int32_t)ENCRYPTION_PLAIN;
-	if(getDatabaseConfig("encryption", value))
-	{
-		if(newValue != (Encryption_t)value)
-		{
-			switch(newValue)
-			{
-				case ENCRYPTION_MD5:
-				{
-					if((Encryption_t)value != ENCRYPTION_PLAIN)
-					{
-						std::cout << "> WARNING: You cannot change the encryption to MD5, change it back in config.lua to \"sha1\"." << std::endl;
-						return;
-					}
+        Encryption_t newValue = (Encryption_t)g_config.getNumber(ConfigManager::ENCRYPTION);
+        int32_t value = (int32_t)ENCRYPTION_PLAIN;
+        if(getDatabaseConfig("encryption", value))
+        {
+                if(newValue != (Encryption_t)value)
+                {
+                        switch(newValue)
+                        {
+                                case ENCRYPTION_MD5:
+                                {
+                                        if((Encryption_t)value != ENCRYPTION_PLAIN)
+                                        {
+                                                std::cout << "> WARNING: You cannot change the encryption to MD5, change it back in config.lua to \"sha1\"." << std::endl;
+                                                return;
+                                        }
 
-					Database* db = Database::getInstance();
-					DBQuery query;
-					if(db->getDatabaseEngine() != DATABASE_ENGINE_MYSQL && db->getDatabaseEngine() != DATABASE_ENGINE_POSTGRESQL)
-					{
-						if(DBResult* result = db->storeQuery("SELECT `id`, `password`, `key` FROM `accounts`;"))
-						{
-							do
-							{
-								query << "UPDATE `accounts` SET `password` = " << db->escapeString(transformToMD5(result->getDataString("password"), false)) << ", `key` = " << db->escapeString(transformToMD5(result->getDataString("key"), false)) << " WHERE `id` = " << result->getDataInt("id") << ";";
-								db->executeQuery(query.str());
-							}
-							while(result->next());
-							result->free();
-						}
-					}
-					else
-						db->executeQuery("UPDATE `accounts` SET `password` = MD5(`password`), `key` = MD5(`key`);");
+                                        Database* db = Database::getInstance();
+                                        DBQuery query;
+                                        if(db->getDatabaseEngine() != DATABASE_ENGINE_MYSQL && db->getDatabaseEngine() != DATABASE_ENGINE_POSTGRESQL)
+                                        {
+                                                if(DBResult* result = db->storeQuery("SELECT `id`, `password`, `key` FROM `accounts`;"))
+                                                {
+                                                        do
+                                                        {
+                                                                query << "UPDATE `accounts` SET `password` = " << db->escapeString(transformToMD5(result->getDataString("password"), false)) << ", `key` = " << db->escapeString(transformToMD5(result->getDataString("key"), false)) << " WHERE `id` = " << result->getDataInt("id") << ";";
+                                                                db->executeQuery(query.str());
+                                                        }
+                                                        while(result->next());
+                                                        result->free();
+                                                }
+                                        }
+                                        else
+                                                db->executeQuery("UPDATE `accounts` SET `password` = MD5(`password`), `key` = MD5(`key`);");
 
-					registerDatabaseConfig("encryption", (int32_t)newValue);
-					std::cout << "> Encryption updated to MD5." << std::endl;
-					break;
-				}
+                                        registerDatabaseConfig("encryption", (int32_t)newValue);
+                                        std::cout << "> Encryption updated to MD5." << std::endl;
+                                        break;
+                                }
 
-				case ENCRYPTION_SHA1:
-				{
-					if((Encryption_t)value != ENCRYPTION_PLAIN)
-					{
-						std::cout << "> WARNING: You cannot change the encryption to SHA1, change it back in config.lua to \"md5\"." << std::endl;
-						return;
-					}
+                                case ENCRYPTION_SHA1:
+                                {
+                                        if((Encryption_t)value != ENCRYPTION_PLAIN)
+                                        {
+                                                std::cout << "> WARNING: You cannot change the encryption to SHA1, change it back in config.lua to \"md5\"." << std::endl;
+                                                return;
+                                        }
 
-					Database* db = Database::getInstance();
-					DBQuery query;
-					if(db->getDatabaseEngine() != DATABASE_ENGINE_MYSQL && db->getDatabaseEngine() != DATABASE_ENGINE_POSTGRESQL)
-					{
-						if(DBResult* result = db->storeQuery("SELECT `id`, `password`, `key` FROM `accounts`;"))
-						{
-							do
-							{
-								query << "UPDATE `accounts` SET `password` = " << db->escapeString(transformToSHA1(result->getDataString("password"), false)) << ", `key` = " << db->escapeString(transformToSHA1(result->getDataString("key"), false)) << " WHERE `id` = " << result->getDataInt("id") << ";";
-								db->executeQuery(query.str());
-							}
-							while(result->next());
-							result->free();
-						}
-					}
-					else
-						db->executeQuery("UPDATE `accounts` SET `password` = SHA1(`password`), `key` = SHA1(`key`);");
+                                        Database* db = Database::getInstance();
+                                        DBQuery query;
+                                        if(db->getDatabaseEngine() != DATABASE_ENGINE_MYSQL && db->getDatabaseEngine() != DATABASE_ENGINE_POSTGRESQL)
+                                        {
+                                                if(DBResult* result = db->storeQuery("SELECT `id`, `password`, `key` FROM `accounts`;"))
+                                                {
+                                                        do
+                                                        {
+                                                                query << "UPDATE `accounts` SET `password` = " << db->escapeString(transformToSHA1(result->getDataString("password"), false)) << ", `key` = " << db->escapeString(transformToSHA1(result->getDataString("key"), false)) << " WHERE `id` = " << result->getDataInt("id") << ";";
+                                                                db->executeQuery(query.str());
+                                                        }
+                                                        while(result->next());
+                                                        result->free();
+                                                }
+                                        }
+                                        else
+                                                db->executeQuery("UPDATE `accounts` SET `password` = SHA1(`password`), `key` = SHA1(`key`);");
 
-					registerDatabaseConfig("encryption", (int32_t)newValue);
-					std::cout << "> Encryption set to SHA1." << std::endl;
-					break;
-				}
+                                        registerDatabaseConfig("encryption", (int32_t)newValue);
+                                        std::cout << "> Encryption set to SHA1." << std::endl;
+                                        break;
+                                }
 
-				default:
-				{
-					std::cout << "> WARNING: You cannot switch from hashed passwords to plain text, change back the passwordType in config.lua to the passwordType you were previously using." << std::endl;
-					break;
-				}
-			}
-		}
-	}
-	else
-	{
-		registerDatabaseConfig("encryption", (int32_t)newValue);
-		if(g_config.getBool(ConfigManager::ACCOUNT_MANAGER))
-		{
-			switch(newValue)
-			{
-				case ENCRYPTION_MD5:
-				{
-					Database* db = Database::getInstance();
-					DBQuery query;
-					query << "UPDATE `accounts` SET `password` = " << db->escapeString(transformToMD5("1", false)) << " WHERE `id` = 1 AND `password` = '1';";
-					db->executeQuery(query.str());
-					break;
-				}
+                                default:
+                                {
+                                        std::cout << "> WARNING: You cannot switch from hashed passwords to plain text, change back the passwordType in config.lua to the passwordType you were previously using." << std::endl;
+                                        break;
+                                }
+                        }
+                }
+        }
+        else
+        {
+                registerDatabaseConfig("encryption", (int32_t)newValue);
+                if(g_config.getBool(ConfigManager::ACCOUNT_MANAGER))
+                {
+                        switch(newValue)
+                        {
+                                case ENCRYPTION_MD5:
+                                {
+                                        Database* db = Database::getInstance();
+                                        DBQuery query;
+                                        query << "UPDATE `accounts` SET `password` = " << db->escapeString(transformToMD5("1", false)) << " WHERE `id` = 1 AND `password` = '1';";
+                                        db->executeQuery(query.str());
+                                        break;
+                                }
 
-				case ENCRYPTION_SHA1:
-				{
-					Database* db = Database::getInstance();
-					DBQuery query;
-					query << "UPDATE `accounts` SET `password` = " << db->escapeString(transformToSHA1("1", false)) << " WHERE `id` = 1 AND `password` = '1';";
-					db->executeQuery(query.str());
-					break;
-				}
+                                case ENCRYPTION_SHA1:
+                                {
+                                        Database* db = Database::getInstance();
+                                        DBQuery query;
+                                        query << "UPDATE `accounts` SET `password` = " << db->escapeString(transformToSHA1("1", false)) << " WHERE `id` = 1 AND `password` = '1';";
+                                        db->executeQuery(query.str());
+                                        break;
+                                }
 
-				default:
-					break;
-			}
-		}
-	}
+                                default:
+                                        break;
+                        }
+                }
+        }
 }
 
 void DatabaseManager::checkTriggers()
 {
-	Database* db = Database::getInstance();
-	switch(db->getDatabaseEngine())
-	{
-		case DATABASE_ENGINE_MYSQL:
-		{
-			std::string triggerName[] =
-			{
-				"ondelete_accounts",
-				"oncreate_guilds",
-				"ondelete_guilds",
-				"oncreate_players",
-				"ondelete_players",
-			};
+        Database* db = Database::getInstance();
+        switch(db->getDatabaseEngine())
+        {
+                case DATABASE_ENGINE_MYSQL:
+                {
+                        std::string triggerName[] =
+                        {
+                                "ondelete_accounts",
+                                "oncreate_guilds",
+                                "ondelete_guilds",
+                                "oncreate_players",
+                                "ondelete_players",
+                        };
 
-			std::string triggerStatement[] =
-			{
-				"CREATE TRIGGER `ondelete_accounts` BEFORE DELETE ON `accounts` FOR EACH ROW BEGIN DELETE FROM `bans` WHERE `type` NOT IN(1, 2) AND `value` = OLD.`id`; END;",
-				"CREATE TRIGGER `oncreate_guilds` AFTER INSERT ON `guilds` FOR EACH ROW BEGIN INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES ('Leader', 3, NEW.`id`); INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES ('Vice-Leader', 2, NEW.`id`); INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES ('Member', 1, NEW.`id`); END;",
-				"CREATE TRIGGER `ondelete_guilds` BEFORE DELETE ON `guilds` FOR EACH ROW BEGIN UPDATE `players` SET `guildnick` = '', `rank_id` = 0 WHERE `rank_id` IN (SELECT `id` FROM `guild_ranks` WHERE `guild_id` = OLD.`id`); END;",
-				"CREATE TRIGGER `oncreate_players` AFTER INSERT ON `players` FOR EACH ROW BEGIN INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 0, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 1, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 2, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 3, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 4, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 5, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 6, 10); END;",
-				"CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players` FOR EACH ROW BEGIN DELETE FROM `bans` WHERE `type` = 2 AND `value` = OLD.`id`; UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`; END;"
-			};
+                        std::string triggerStatement[] =
+                        {
+                                "CREATE TRIGGER `ondelete_accounts` BEFORE DELETE ON `accounts` FOR EACH ROW BEGIN DELETE FROM `bans` WHERE `type` NOT IN(1, 2) AND `value` = OLD.`id`; END;",
+                                "CREATE TRIGGER `oncreate_guilds` AFTER INSERT ON `guilds` FOR EACH ROW BEGIN INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES ('Leader', 3, NEW.`id`); INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES ('Vice-Leader', 2, NEW.`id`); INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES ('Member', 1, NEW.`id`); END;",
+                                "CREATE TRIGGER `ondelete_guilds` BEFORE DELETE ON `guilds` FOR EACH ROW BEGIN UPDATE `players` SET `guildnick` = '', `rank_id` = 0 WHERE `rank_id` IN (SELECT `id` FROM `guild_ranks` WHERE `guild_id` = OLD.`id`); END;",
+                                "CREATE TRIGGER `oncreate_players` AFTER INSERT ON `players` FOR EACH ROW BEGIN INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 0, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 1, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 2, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 3, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 4, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 5, 10); INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 6, 10); END;",
+                                "CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players` FOR EACH ROW BEGIN DELETE FROM `bans` WHERE `type` = 2 AND `value` = OLD.`id`; UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`; END;"
+                        };
 
-			DBQuery query;
-			for(uint32_t i = 0; i < sizeof(triggerName) / sizeof(std::string); i++)
-			{
-				if(!triggerExists(triggerName[i]))
-				{
-					std::cout << "> Trigger: " << triggerName[i] << " does not exist, creating it..." << std::endl;
-					db->executeQuery(triggerStatement[i]);
-				}
-			}
+                        DBQuery query;
+                        for(uint32_t i = 0; i < sizeof(triggerName) / sizeof(std::string); i++)
+                        {
+                                if(!triggerExists(triggerName[i]))
+                                {
+                                        std::cout << "> Trigger: " << triggerName[i] << " does not exist, creating it..." << std::endl;
+                                        db->executeQuery(triggerStatement[i]);
+                                }
+                        }
 
-			break;
-		}
+                        break;
+                }
 
-		case DATABASE_ENGINE_SQLITE:
-		{
-			std::string triggerName[] =
-			{
-				"oncreate_guilds",
-				"oncreate_players",
-				"ondelete_accounts",
-				"ondelete_players",
-				"ondelete_guilds",
-				"oninsert_players",
-				"onupdate_players",
-				"oninsert_guilds",
-				"onupdate_guilds",
-				"ondelete_houses",
-				"ondelete_tiles",
-				"oninsert_guild_ranks",
-				"onupdate_guild_ranks",
-				"oninsert_house_lists",
-				"onupdate_house_lists",
-				"oninsert_player_depotitems",
-				"onupdate_player_depotitems",
-				"oninsert_player_skills",
-				"onupdate_player_skills",
-				"oninsert_player_storage",
-				"onupdate_player_storage",
-				"oninsert_player_viplist",
-				"onupdate_player_viplist",
-				"oninsert_account_viplist",
-				"onupdate_account_viplist",
-				"oninsert_tile_items",
-				"onupdate_tile_items",
-				"oninsert_player_spells",
-				"onupdate_player_spells",
-				"oninsert_player_deaths",
-				"onupdate_player_deaths",
-				"oninsert_killers",
-				"onupdate_killers",
-				"oninsert_environment_killers",
-				"onupdate_environment_killers",
-				"oninsert_player_killers",
-				"onupdate_player_killers"
-			};
+                case DATABASE_ENGINE_SQLITE:
+                {
+                        std::string triggerName[] =
+                        {
+                                "oncreate_guilds",
+                                "oncreate_players",
+                                "ondelete_accounts",
+                                "ondelete_players",
+                                "ondelete_guilds",
+                                "oninsert_players",
+                                "onupdate_players",
+                                "oninsert_guilds",
+                                "onupdate_guilds",
+                                "ondelete_houses",
+                                "ondelete_tiles",
+                                "oninsert_guild_ranks",
+                                "onupdate_guild_ranks",
+                                "oninsert_house_lists",
+                                "onupdate_house_lists",
+                                "oninsert_player_depotitems",
+                                "onupdate_player_depotitems",
+                                "oninsert_player_skills",
+                                "onupdate_player_skills",
+                                "oninsert_player_storage",
+                                "onupdate_player_storage",
+                                "oninsert_player_viplist",
+                                "onupdate_player_viplist",
+                                "oninsert_account_viplist",
+                                "onupdate_account_viplist",
+                                "oninsert_tile_items",
+                                "onupdate_tile_items",
+                                "oninsert_player_spells",
+                                "onupdate_player_spells",
+                                "oninsert_player_deaths",
+                                "onupdate_player_deaths",
+                                "oninsert_killers",
+                                "onupdate_killers",
+                                "oninsert_environment_killers",
+                                "onupdate_environment_killers",
+                                "oninsert_player_killers",
+                                "onupdate_player_killers"
+                        };
 
-			std::string triggerStatement[] =
-			{
-				"CREATE TRIGGER `oncreate_guilds` \
+                        std::string triggerStatement[] =
+                        {
+                                "CREATE TRIGGER `oncreate_guilds` \
 AFTER INSERT ON `guilds` \
 BEGIN \
-	INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES (`Leader`, 3, NEW.`id`);\
-	INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES (`Vice-Leader`, 2, NEW.`id`);\
-	INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES (`Member`, 1, NEW.`id`);\
+        INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES (`Leader`, 3, NEW.`id`);\
+        INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES (`Vice-Leader`, 2, NEW.`id`);\
+        INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES (`Member`, 1, NEW.`id`);\
 END;",
 
-				"CREATE TRIGGER `oncreate_players`\
+                                "CREATE TRIGGER `oncreate_players`\
 AFTER INSERT\
 ON `players`\
 BEGIN\
-	INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 0, 10);\
-	INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 1, 10);\
-	INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 2, 10);\
-	INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 3, 10);\
-	INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 4, 10);\
-	INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 5, 10);\
-	INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 6, 10);\
+        INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 0, 10);\
+        INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 1, 10);\
+        INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 2, 10);\
+        INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 3, 10);\
+        INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 4, 10);\
+        INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 5, 10);\
+        INSERT INTO `player_skills` (`player_id`, `skillid`, `value`) VALUES (NEW.`id`, 6, 10);\
 END;",
-				"CREATE TRIGGER `ondelete_accounts`\
+                                "CREATE TRIGGER `ondelete_accounts`\
 BEFORE DELETE\
 ON `accounts`\
 FOR EACH ROW\
 BEGIN\
-	DELETE FROM `players` WHERE `account_id` = OLD.`id`;\
-	DELETE FROM `account_viplist` WHERE `account_id` = OLD.`id`;\
-	DELETE FROM `bans` WHERE `type` IN (3, 4) AND `value` = OLD.`id`;\
+        DELETE FROM `players` WHERE `account_id` = OLD.`id`;\
+        DELETE FROM `account_viplist` WHERE `account_id` = OLD.`id`;\
+        DELETE FROM `bans` WHERE `type` IN (3, 4) AND `value` = OLD.`id`;\
 END;",
 
-				"CREATE TRIGGER `ondelete_players`\
+                                "CREATE TRIGGER `ondelete_players`\
 BEFORE DELETE\
 ON `players`\
 FOR EACH ROW\
 BEGIN\
-	SELECT RAISE(ROLLBACK, 'DELETE on table `players` violates foreign: `ownerid` from table `guilds`')\
-	WHERE (SELECT `id` FROM `guilds` WHERE `ownerid` = OLD.`id`) IS NOT NULL;\
+        SELECT RAISE(ROLLBACK, 'DELETE on table `players` violates foreign: `ownerid` from table `guilds`')\
+        WHERE (SELECT `id` FROM `guilds` WHERE `ownerid` = OLD.`id`) IS NOT NULL;\
 \
-	DELETE FROM `account_viplist` WHERE `player_id` = OLD.`id`;\
-	DELETE FROM `player_viplist` WHERE `player_id` = OLD.`id` OR `vip_id` = OLD.`id`;\
-	DELETE FROM `player_storage` WHERE `player_id` = OLD.`id`;\
-	DELETE FROM `player_skills` WHERE `player_id` = OLD.`id`;\
-	DELETE FROM `player_items` WHERE `player_id` = OLD.`id`;\
-	DELETE FROM `player_depotitems` WHERE `player_id` = OLD.`id`;\
-	DELETE FROM `player_spells` WHERE `player_id` = OLD.`id`;\
-	DELETE FROM `player_killers` WHERE `player_id` = OLD.`id`;\
-	DELETE FROM `player_deaths` WHERE `player_id` = OLD.`id`;\
-	DELETE FROM `guild_invites` WHERE `player_id` = OLD.`id`;\
-	DELETE FROM `bans` WHERE `type` IN (2, 5) AND `value` = OLD.`id`;\
-	UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;\
+        DELETE FROM `account_viplist` WHERE `player_id` = OLD.`id`;\
+        DELETE FROM `player_viplist` WHERE `player_id` = OLD.`id` OR `vip_id` = OLD.`id`;\
+        DELETE FROM `player_storage` WHERE `player_id` = OLD.`id`;\
+        DELETE FROM `player_skills` WHERE `player_id` = OLD.`id`;\
+        DELETE FROM `player_items` WHERE `player_id` = OLD.`id`;\
+        DELETE FROM `player_depotitems` WHERE `player_id` = OLD.`id`;\
+        DELETE FROM `player_spells` WHERE `player_id` = OLD.`id`;\
+        DELETE FROM `player_killers` WHERE `player_id` = OLD.`id`;\
+        DELETE FROM `player_deaths` WHERE `player_id` = OLD.`id`;\
+        DELETE FROM `guild_invites` WHERE `player_id` = OLD.`id`;\
+        DELETE FROM `bans` WHERE `type` IN (2, 5) AND `value` = OLD.`id`;\
+        UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;\
 END;",
-				"CREATE TRIGGER `ondelete_guilds`\
+                                "CREATE TRIGGER `ondelete_guilds`\
 BEFORE DELETE\
 ON `guilds`\
 FOR EACH ROW\
 BEGIN\
-	UPDATE `players` SET `guildnick` = '', `rank_id` = 0 WHERE `rank_id` IN (SELECT `id` FROM `guild_ranks` WHERE `guild_id` = OLD.`id`);\
-	DELETE FROM `guild_ranks` WHERE `guild_id` = OLD.`id`;\
-	DELETE FROM `guild_invites` WHERE `guild_id` = OLD.`id`;\
+        UPDATE `players` SET `guildnick` = '', `rank_id` = 0 WHERE `rank_id` IN (SELECT `id` FROM `guild_ranks` WHERE `guild_id` = OLD.`id`);\
+        DELETE FROM `guild_ranks` WHERE `guild_id` = OLD.`id`;\
+        DELETE FROM `guild_invites` WHERE `guild_id` = OLD.`id`;\
 END;",
 
-				"CREATE TRIGGER `oninsert_players` BEFORE INSERT ON `players` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `players` violates foreign: `account_id`') WHERE NEW.`account_id` IS NULL OR (SELECT `id` FROM `accounts` WHERE `id` = NEW.`account_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_players` BEFORE UPDATE ON `players` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `players` violates foreign: `account_id`') WHERE NEW.`account_id` IS NULL OR (SELECT `id` FROM `accounts` WHERE `id` = NEW.`account_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_players` BEFORE INSERT ON `players` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `players` violates foreign: `account_id`') WHERE NEW.`account_id` IS NULL OR (SELECT `id` FROM `accounts` WHERE `id` = NEW.`account_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_players` BEFORE UPDATE ON `players` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `players` violates foreign: `account_id`') WHERE NEW.`account_id` IS NULL OR (SELECT `id` FROM `accounts` WHERE `id` = NEW.`account_id`) IS NULL; END;",
 
-				"CREATE TRIGGER `oninsert_guilds` BEFORE INSERT ON `guilds` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `guilds` violates foreign: `ownerid`') WHERE NEW.`ownerid` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`ownerid`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_guilds` BEFORE UPDATE ON `guilds` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `guilds` violates foreign: `ownerid`') WHERE NEW.`ownerid` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`ownerid`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_guilds` BEFORE INSERT ON `guilds` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `guilds` violates foreign: `ownerid`') WHERE NEW.`ownerid` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`ownerid`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_guilds` BEFORE UPDATE ON `guilds` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `guilds` violates foreign: `ownerid`') WHERE NEW.`ownerid` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`ownerid`) IS NULL; END;",
 
-				"CREATE TRIGGER `ondelete_houses` BEFORE DELETE ON `houses` FOR EACH ROW BEGIN DELETE FROM `house_lists` WHERE `house_id` = OLD.`id`; END;",
-				"CREATE TRIGGER `ondelete_tiles` BEFORE DELETE ON `tiles` FOR EACH ROW BEGIN DELETE FROM `tile_items` WHERE `tile_id` = OLD.`id`; END;",
+                                "CREATE TRIGGER `ondelete_houses` BEFORE DELETE ON `houses` FOR EACH ROW BEGIN DELETE FROM `house_lists` WHERE `house_id` = OLD.`id`; END;",
+                                "CREATE TRIGGER `ondelete_tiles` BEFORE DELETE ON `tiles` FOR EACH ROW BEGIN DELETE FROM `tile_items` WHERE `tile_id` = OLD.`id`; END;",
 
-				"CREATE TRIGGER `oninsert_guild_ranks` BEFORE INSERT ON `guild_ranks` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `guild_ranks` violates foreign: `guild_id`') WHERE NEW.`guild_id` IS NULL OR (SELECT `id` FROM `guilds` WHERE `id` = NEW.`guild_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_guild_ranks` BEFORE UPDATE ON `guild_ranks` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `guild_ranks` violates foreign: `guild_id`') WHERE NEW.`guild_id` IS NULL OR (SELECT `id` FROM `guilds` WHERE `id` = NEW.`guild_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_guild_ranks` BEFORE INSERT ON `guild_ranks` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `guild_ranks` violates foreign: `guild_id`') WHERE NEW.`guild_id` IS NULL OR (SELECT `id` FROM `guilds` WHERE `id` = NEW.`guild_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_guild_ranks` BEFORE UPDATE ON `guild_ranks` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `guild_ranks` violates foreign: `guild_id`') WHERE NEW.`guild_id` IS NULL OR (SELECT `id` FROM `guilds` WHERE `id` = NEW.`guild_id`) IS NULL; END;",
 
-				"CREATE TRIGGER `oninsert_house_lists` BEFORE INSERT ON `house_lists` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `house_lists` violates foreign: `house_id`') WHERE NEW.`house_id` IS NULL OR (SELECT `id` FROM `houses` WHERE `id` = NEW.`house_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_house_lists` BEFORE UPDATE ON `house_lists` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `house_lists` violates foreign: `house_id`') WHERE NEW.`house_id` IS NULL OR (SELECT `id` FROM `houses` WHERE `id` = NEW.`house_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_house_lists` BEFORE INSERT ON `house_lists` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `house_lists` violates foreign: `house_id`') WHERE NEW.`house_id` IS NULL OR (SELECT `id` FROM `houses` WHERE `id` = NEW.`house_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_house_lists` BEFORE UPDATE ON `house_lists` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `house_lists` violates foreign: `house_id`') WHERE NEW.`house_id` IS NULL OR (SELECT `id` FROM `houses` WHERE `id` = NEW.`house_id`) IS NULL; END;",
 
-				"CREATE TRIGGER `oninsert_player_depotitems` BEFORE INSERT ON `player_depotitems` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_depotitems` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_player_depotitems` BEFORE UPDATE ON `player_depotitems` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_depotitems` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_player_depotitems` BEFORE INSERT ON `player_depotitems` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_depotitems` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_player_depotitems` BEFORE UPDATE ON `player_depotitems` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_depotitems` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
 
-				"CREATE TRIGGER `oninsert_player_skills` BEFORE INSERT ON `player_skills` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_skills` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_player_skills` BEFORE UPDATE ON `player_skills` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_skills` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_player_skills` BEFORE INSERT ON `player_skills` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_skills` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_player_skills` BEFORE UPDATE ON `player_skills` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_skills` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
 
-				"CREATE TRIGGER `oninsert_player_storage` BEFORE INSERT ON `player_storage` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_storage` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_player_storage` BEFORE UPDATE ON `player_storage` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_storage` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_player_storage` BEFORE INSERT ON `player_storage` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_storage` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_player_storage` BEFORE UPDATE ON `player_storage` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_storage` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
 
-				"CREATE TRIGGER `oninsert_player_viplist` BEFORE INSERT ON `player_viplist` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_viplist` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; SELECT RAISE(ROLLBACK, 'INSERT on table `player_viplist` violates foreign: `vip_id`') WHERE NEW.`vip_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`vip_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_player_viplist` BEFORE UPDATE ON `player_viplist` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_viplist` violates foreign: `vip_id`') WHERE NEW.`vip_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`vip_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_player_viplist` BEFORE INSERT ON `player_viplist` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_viplist` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; SELECT RAISE(ROLLBACK, 'INSERT on table `player_viplist` violates foreign: `vip_id`') WHERE NEW.`vip_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`vip_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_player_viplist` BEFORE UPDATE ON `player_viplist` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_viplist` violates foreign: `vip_id`') WHERE NEW.`vip_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`vip_id`) IS NULL; END;",
 
-				"CREATE TRIGGER `oninsert_account_viplist` BEFORE INSERT ON `account_viplist` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `account_viplist` violates foreign: `account_id`') WHERE NEW.`account_id` IS NULL OR (SELECT `id` FROM `accounts` WHERE `id` = NEW.`account_id`) IS NULL; SELECT RAISE(ROLLBACK, 'INSERT on table `account_viplist` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_account_viplist` BEFORE UPDATE ON `account_viplist` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `account_viplist` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_account_viplist` BEFORE INSERT ON `account_viplist` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `account_viplist` violates foreign: `account_id`') WHERE NEW.`account_id` IS NULL OR (SELECT `id` FROM `accounts` WHERE `id` = NEW.`account_id`) IS NULL; SELECT RAISE(ROLLBACK, 'INSERT on table `account_viplist` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_account_viplist` BEFORE UPDATE ON `account_viplist` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `account_viplist` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
 
-				"CREATE TRIGGER `oninsert_tile_items` BEFORE INSERT ON `tile_items` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `tile_items` violates foreign: `tile_id`') WHERE NEW.`tile_id` IS NULL OR (SELECT `id` FROM `tiles` WHERE `id` = NEW.`tile_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_tile_items` BEFORE UPDATE ON `tile_items` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `tile_items` violates foreign: `tile_id`') WHERE NEW.`tile_id` IS NULL OR (SELECT `id` FROM `tiles` WHERE `id` = NEW.`tile_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_tile_items` BEFORE INSERT ON `tile_items` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `tile_items` violates foreign: `tile_id`') WHERE NEW.`tile_id` IS NULL OR (SELECT `id` FROM `tiles` WHERE `id` = NEW.`tile_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_tile_items` BEFORE UPDATE ON `tile_items` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `tile_items` violates foreign: `tile_id`') WHERE NEW.`tile_id` IS NULL OR (SELECT `id` FROM `tiles` WHERE `id` = NEW.`tile_id`) IS NULL; END;",
 
-				"CREATE TRIGGER `oninsert_player_spells` BEFORE INSERT ON `player_spells` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_spells` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_player_spells` BEFORE UPDATE ON `player_spells` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_spells` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
-				"CREATE TRIGGER `oninsert_player_deaths` BEFORE INSERT ON `player_deaths` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_deaths` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_player_deaths` BEFORE UPDATE ON `player_deaths` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_deaths` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_player_spells` BEFORE INSERT ON `player_spells` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_spells` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_player_spells` BEFORE UPDATE ON `player_spells` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_spells` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_player_deaths` BEFORE INSERT ON `player_deaths` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_deaths` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_player_deaths` BEFORE UPDATE ON `player_deaths` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_deaths` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; END;",
 
-				"CREATE TRIGGER `oninsert_killers` BEFORE INSERT ON `killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `killers` violates foreign: `death_id`') WHERE NEW.`death_id` IS NULL OR (SELECT `id` FROM `player_deaths` WHERE `id` = NEW.`death_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_killers` BEFORE UPDATE ON `killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `killers` violates foreign: `death_id`') WHERE NEW.`death_id` IS NULL OR (SELECT `id` FROM `player_deaths` WHERE `id` = NEW.`death_id`) IS NULL; END;",
-				"CREATE TRIGGER `oninsert_environment_killers` BEFORE INSERT ON `environment_killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `enviroment_killers` violates foreign: `kill_id`') WHERE NEW.`kill_id` IS NULL OR (SELECT `id` FROM `killers` WHERE `id` = NEW.`kill_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_environment_killers` BEFORE UPDATE ON `environment_killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `enviroment_killers` violates foreign: `kill_id`') WHERE NEW.`kill_id` IS NULL OR (SELECT `id` FROM `killers` WHERE `id` = NEW.`kill_id`) IS NULL; END;",
-				"CREATE TRIGGER `oninsert_player_killers` BEFORE INSERT ON `player_killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_killers` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; SELECT RAISE(ROLLBACK, 'INSERT on table `player_killers` violates foreign: `kill_id`') WHERE NEW.`kill_id` IS NULL OR (SELECT `id` FROM `killers` WHERE `id` = NEW.`kill_id`) IS NULL; END;",
-				"CREATE TRIGGER `onupdate_player_killers` BEFORE UPDATE ON `player_killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_killers` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; SELECT RAISE(ROLLBACK, 'UPDATE on table `killers` violates foreign: `kill_id`') WHERE NEW.`kill_id` IS NULL OR (SELECT `id` FROM `killers` WHERE `id` = NEW.`kill_id`) IS NULL; END;"
-			};
+                                "CREATE TRIGGER `oninsert_killers` BEFORE INSERT ON `killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `killers` violates foreign: `death_id`') WHERE NEW.`death_id` IS NULL OR (SELECT `id` FROM `player_deaths` WHERE `id` = NEW.`death_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_killers` BEFORE UPDATE ON `killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `killers` violates foreign: `death_id`') WHERE NEW.`death_id` IS NULL OR (SELECT `id` FROM `player_deaths` WHERE `id` = NEW.`death_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_environment_killers` BEFORE INSERT ON `environment_killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `enviroment_killers` violates foreign: `kill_id`') WHERE NEW.`kill_id` IS NULL OR (SELECT `id` FROM `killers` WHERE `id` = NEW.`kill_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_environment_killers` BEFORE UPDATE ON `environment_killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `enviroment_killers` violates foreign: `kill_id`') WHERE NEW.`kill_id` IS NULL OR (SELECT `id` FROM `killers` WHERE `id` = NEW.`kill_id`) IS NULL; END;",
+                                "CREATE TRIGGER `oninsert_player_killers` BEFORE INSERT ON `player_killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'INSERT on table `player_killers` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; SELECT RAISE(ROLLBACK, 'INSERT on table `player_killers` violates foreign: `kill_id`') WHERE NEW.`kill_id` IS NULL OR (SELECT `id` FROM `killers` WHERE `id` = NEW.`kill_id`) IS NULL; END;",
+                                "CREATE TRIGGER `onupdate_player_killers` BEFORE UPDATE ON `player_killers` FOR EACH ROW BEGIN SELECT RAISE(ROLLBACK, 'UPDATE on table `player_killers` violates foreign: `player_id`') WHERE NEW.`player_id` IS NULL OR (SELECT `id` FROM `players` WHERE `id` = NEW.`player_id`) IS NULL; SELECT RAISE(ROLLBACK, 'UPDATE on table `killers` violates foreign: `kill_id`') WHERE NEW.`kill_id` IS NULL OR (SELECT `id` FROM `killers` WHERE `id` = NEW.`kill_id`) IS NULL; END;"
+                        };
 
-			DBQuery query;
-			for(uint32_t i = 0; i < sizeof(triggerName) / sizeof(std::string); i++)
-			{
-				if(!triggerExists(triggerName[i]))
-				{
-					std::cout << "> Trigger: " << triggerName[i] << " does not exist, creating it..." << std::endl;
-					db->executeQuery(triggerStatement[i]);
-				}
-			}
+                        DBQuery query;
+                        for(uint32_t i = 0; i < sizeof(triggerName) / sizeof(std::string); i++)
+                        {
+                                if(!triggerExists(triggerName[i]))
+                                {
+                                        std::cout << "> Trigger: " << triggerName[i] << " does not exist, creating it..." << std::endl;
+                                        db->executeQuery(triggerStatement[i]);
+                                }
+                        }
 
-			break;
-		}
+                        break;
+                }
 
-		case DATABASE_ENGINE_POSTGRESQL:
-			//TODO: PostgreSQL support
-			break;
+                case DATABASE_ENGINE_POSTGRESQL:
+                        //TODO: PostgreSQL support
+                        break;
 
-		default:
-			break;
-	}
+                default:
+                        break;
+        }
 }
