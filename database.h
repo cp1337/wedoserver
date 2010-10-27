@@ -70,177 +70,177 @@ typedef DBRES_CLASS DBResult;
 class DBQuery;
 enum DBParam_t
 {
-	DBPARAM_MULTIINSERT = 1
+        DBPARAM_MULTIINSERT = 1
 };
 
 class _Database
 {
-	public:
-		/**
-		* Singleton implementation.
-		*
-		* Retruns instance of database handler. Don't create database (or drivers) instances in your code - instead of it use Database::getInstance()-> This method stores static instance of connection class internaly to make sure exacly one instance of connection is created for entire system.
-		*
-		* @return database connection handler singletor
-		*/
-		static Database* getInstance();
+        public:
+                /**
+                * Singleton implementation.
+                *
+                * Retruns instance of database handler. Don't create database (or drivers) instances in your code - instead of it use Database::getInstance()-> This method stores static instance of connection class internaly to make sure exacly one instance of connection is created for entire system.
+                *
+                * @return database connection handler singletor
+                */
+                static Database* getInstance();
 
-		/**
-		* Database information.
-		*
-		* Returns currently used database attribute.
-		*
-		* @param DBParam_t parameter to get
-		* @return suitable for given parameter
-		*/
-		DATABASE_VIRTUAL bool getParam(DBParam_t param) {return false;}
+                /**
+                * Database information.
+                *
+                * Returns currently used database attribute.
+                *
+                * @param DBParam_t parameter to get
+                * @return suitable for given parameter
+                */
+                DATABASE_VIRTUAL bool getParam(DBParam_t param) {return false;}
 
-		/**
-		* Database connected.
-		*
-		* Returns whether or not the database is connected.
-		*
-		* @return whether or not the database is connected.
-		*/
-		DATABASE_VIRTUAL bool isConnected() {return m_connected;}
+                /**
+                * Database connected.
+                *
+                * Returns whether or not the database is connected.
+                *
+                * @return whether or not the database is connected.
+                */
+                DATABASE_VIRTUAL bool isConnected() {return m_connected;}
 
-		/**
-		* Database ...
-		*/
-		DATABASE_VIRTUAL void use() {m_use = time(NULL);}
+                /**
+                * Database ...
+                */
+                DATABASE_VIRTUAL void use() {m_use = time(NULL);}
 
-	protected:
-		/**
-		* Transaction related methods.
-		*
-		* Methods for starting, commiting and rolling back transaction. Each of the returns boolean value.
-		*
-		* @return true on success, false on error
-		* @note
-		*	If your database system doesn't support transactions you should return true - it's not feature test, code should work without transaction, just will lack integrity.
-		*/
-		friend class DBTransaction;
+        protected:
+                /**
+                * Transaction related methods.
+                *
+                * Methods for starting, commiting and rolling back transaction. Each of the returns boolean value.
+                *
+                * @return true on success, false on error
+                * @note
+                *       If your database system doesn't support transactions you should return true - it's not feature test, code should work without transaction, just will lack integrity.
+                */
+                friend class DBTransaction;
 
-		DATABASE_VIRTUAL bool beginTransaction() {return 0;}
-		DATABASE_VIRTUAL bool rollback() {return 0;}
-		DATABASE_VIRTUAL bool commit() {return 0;}
+                DATABASE_VIRTUAL bool beginTransaction() {return 0;}
+                DATABASE_VIRTUAL bool rollback() {return 0;}
+                DATABASE_VIRTUAL bool commit() {return 0;}
 
-	public:
-		/**
-		* Executes command.
-		*
-		* Executes query which doesn't generates results (eg. INSERT, UPDATE, DELETE...).
-		*
-		* @param std::string query command
-		* @return true on success, false on error
-		*/
-		DATABASE_VIRTUAL bool executeQuery(const std::string &query) {return 0;}
+        public:
+                /**
+                * Executes command.
+                *
+                * Executes query which doesn't generates results (eg. INSERT, UPDATE, DELETE...).
+                *
+                * @param std::string query command
+                * @return true on success, false on error
+                */
+                DATABASE_VIRTUAL bool executeQuery(const std::string &query) {return 0;}
 
-		/**
-		* Queries database.
-		*
-		* Executes query which generates results (mostly SELECT).
-		*
-		* @param std::string query
-		* @return results object (null on error)
-		*/
-		DATABASE_VIRTUAL DBResult* storeQuery(const std::string &query) {return 0;}
+                /**
+                * Queries database.
+                *
+                * Executes query which generates results (mostly SELECT).
+                *
+                * @param std::string query
+                * @return results object (null on error)
+                */
+                DATABASE_VIRTUAL DBResult* storeQuery(const std::string &query) {return 0;}
 
-		/**
-		* Escapes string for query.
-		*
-		* Prepares string to fit SQL queries including quoting it.
-		*
-		* @param std::string string to be escaped
-		* @return quoted string
-		*/
-		DATABASE_VIRTUAL std::string escapeString(const std::string &s) {return "''";}
+                /**
+                * Escapes string for query.
+                *
+                * Prepares string to fit SQL queries including quoting it.
+                *
+                * @param std::string string to be escaped
+                * @return quoted string
+                */
+                DATABASE_VIRTUAL std::string escapeString(const std::string &s) {return "''";}
 
-		/**
-		* Escapes binary stream for query.
-		*
-		* Prepares binary stream to fit SQL queries.
-		*
-		* @param char* binary stream
-		* @param long stream length
-		* @return quoted string
-		*/
-		DATABASE_VIRTUAL std::string escapeBlob(const char* s, uint32_t length) {return "''";}
+                /**
+                * Escapes binary stream for query.
+                *
+                * Prepares binary stream to fit SQL queries.
+                *
+                * @param char* binary stream
+                * @param long stream length
+                * @return quoted string
+                */
+                DATABASE_VIRTUAL std::string escapeBlob(const char* s, uint32_t length) {return "''";}
 
-		/**
-		 * Retrieve id of last inserted row
-		 *
-		 * @return id on success, 0 if last query did not result on any rows with auto_increment keys
-		 */
-		DATABASE_VIRTUAL uint64_t getLastInsertId() {return 0;}
+                /**
+                 * Retrieve id of last inserted row
+                 *
+                 * @return id on success, 0 if last query did not result on any rows with auto_increment keys
+                 */
+                DATABASE_VIRTUAL uint64_t getLastInsertId() {return 0;}
 
-		/**
-		* Get case insensitive string comparison operator
-		*
-		* @return the case insensitive operator
-		*/
-		DATABASE_VIRTUAL std::string getStringComparison() {return "= ";}
-		DATABASE_VIRTUAL std::string getUpdateLimiter() {return " LIMIT 1;";}
+                /**
+                * Get case insensitive string comparison operator
+                *
+                * @return the case insensitive operator
+                */
+                DATABASE_VIRTUAL std::string getStringComparison() {return "= ";}
+                DATABASE_VIRTUAL std::string getUpdateLimiter() {return " LIMIT 1;";}
 
-		/**
-		* Get database engine
-		*
-		* @return the database engine type
-		*/
-		DATABASE_VIRTUAL DatabaseEngine_t getDatabaseEngine() {return DATABASE_ENGINE_NONE;}
+                /**
+                * Get database engine
+                *
+                * @return the database engine type
+                */
+                DATABASE_VIRTUAL DatabaseEngine_t getDatabaseEngine() {return DATABASE_ENGINE_NONE;}
 
-	protected:
-		_Database() {}
-		DATABASE_VIRTUAL ~_Database() {}
+        protected:
+                _Database() {}
+                DATABASE_VIRTUAL ~_Database() {}
 
-		DBResult* verifyResult(DBResult* result);
+                DBResult* verifyResult(DBResult* result);
 
-		bool m_connected;
-		time_t m_use;
+                bool m_connected;
+                time_t m_use;
 
-	private:
-		static Database* _instance;
+        private:
+                static Database* _instance;
 };
 
 class _DBResult
 {
-	public:
-		/** Get the Integer value of a field in database
-		*\returns The Integer value of the selected field and row
-		*\param s The name of the field
-		*/
-		DATABASE_VIRTUAL int32_t getDataInt(const std::string &s) {return 0;}
+        public:
+                /** Get the Integer value of a field in database
+                *\returns The Integer value of the selected field and row
+                *\param s The name of the field
+                */
+                DATABASE_VIRTUAL int32_t getDataInt(const std::string &s) {return 0;}
 
-		/** Get the Long value of a field in database
-		*\returns The Long value of the selected field and row
-		*\param s The name of the field
-		*/
-		DATABASE_VIRTUAL int64_t getDataLong(const std::string &s) {return 0;}
+                /** Get the Long value of a field in database
+                *\returns The Long value of the selected field and row
+                *\param s The name of the field
+                */
+                DATABASE_VIRTUAL int64_t getDataLong(const std::string &s) {return 0;}
 
-		/** Get the String of a field in database
-		*\returns The String of the selected field and row
-		*\param s The name of the field
-		*/
-		DATABASE_VIRTUAL std::string getDataString(const std::string &s) {return "''";}
+                /** Get the String of a field in database
+                *\returns The String of the selected field and row
+                *\param s The name of the field
+                */
+                DATABASE_VIRTUAL std::string getDataString(const std::string &s) {return "''";}
 
-		/** Get the blob of a field in database
-		*\returns a PropStream that is initiated with the blob data field, if not exist it returns NULL.
-		*\param s The name of the field
-		*/
-		DATABASE_VIRTUAL const char* getDataStream(const std::string &s, uint64_t &size) {return 0;}
+                /** Get the blob of a field in database
+                *\returns a PropStream that is initiated with the blob data field, if not exist it returns NULL.
+                *\param s The name of the field
+                */
+                DATABASE_VIRTUAL const char* getDataStream(const std::string &s, uint64_t &size) {return 0;}
 
-		/** Result freeing
-		*/
-		DATABASE_VIRTUAL void free() {/*delete this;*/}
+                /** Result freeing
+                */
+                DATABASE_VIRTUAL void free() {/*delete this;*/}
 
-		/** Moves to next result in set
-		*\returns true if moved, false if there are no more results.
-		*/
-		DATABASE_VIRTUAL bool next() {return false;}
+                /** Moves to next result in set
+                *\returns true if moved, false if there are no more results.
+                */
+                DATABASE_VIRTUAL bool next() {return false;}
 
-	protected:
-		_DBResult() {}
-		DATABASE_VIRTUAL ~_DBResult() {}
+        protected:
+                _DBResult() {}
+                DATABASE_VIRTUAL ~_DBResult() {}
 };
 
 /**
@@ -250,13 +250,13 @@ class _DBResult
 */
 class DBQuery : public std::stringstream
 {
-	friend class _Database;
-	public:
-		DBQuery() {databaseLock.lock();}
-		virtual ~DBQuery() {str(""); databaseLock.unlock();}
+        friend class _Database;
+        public:
+                DBQuery() {databaseLock.lock();}
+                virtual ~DBQuery() {str(""); databaseLock.unlock();}
 
-	protected:
-		static boost::recursive_mutex databaseLock;
+        protected:
+                static boost::recursive_mutex databaseLock;
 };
 
 /**
@@ -266,46 +266,46 @@ class DBQuery : public std::stringstream
  */
 class DBInsert
 {
-	public:
-		/**
-		* Associates with given database handler.
-		*
-		* @param Database* database wrapper
-		*/
-		DBInsert(Database* db);
-		virtual ~DBInsert() {}
+        public:
+                /**
+                * Associates with given database handler.
+                *
+                * @param Database* database wrapper
+                */
+                DBInsert(Database* db);
+                virtual ~DBInsert() {}
 
-		/**
-		* Sets query prototype.
-		*
-		* @param std::string& INSERT query
-		*/
-		void setQuery(const std::string& query);
+                /**
+                * Sets query prototype.
+                *
+                * @param std::string& INSERT query
+                */
+                void setQuery(const std::string& query);
 
-		/**
-		* Adds new row to INSERT statement.
-		*
-		* On databases that doesn't support multiline INSERTs it simply execute INSERT for each row.
-		*
-		* @param std::string& row data
-		*/
-		bool addRow(const std::string& row);
-		/**
-		* Allows to use addRow() with stringstream as parameter.
-		*/
-		bool addRow(std::stringstream& row);
+                /**
+                * Adds new row to INSERT statement.
+                *
+                * On databases that doesn't support multiline INSERTs it simply execute INSERT for each row.
+                *
+                * @param std::string& row data
+                */
+                bool addRow(const std::string& row);
+                /**
+                * Allows to use addRow() with stringstream as parameter.
+                */
+                bool addRow(std::stringstream& row);
 
-		/**
-		* Executes current buffer.
-		*/
-		bool execute();
+                /**
+                * Executes current buffer.
+                */
+                bool execute();
 
-	protected:
-		Database* m_db;
-		bool m_multiLine;
+        protected:
+                Database* m_db;
+                bool m_multiLine;
 
-		uint32_t m_rows;
-		std::string m_query, m_buf;
+                uint32_t m_rows;
+                std::string m_query, m_buf;
 };
 
 
@@ -323,45 +323,45 @@ class DBInsert
 
 class DBTransaction
 {
-	public:
-		DBTransaction(Database* database)
-		{
-			m_database = database;
-			m_state = STATE_NO_START;
-		}
+        public:
+                DBTransaction(Database* database)
+                {
+                        m_database = database;
+                        m_state = STATE_NO_START;
+                }
 
-		virtual ~DBTransaction()
-		{
-			if(m_state == STATE_START)
-				m_database->rollback();
-		}
+                virtual ~DBTransaction()
+                {
+                        if(m_state == STATE_START)
+                                m_database->rollback();
+                }
 
-		bool begin()
-		{
-			m_state = STATE_START;
-			return m_database->beginTransaction();
-		}
+                bool begin()
+                {
+                        m_state = STATE_START;
+                        return m_database->beginTransaction();
+                }
 
-		bool commit()
-		{
-			if(m_state != STATE_START)
-				return false;
+                bool commit()
+                {
+                        if(m_state != STATE_START)
+                                return false;
 
-			m_state = STEATE_COMMIT;
-			return m_database->commit();
-		}
+                        m_state = STEATE_COMMIT;
+                        return m_database->commit();
+                }
 
-	private:
-		Database* m_database;
+        private:
+                Database* m_database;
 
-		enum TransactionStates_t
-		{
-			STATE_NO_START,
-			STATE_START,
-			STEATE_COMMIT
-		};
+                enum TransactionStates_t
+                {
+                        STATE_NO_START,
+                        STATE_START,
+                        STEATE_COMMIT
+                };
 
-		TransactionStates_t m_state;
+                TransactionStates_t m_state;
 };
 #endif
 #endif

@@ -49,11 +49,15 @@ enum stackposType_t
 
 enum WorldType_t
 {
-	WORLD_TYPE_FIRST = 1,
-	WORLD_TYPE_NO_PVP = WORLD_TYPE_FIRST,
-	WORLD_TYPE_PVP = 2,
-	WORLD_TYPE_PVP_ENFORCED = 3,
-	WORLD_TYPE_LAST = WORLD_TYPE_PVP_ENFORCED
+	WORLDTYPE_FIRST = 1,
+	WORLDTYPE_OPTIONAL = WORLDTYPE_FIRST,
+	WORLDTYPE_OPEN = 2,
+	WORLDTYPE_HARDCORE = 3,
+	WORLD_TYPE_FIRST = WORLDTYPE_FIRST,
+	WORLD_TYPE_NO_PVP = WORLDTYPE_OPTIONAL,
+	WORLD_TYPE_PVP = WORLDTYPE_OPEN,
+	WORLD_TYPE_PVP_ENFORCED = WORLDTYPE_HARDCORE,
+	WORLDTYPE_LAST = WORLDTYPE_HARDCORE
 };
 
 enum GameState_t
@@ -137,6 +141,9 @@ typedef std::map<int32_t, float> StageList;
 #define EVENT_DECAYINTERVAL 1000
 #define EVENT_DECAYBUCKETS 16
 #define STATE_DELAY 1000
+#ifdef __WAR_SYSTEM__
+#define EVENT_WARSINTERVAL 900000
+#endif
 
 /**
   * Main Game class.
@@ -567,6 +574,9 @@ class Game
 		void checkCreatureAttack(uint32_t creatureId);
 		void checkCreatures();
 		void checkLight();
+#ifdef __WAR_SYSTEM__
+		void checkWars();
+#endif
 
 		bool combatBlockHit(CombatType_t combatType, Creature* attacker, Creature* target,
 			int32_t& healthChange, bool checkDefense, bool checkArmor);
@@ -658,6 +668,9 @@ class Game
 		int32_t lastMotdId;
 		uint32_t playersRecord;
 		uint32_t checkLightEvent, checkCreatureEvent, checkDecayEvent, saveEvent;
+#ifdef __WAR_SYSTEM__
+		uint32_t checkWarsEvent;
+#endif
 		bool globalSaveMessage[2];
 
 		RefreshTiles refreshTiles;

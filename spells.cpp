@@ -757,7 +757,7 @@ bool Spell::playerInstantSpellCheck(Player* player, Creature* creature)
 
 	Player* targetPlayer = creature->getPlayer();
 	if(!isAggressive || !targetPlayer || Combat::isInPvpZone(player, targetPlayer)
-		|| player->getSkullClient(targetPlayer) != SKULL_NONE)
+		|| player->getSkullType(targetPlayer) != SKULL_NONE)
 		return true;
 
 	if(player->getSecureMode() == SECUREMODE_ON)
@@ -919,7 +919,7 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 
 	Player* targetPlayer = targetCreature->getPlayer();
 	if(!isAggressive || !targetPlayer || Combat::isInPvpZone(player, targetPlayer)
-		|| player->getSkullClient(targetPlayer) != SKULL_NONE)
+		|| player->getSkullType(targetPlayer) != SKULL_NONE)
 		return true;
 
 	if(player->getSecureMode() == SECUREMODE_ON)
@@ -947,7 +947,7 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 			player->addExhaust(exhaustion, isAggressive ? EXHAUST_COMBAT : EXHAUST_HEALING);
 
 		if(isAggressive && !player->hasFlag(PlayerFlag_NotGainInFight))
-			player->addInFightTicks();
+			player->addInFightTicks(false);
 	}
 
 	if(payCost)

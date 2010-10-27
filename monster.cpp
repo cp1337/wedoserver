@@ -283,17 +283,21 @@ void Monster::onCreatureEnter(Creature* creature)
 
 bool Monster::isFriend(const Creature* creature)
 {
-	if(!isSummon() || !getMaster()->getPlayer())
+	if(!isSummon() || !master->getPlayer())
 		return creature->getMonster() && !creature->isSummon();
 
 	const Player* tmpPlayer = NULL;
 	if(creature->getPlayer())
 		tmpPlayer = creature->getPlayer();
-	else if(creature->getMaster() && creature->getMaster()->getPlayer())
-		tmpPlayer = creature->getMaster()->getPlayer();
+	else if(creature->getPlayerMaster())
+		tmpPlayer = creature->getPlayerMaster();
 
-	const Player* masterPlayer = getMaster()->getPlayer();
-	return tmpPlayer && (tmpPlayer == getMaster() || masterPlayer->isPartner(tmpPlayer));
+	const Player* masterPlayer = master->getPlayer();
+	return tmpPlayer && (tmpPlayer == masterPlayer || masterPlayer->isPartner(tmpPlayer)
+#ifdef __WAR_SYSTEM__
+		|| masterPlayer->isAlly(tmpPlayer)
+#endif
+		);
 }
 
 bool Monster::isOpponent(const Creature* creature)
@@ -1170,7 +1174,7 @@ Item* Monster::createCorpse(DeathList deathList)
 		corpse->setUniqueId(mType->corpseUnique);
 
 	if(mType->corpseAction)
-		corpse->setActionId(mType->corpseAction);
+		corpse->setActionId(mType->corpseAction, false);
 
 	DeathEntry ownerEntry = deathList[0];
 	if(ownerEntry.isNameKill())

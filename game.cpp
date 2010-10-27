@@ -72,7 +72,7 @@ extern GlobalEvents* g_globalEvents;
 Game::Game()
 {
 	gameState = GAME_STATE_NORMAL;
-	worldType = WORLD_TYPE_PVP;
+	worldType = WORLDTYPE_OPEN;
 	map = NULL;
 	playersRecord = lastStageLevel = 0;
 	for(int32_t i = 0; i < 3; i++)
@@ -85,6 +85,9 @@ Game::Game()
 	lightState = LIGHT_STATE_DAY;
 
 	lastBucket = checkCreatureLastIndex = checkLightEvent = checkCreatureEvent = checkDecayEvent = saveEvent = 0;
+#ifdef __WAR_SYSTEM__
+	checkWarsEvent = 0;
+#endif
 }
 
 Game::~Game()
@@ -102,6 +105,10 @@ void Game::start(ServiceManager* servicer)
 		boost::bind(&Game::checkCreatures, this)));
 	checkLightEvent = Scheduler::getInstance().addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL,
 		boost::bind(&Game::checkLight, this)));
+#ifdef __WAR_SYSTEM__
+	checkWarsEvent = Scheduler::getInstance().addEvent(createSchedulerTask(EVENT_WARSINTERVAL,
+		boost::bind(&Game::checkWars, this)));
+#endif
 
 	services = servicer;
 	if(g_config.getBool(ConfigManager::GLOBALSAVE_ENABLED) && g_config.getNumber(ConfigManager::GLOBALSAVE_H) >= 1
@@ -183,6 +190,9 @@ void Game::setGameState(GameState_t newState)
 				IOBan::getInstance()->clearTemporials();
 				if(g_config.getBool(ConfigManager::REMOVE_PREMIUM_ON_INIT))
 					IOLoginData::getInstance()->updatePremiumDays();
+#ifdef __WAR_SYSTEM__
+				IOGuild::getInstance()->checkWars();
+#endif
 				break;
 			}
 
@@ -1079,7 +1089,7 @@ bool Game::playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
 		}
 
 		if((movingCreature->getZone() == ZONE_PROTECTION || movingCreature->getZone() == ZONE_NOPVP)
-			&& !toTile->hasFlag(TILESTATE_NOPVPZONE) && !toTile->hasFlag(TILESTATE_PROTECTIONZONE)
+			&& !toTile->hasFlag(TILESTATE_OPTIONALZONE) && !toTile->hasFlag(TILESTATE_PROTECTIONZONE)
 			&& !player->hasFlag(PlayerFlag_IgnoreProtectionZone))
 		{
 			player->sendCancelMessage(RET_NOTPOSSIBLE);
@@ -1711,9 +1721,9 @@ bool Game::removeItemOfType(Cylinder* cylinder, uint16_t itemId, int32_t count, 
 
 	std::list<Container*> listContainer;
 	Container* tmpContainer = NULL;
+	Item* item = NULL;
 
 	Thing* thing = NULL;
-	Item* item = NULL;
 	for(int32_t i = cylinder->__getFirstIndex(); i < cylinder->__getLastIndex() && count > 0;)
 	{
 		if((thing = cylinder->__getThing(i)) && (item = thing->getItem()))
@@ -1738,6 +1748,8 @@ bool Game::removeItemOfType(Cylinder* cylinder, uint16_t itemId, int32_t count, 
 					--count;
 					internalRemoveItem(NULL, item);
 				}
+				else
+				        ++i;
 			}
 			else
 			{
@@ -1777,6 +1789,8 @@ bool Game::removeItemOfType(Cylinder* cylinder, uint16_t itemId, int32_t count, 
 					--count;
 					internalRemoveItem(NULL, item);
 				}
+				else
+				        ++i;
 			}
 			else
 			{
@@ -1797,9 +1811,9 @@ uint32_t Game::getMoney(const Cylinder* cylinder)
 
 	std::list<Container*> listContainer;
 	Container* tmpContainer = NULL;
+	Item* item = NULL;
 
 	Thing* thing = NULL;
-	Item* item = NULL;
 
 	uint32_t moneyCount = 0;
 	for(int32_t i = cylinder->__getFirstIndex(); i < cylinder->__getLastIndex(); ++i)
@@ -2902,13 +2916,14 @@ bool Game::internalStartTrade(Player* player, Player* tradePartner, Item* tradeI
 		char buffer[100];
 		sprintf(buffer, "%s wants to trade with you", player->getName().c_str());
 		tradePartner->sendTextMessage(MSG_INFO_DESCR, buffer);
+		
 		tradePartner->tradeState = TRADE_ACKNOWLEDGE;
 		tradePartner->tradePartner = player;
 	}
 	else
 	{
-		Item* counterOfferItem = tradePartner->tradeItem;
-		player->sendTradeItemRequest(tradePartner, counterOfferItem, false);
+		Item* counterItem = tradePartner->tradeItem;
+		player->sendTradeItemRequest(tradePartner, counterItem, false);
 		tradePartner->sendTradeItemRequest(player, tradeItem, false);
 	}
 
@@ -2963,47 +2978,50 @@ bool Game::playerAcceptTrade(uint32_t playerId)
 	ReturnValue ret1 = internalAddItem(player, tradePartner, tradeItem1, INDEX_WHEREEVER, 0, true);
 	ReturnValue ret2 = internalAddItem(tradePartner, player, tradeItem2, INDEX_WHEREEVER, 0, true);
 
-	bool isSuccess = false;
+	bool success = false;
 	if(ret1 == RET_NOERROR && ret2 == RET_NOERROR)
 	{
 		ret1 = internalRemoveItem(tradePartner, tradeItem1, tradeItem1->getItemCount(), true);
 		ret2 = internalRemoveItem(player, tradeItem2, tradeItem2->getItemCount(), true);
 		if(ret1 == RET_NOERROR && ret2 == RET_NOERROR)
 		{
-			Cylinder* cylinder1 = tradeItem1->getParent();
-			Cylinder* cylinder2 = tradeItem2->getParent();
-
+			Cylinder *cylinder1 = tradeItem1->getParent(), *cylinder2 = tradeItem2->getParent();
 			internalMoveItem(player, cylinder1, tradePartner, INDEX_WHEREEVER, tradeItem1, tradeItem1->getItemCount(), NULL);
 			internalMoveItem(tradePartner, cylinder2, player, INDEX_WHEREEVER, tradeItem2, tradeItem2->getItemCount(), NULL);
 
 			tradeItem1->onTradeEvent(ON_TRADE_TRANSFER, tradePartner, player);
 			tradeItem2->onTradeEvent(ON_TRADE_TRANSFER, player, tradePartner);
 
-			isSuccess = true;
+			success = true;
 		}
 	}
 
-	if(!isSuccess)
+	if(!success)
 	{
-		std::string errorDescription = getTradeErrorDescription(ret1, tradeItem1);
-		tradePartner->sendTextMessage(MSG_INFO_DESCR, errorDescription);
+		std::string error = getTradeErrorDescription(ret1, tradeItem1);
+		tradePartner->sendTextMessage(MSG_INFO_DESCR, error);
+		
+		error = getTradeErrorDescription(ret2, tradeItem2);
+		if(tradeItem2)
 		tradeItem2->onTradeEvent(ON_TRADE_CANCEL, tradePartner, NULL);
 
-		errorDescription = getTradeErrorDescription(ret2, tradeItem2);
-		player->sendTextMessage(MSG_INFO_DESCR, errorDescription);
+		player->sendTextMessage(MSG_INFO_DESCR, error);
+		if(tradeItem1)
 		tradeItem1->onTradeEvent(ON_TRADE_CANCEL, player, NULL);
 	}
 
 	player->setTradeState(TRADE_NONE);
 	player->tradeItem = NULL;
 	player->tradePartner = NULL;
-	player->sendTradeClose();
 
 	tradePartner->setTradeState(TRADE_NONE);
 	tradePartner->tradeItem = NULL;
 	tradePartner->tradePartner = NULL;
+	
+	player->sendTradeClose();
 	tradePartner->sendTradeClose();
-	return isSuccess;
+	
+	return success;
 }
 
 std::string Game::getTradeErrorDescription(ReturnValue ret, Item* item)
@@ -3672,7 +3690,7 @@ bool Game::playerWhisper(Player* player, const std::string& text)
 
 bool Game::playerYell(Player* player, const std::string& text)
 {
-	if(player->getLevel() <= 1)
+	if(player->getLevel() <= 1 && !player->hasFlag(PlayerFlag_CannotBeMuted))
 	{
 		player->sendTextMessage(MSG_STATUS_SMALL, "You may not yell as long as you are on level 1.");
 		return true;
@@ -4613,7 +4631,7 @@ void Game::checkDecay()
 
 void Game::checkLight()
 {
-	Scheduler::getInstance().addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL,
+	checkLightEvent = Scheduler::getInstance().addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL,
 		boost::bind(&Game::checkLight, this)));
 
 	lightHour = lightHour + lightHourDelta;
@@ -4663,9 +4681,21 @@ void Game::checkLight()
 		LightInfo lightInfo;
 		getWorldLightInfo(lightInfo);
 		for(AutoList<Player>::iterator it = Player::autoList.begin(); it != Player::autoList.end(); ++it)
-			it->second->sendWorldLight(lightInfo);
+		{
+			if(!it->second->hasCustomFlag(PlayerCustomFlag_HasFullLight))
+				it->second->sendWorldLight(lightInfo);
+		}
 	}
 }
+#ifdef __WAR_SYSTEM__
+
+void Game::checkWars()
+{
+	IOGuild::getInstance()->checkWars();
+	checkWarsEvent = Scheduler::getInstance().addEvent(createSchedulerTask(EVENT_WARSINTERVAL,
+		boost::bind(&Game::checkWars, this)));
+}
+#endif
 
 void Game::getWorldLightInfo(LightInfo& lightInfo)
 {

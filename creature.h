@@ -90,13 +90,25 @@ struct DeathLessThan;
 struct DeathEntry
 {
 		DeathEntry(std::string name, int32_t dmg):
-			data(name), damage(dmg), unjustified(false) {}
+			data(name), damage(dmg), last(false), justify(false), unjustified(false) {}
 		DeathEntry(Creature* killer, int32_t dmg):
-			data(killer), damage(dmg), unjustified(false) {}
-		void setUnjustified(bool v) {unjustified = v;}
+			data(killer), damage(dmg), last(false), justify(false), unjustified(false) {}
 
 		bool isCreatureKill() const {return data.type() == typeid(Creature*);}
 		bool isNameKill() const {return !isCreatureKill();}
+#ifdef __WAR_SYSTEM__
+
+		void setWar(War_t v) {war = v;}
+		War_t getWar() const {return war;}
+#endif
+
+		void setLast() {last = true;}
+		bool isLast() const {return last;}
+
+		void setJustify() {justify = true;}
+		bool isJustify() const {return justify;}
+		
+		void setUnjustified() {unjustified = true;}
 		bool isUnjustified() const {return unjustified;}
 
 		const std::type_info& getKillerType() const {return data.type();}
@@ -106,9 +118,15 @@ struct DeathEntry
 	protected:
 		boost::any data;
 		int32_t damage;
-		bool unjustified;
 
 		friend struct DeathLessThan;
+#ifdef __WAR_SYSTEM__
+		War_t war;
+#endif
+
+		bool last;
+		bool justify;
+		bool unjustified;
 };
 
 struct DeathLessThan
@@ -358,7 +376,7 @@ class Creature : public AutoId, virtual public Thing
 		virtual void onSummonAttackedCreatureDrain(Creature* summon, Creature* target, int32_t points) {}
 		virtual void onTargetCreatureGainHealth(Creature* target, int32_t points);
 		virtual void onAttackedCreatureKilled(Creature* target);
-		virtual bool onKilledCreature(Creature* target, uint32_t& flags);
+		virtual bool onKilledCreature(Creature* target, DeathEntry& entry);
 		virtual void onGainExperience(double& gainExp, bool fromMonster, bool multiplied);
 		virtual void onGainSharedExperience(double& gainExp, bool fromMonster, bool multiplied);
 		virtual void onAttackedCreatureBlockHit(Creature* target, BlockType_t blockType) {}
@@ -405,7 +423,7 @@ class Creature : public AutoId, virtual public Thing
 
 		virtual void setSkull(Skulls_t newSkull) {skull = newSkull;}
 		virtual Skulls_t getSkull() const {return skull;}
-		virtual Skulls_t getSkullClient(const Creature* creature) const {return creature->getSkull();}
+		virtual Skulls_t getSkullType(const Creature* creature) const {return creature->getSkull();}
 
 		virtual void setShield(PartyShields_t newPartyShield) {partyShield = newPartyShield;}
 		virtual PartyShields_t getShield() const {return partyShield;}
