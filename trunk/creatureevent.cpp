@@ -318,7 +318,11 @@ std::string CreatureEvent::getScriptEventParams() const
 		case CREATURE_EVENT_CAST:
 			return "cid, target";
 		case CREATURE_EVENT_KILL:
-			return "cid, target, lastHit";
+#ifndef __WAR_SYSTEM__
+			return "cid, target, flags";
+#else
+			return "cid, target, flags, war";
+#endif
 		case CREATURE_EVENT_DEATH:
 			return "cid, corpse, deathList";
 		case CREATURE_EVENT_PREPAREDEATH:
@@ -1385,11 +1389,21 @@ uint32_t CreatureEvent::executeCast(Creature* creature, Creature* target/* = NUL
 	}
 }
 
-uint32_t CreatureEvent::executeKill(Creature* creature, Creature* target, bool lastHit)
+uint32_t CreatureEvent::executeKill(Creature* creature, Creature* target, const DeathEntry& entry)
 {
-	//onKill(cid, target, lastHit)
+	//onKill(cid, target, flags)
 	if(m_interface->reserveEnv())
 	{
+		uint32_t flags = 0;
+		if(entry.isLast())
+			flags |= 1;
+
+		if(entry.isJustify())
+			flags |= 2;
+
+		if(entry.isUnjustified())
+			flags |= 4;
+
 		ScriptEnviroment* env = m_interface->getEnv();
 		if(m_scripted == EVENT_SCRIPT_BUFFER)
 		{
@@ -1398,7 +1412,10 @@ uint32_t CreatureEvent::executeKill(Creature* creature, Creature* target, bool l
 			scriptstream << "local cid = " << env->addThing(creature) << std::endl;
 
 			scriptstream << "local target = " << env->addThing(target) << std::endl;
-			scriptstream << "local lastHit = " << (lastHit ? "true" : "false") << std::endl;
+			scriptstream << "local flags = " << flags << std::endl;
+#ifdef __WAR_SYSTEM__
+			scriptstream << "local war = " << entry.getWar().war << std::endl;
+#endif
 
 			scriptstream << m_scriptData;
 			bool result = true;
@@ -1416,7 +1433,7 @@ uint32_t CreatureEvent::executeKill(Creature* creature, Creature* target, bool l
 			#ifdef __DEBUG_LUASCRIPTS__
 			std::stringstream desc;
 			desc << creature->getName();
-			env->setEventDesc(desc.str());
+			env->setEvent(desc.str());
 			#endif
 
 			env->setScriptId(m_scriptId, m_interface);
@@ -1427,16 +1444,23 @@ uint32_t CreatureEvent::executeKill(Creature* creature, Creature* target, bool l
 
 			lua_pushnumber(L, env->addThing(creature));
 			lua_pushnumber(L, env->addThing(target));
-			lua_pushboolean(L, lastHit);
 
-			bool result = m_interface->callFunction(3);
+			lua_pushnumber(L, flags);
+#ifndef __WAR_SYSTEM__
+
+			bool result = m_interface->callFunction(4);
+#else
+			lua_pushnumber(L, entry.getWar().war);
+
+			bool result = m_interface->callFunction(5);
+#endif
 			m_interface->releaseEnv();
 			return result;
 		}
 	}
 	else
 	{
-		std::cout << "[Error - CreatureEvent::executeKill] Call stack overflow." << std::endl;
+		std::clog << "[Error - CreatureEvent::executeKill] Call stack overflow." << std::endl;
 		return 0;
 	}
 }

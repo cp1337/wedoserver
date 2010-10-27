@@ -655,72 +655,67 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 
 bool Creature::onDeath()
 {
-	DeathList deathList = getKillers();
-	bool deny = false;
+        DeathList deathList = getKillers();
+        bool deny = false;
 
-	CreatureEventList prepareDeathEvents = getCreatureEvents(CREATURE_EVENT_PREPAREDEATH);
-	for(CreatureEventList::iterator it = prepareDeathEvents.begin(); it != prepareDeathEvents.end(); ++it)
-	{
-		if(!(*it)->executePrepareDeath(this, deathList) && !deny)
-			deny = true;
-	}
+        CreatureEventList prepareDeathEvents = getCreatureEvents(CREATURE_EVENT_PREPAREDEATH);
+        for(CreatureEventList::iterator it = prepareDeathEvents.begin(); it != prepareDeathEvents.end(); ++it)
+        {
+                if(!(*it)->executePrepareDeath(this, deathList) && !deny)
+                        deny = true;
+        }
 
-	if(deny)
-		return false;
+        if(deny)
+                return false;
 
-	int32_t i = 0, size = deathList.size(), limit = g_config.getNumber(ConfigManager::DEATH_ASSISTS) + 1;
-	if(limit > 0 && size > limit)
-		size = limit;
+        int32_t i = 0, size = deathList.size(), limit = g_config.getNumber(ConfigManager::DEATH_ASSISTS) + 1;
+        if(limit > 0 && size > limit)
+                size = limit;
 
-	Creature* tmp = NULL;
-	CreatureVector justifyVec;
-	for(DeathList::iterator it = deathList.begin(); it != deathList.end(); ++it, ++i)
-	{
-		if(it->isNameKill())
-			continue;
+        Creature* tmp = NULL;
+        CreatureVector justifyVec;
+        for(DeathList::iterator it = deathList.begin(); it != deathList.end(); ++it, ++i)
+        {
+                if(it->isNameKill())
+                        continue;
 
-		bool lastHit = it == deathList.begin();
-		uint32_t flags = KILLFLAG_NONE;
-		if(lastHit)
-			flags |= (uint32_t)KILLFLAG_LASTHIT;
+                if(it == deathList.begin())
+                        it->setLast();
 
-		if(i < size)
-		{
-			if(it->getKillerCreature()->getPlayer())
-				tmp = it->getKillerCreature();
-			else if(it->getKillerCreature()->getPlayerMaster())
-				tmp = it->getKillerCreature()->getMaster();
-		}
+                if(i < size)
+                {
+                        if(it->getKillerCreature()->getPlayer())
+                                tmp = it->getKillerCreature();
+                        else if(it->getKillerCreature()->getPlayerMaster())
+                                tmp = it->getKillerCreature()->getMaster();
+                }
 
-		if(tmp)
-		{
-			if(std::find(justifyVec.begin(), justifyVec.end(), tmp) == justifyVec.end())
-			{
-				flags |= (uint32_t)KILLFLAG_JUSTIFY;
-				justifyVec.push_back(tmp);
-			}
+                if(tmp)
+                {
+                        if(std::find(justifyVec.begin(), justifyVec.end(), tmp) == justifyVec.end())
+                        {
+                                it->setJustify();
+                                justifyVec.push_back(tmp);
+                        }
 
-			tmp = NULL;
-		}
+                        tmp = NULL;
+                }
 
-		if(!it->getKillerCreature()->onKilledCreature(this, flags) && lastHit)
-			return false;
+                if(!it->getKillerCreature()->onKilledCreature(this, (*it)) && it->isLast())
+                        return false;
+        }
 
-		if(hasBitSet((uint32_t)KILLFLAG_UNJUSTIFIED, flags))
-			it->setUnjustified(true);
-	}
+        for(CountMap::iterator it = damageMap.begin(); it != damageMap.end(); ++it)
+        {
+                if((tmp = g_game.getCreatureByID(it->first)))
+                        tmp->onAttackedCreatureKilled(this);
+        }
 
-	for(CountMap::iterator it = damageMap.begin(); it != damageMap.end(); ++it)
-	{
-		if((tmp = g_game.getCreatureByID(it->first)))
-			tmp->onAttackedCreatureKilled(this);
-	}
+        dropCorpse(deathList);
+        if(master)
+                master->removeSummon(this);
 
-	dropCorpse(deathList);
-	if(master)
-		master->removeSummon(this);
-
-	return true;
+        return true;
 }
 
 void Creature::dropCorpse(DeathList deathList)
@@ -777,17 +772,26 @@ void Creature::dropCorpse(DeathList deathList)
 DeathList Creature::getKillers()
 {
 	DeathList list;
+	CountMap::const_iterator it;
+
 	Creature* lhc = NULL;
-	if(!(lhc = g_game.getCreatureByID(lastHitCreature)))
-		list.push_back(DeathEntry(getCombatName(lastDamageSource), 0));
+	if((lhc = g_game.getCreatureByID(lastHitCreature)))
+	{
+		int32_t damage = 0;
+		it = damageMap.find(lastHitCreature);
+		if(it != damageMap.end())
+			damage = it->second.total;
+
+		list.push_back(DeathEntry(lhc, damage));
+	}
 	else
-		list.push_back(DeathEntry(lhc, 0));
+		list.push_back(DeathEntry(getCombatName(lastDamageSource), 0));
 
 	int32_t requiredTime = g_config.getNumber(ConfigManager::DEATHLIST_REQUIRED_TIME);
 	int64_t now = OTSYS_TIME();
 
 	CountBlock_t cb;
-	for(CountMap::const_iterator it = damageMap.begin(); it != damageMap.end(); ++it)
+	for(it = damageMap.begin(); it != damageMap.end(); ++it)
 	{
 		cb = it->second;
 		if((now - cb.ticks) > requiredTime)
@@ -1206,28 +1210,28 @@ void Creature::onAttackedCreatureKilled(Creature* target)
 	onGainExperience(gainExp, !target->getPlayer(), false);
 }
 
-bool Creature::onKilledCreature(Creature* target, uint32_t& flags)
+bool Creature::onKilledCreature(Creature* target, DeathEntry& entry)
 {
-	bool ret = true;
-	if(master)
-		ret = master->onKilledCreature(target, flags);
+        bool ret = true;
+        if(master)
+                ret = master->onKilledCreature(target, entry);
 
-	CreatureEventList killEvents = getCreatureEvents(CREATURE_EVENT_KILL);
-	if(!hasBitSet((uint32_t)KILLFLAG_LASTHIT, flags))
-	{
-		for(CreatureEventList::iterator it = killEvents.begin(); it != killEvents.end(); ++it)
-			(*it)->executeKill(this, target, false);
+        CreatureEventList killEvents = getCreatureEvents(CREATURE_EVENT_KILL);
+        if(!entry.isLast())
+        {
+                for(CreatureEventList::iterator it = killEvents.begin(); it != killEvents.end(); ++it)
+                        (*it)->executeKill(this, target, entry);
 
-		return true;
-	}
+                return true;
+        }
 
-	for(CreatureEventList::iterator it = killEvents.begin(); it != killEvents.end(); ++it)
-	{
-		if(!(*it)->executeKill(this, target, true) && ret)
-			ret = false;
-	}
+        for(CreatureEventList::iterator it = killEvents.begin(); it != killEvents.end(); ++it)
+        {
+                if(!(*it)->executeKill(this, target, entry) && ret)
+                        ret = false;
+        }
 
-	return ret;
+        return ret;
 }
 
 void Creature::onGainExperience(double& gainExp, bool fromMonster, bool multiplied)

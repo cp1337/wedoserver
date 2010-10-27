@@ -261,6 +261,9 @@ class ConfigManager
 			VIPLIST_PER_PLAYER,
 			USE_FRAG_HANDLER,
 			ADDONS_PREMIUM,
+#ifdef __WAR_SYSTEM__
+			OPTIONAL_WAR_ATTACK_ALLY,
+#endif
 			UNIFIED_SPELLS,
 			LAST_BOOL_CONFIG /* this must be the last one */
 		};

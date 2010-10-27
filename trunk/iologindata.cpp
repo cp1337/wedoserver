@@ -533,8 +533,35 @@ bool IOLoginData::loadPlayer(Player* player, const std::string& name, bool preLo
 			player->rankName = result->getDataString("rank");
 			player->rankId = rankId;
 			player->guildNick = nick;
-
 			result->free();
+#ifdef __WAR_SYSTEM__
+
+			query.str("");
+			query << "SELECT `id`, `guild_id`, `enemy_id` FROM `guild_wars` WHERE (`guild_id` = "
+				<< player->guildId << " OR `enemy_id` = " << player->guildId << ") AND `status` IN (1,4)";
+			if((result = db->storeQuery(query.str())))
+			{
+				War_t war;
+				do
+				{
+					uint32_t guild = result->getDataInt("guild_id");
+					if(player->guildId == guild)
+					{
+						war.type = WAR_ENEMY;
+						war.war = result->getDataInt("id");
+						player->addEnemy(result->getDataInt("enemy_id"), war);
+					}
+					else
+					{
+						war.type = WAR_GUILD;
+						war.war = result->getDataInt("id");
+						player->addEnemy(guild, war);
+					}
+				}
+				while(result->next());
+				result->free();
+			}
+#endif
 		}
 	}
 	else if(g_config.getBool(ConfigManager::INGAME_GUILD_MANAGEMENT))
@@ -786,7 +813,7 @@ bool IOLoginData::savePlayer(Player* player, bool preSave/* = true*/, bool shall
 	query << "`sex` = " << player->sex << ", ";
 	query << "`balance` = " << player->balance << ", ";
 	query << "`stamina` = " << player->getStamina() << ", ";
-	if(g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED)
+	if(g_game.getWorldType() != WORLDTYPE_HARDCORE)
 	{
 		Skulls_t skull = SKULL_RED;
 		if(g_config.getBool(ConfigManager::USE_BLACK_SKULL))
@@ -1071,16 +1098,40 @@ bool IOLoginData::playerDeath(Player* player, const DeathList& dl)
 	if(!db->executeQuery(query.str()))
 		return false;
 
-	int32_t i = 0, size = dl.size(), tmp = g_config.getNumber(ConfigManager::DEATH_ASSISTS) + 1;
-	if(tmp > 0 && size > tmp)
+	uint32_t i = 0, size = dl.size(), tmp = g_config.getNumber(ConfigManager::DEATH_ASSISTS) + 1;
+	if(size > tmp)
 		size = tmp;
 
+#ifdef __WAR_SYSTEM__
+	DeathList wl;
+	bool war = false;
+
+#endif
 	uint64_t deathId = db->getLastInsertId();
 	for(DeathList::const_iterator it = dl.begin(); i < size && it != dl.end(); ++it, ++i)
 	{
 		query.str("");
-		query << "INSERT INTO `killers` (`death_id`, `final_hit`, `unjustified`) VALUES ("
-			<< deathId << ", " << (it == dl.begin()) << ", " << it->isUnjustified() << ")";
+		query << "INSERT INTO `killers` (`death_id`, `final_hit`, `unjustified`"
+#ifdef __WAR_SYSTEM__
+			<< ", `war`"
+#endif
+			<< ") VALUES (" << deathId << ", " << it->isLast() << ", " << it->isUnjustified();
+#ifdef __WAR_SYSTEM__
+		if(it->isLast()) //last hit is always first and we got stored war data only there
+		{
+			War_t tmp = it->getWar();
+			if(tmp.war && tmp.frags[tmp.type == WAR_GUILD]
+				<= tmp.limit && tmp.frags[tmp.type] <= tmp.limit)
+				war = true;
+		}
+
+		if(war)
+			query << ", " << it->getWar().war;
+		else
+			query << ", 0";
+#endif
+
+		query << ")";
 		if(!db->executeQuery(query.str()))
 			return false;
 
@@ -1098,6 +1149,11 @@ bool IOLoginData::playerDeath(Player* player, const DeathList& dl)
 
 			if(player)
 			{
+#ifdef __WAR_SYSTEM__
+				if(_player->isEnemy(player, false))
+					wl.push_back(*it);
+
+#endif
 				query.str("");
 				query << "INSERT INTO `player_killers` (`kill_id`, `player_id`) VALUES ("
 					<< killId << ", " << player->getGUID() << ")";
@@ -1119,6 +1175,11 @@ bool IOLoginData::playerDeath(Player* player, const DeathList& dl)
 				return false;
 		}
 	}
+#ifdef __WAR_SYSTEM__
+
+	if(!wl.empty())
+		IOGuild::getInstance()->frag(_player, deathId, wl, war);
+#endif
 
 	return trans.commit();
 }
