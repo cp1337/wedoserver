@@ -5,11 +5,11 @@
 #define WEDOSERVER_PRIVATE_H
 
 /* VERSION DEFINITIONS */
-#define VER_STRING	"0.0.0.102"
+#define VER_STRING	"0.0.0.135"
 #define VER_MAJOR	0
 #define VER_MINOR	0
 #define VER_RELEASE	0
-#define VER_BUILD	102
+#define VER_BUILD	135
 #define COMPANY_NAME	"xtibia.com"
 #define FILE_VERSION	"0.1_Beta"
 #define FILE_DESCRIPTION	"We do Server"

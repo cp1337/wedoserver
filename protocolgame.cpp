@@ -1574,6 +1574,23 @@ void ProtocolGame::sendWorldLight(const LightInfo& lightInfo)
 	}
 }
 
+void ProtocolGame::sendCreatureImpassable(const Creature* creature)
+{
+	reloadCreature(creature);
+	/* TODO: how this actually work...
+	if(!canSee(creature))
+		return;
+
+	NetworkMessage_ptr msg = getOutputBuffer();
+	if(msg)
+	{
+		TRACK_MESSAGE(msg);
+		msg->put<char>(0x92);
+		msg->put<uint32_t>(creature->getID());
+		msg->put<char>(!player->canWalkthrough(creature));
+	}*/
+}
+
 void ProtocolGame::sendCreatureShield(const Creature* creature)
 {
 	if(!canSee(creature))
@@ -2621,7 +2638,35 @@ void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, bool isOnline
 	}
 }
 
-////////////// Add common messages
+void ProtocolGame::reloadCreature(const Creature* creature)
+{
+	if(!canSee(creature))
+		return;
+
+	// we are cheating the client in here!
+	uint32_t stackpos = creature->getTile()->getClientIndexOfThing(player, creature);
+	if(stackpos >= 10)
+		return;
+
+	NetworkMessage_ptr msg = getOutputBuffer();
+	if(msg)
+	{
+		TRACK_MESSAGE(msg);
+		std::list<uint32_t>::iterator it = std::find(knownCreatureList.begin(), knownCreatureList.end(), creature->getID());
+		if(it != knownCreatureList.end())
+		{
+			RemoveTileItem(msg, creature->getPosition(), stackpos);
+			msg->AddByte(0x6A);
+
+			msg->AddPosition(creature->getPosition());
+			msg->AddByte(stackpos);
+			AddCreature(msg, creature, false, creature->getID());
+		}
+		else
+			AddTileCreature(msg, creature->getPosition(), stackpos, creature);
+	}
+}
+
 void ProtocolGame::AddMapDescription(NetworkMessage_ptr msg, const Position& pos)
 {
 	msg->AddByte(0x64);

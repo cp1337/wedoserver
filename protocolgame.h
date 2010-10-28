@@ -204,6 +204,8 @@ class ProtocolGame : public Protocol
 
 		void sendCreatureSkull(const Creature* creature);
 		void sendCreatureShield(const Creature* creature);
+		void sendCreatureEmblem(const Creature* creature) {reloadCreature(creature);}
+		void sendCreatureImpassable(const Creature* creature);
 
 		void sendShop(const ShopInfoList& shop);
 		void sendCloseShop();
@@ -253,6 +255,7 @@ class ProtocolGame : public Protocol
 		void sendRemoveInventoryItem(slots_t slot);
 
 		//Help functions
+		void reloadCreature(const Creature* creature);
 
 		// translate a tile to clientreadable format
 		void GetTileDescription(const Tile* tile, NetworkMessage_ptr msg);

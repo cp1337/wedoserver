@@ -21,7 +21,9 @@
 
 #include "configmanager.h"
 #include "game.h"
+#include "chat.h"
 
+extern Chat g_chat;
 extern Game g_game;
 extern ConfigManager g_config;
 
@@ -455,7 +457,7 @@ bool IOGuild::updateWar(War_t& war)
 
 	query.str("");
 	query << "UPDATE `guild_wars` SET `guild_kills` = " << war.frags[WAR_GUILD] << ", `enemy_kills` = " << war.frags[WAR_ENEMY] << " WHERE `id` = " << war.war;
-	return db->query(query.str());
+	return db->executeQuery(query.str());
 }
 
 void IOGuild::finishWar(War_t war, bool finished)
@@ -465,7 +467,7 @@ void IOGuild::finishWar(War_t war, bool finished)
 	if(finished)
 	{
 		query << "UPDATE `guilds` SET `balance` = `balance` + " << (war.payment * 2) << " WHERE `id` = " << war.ids[war.type];
-		if(!db->query(query.str()))
+		if(!db->executeQuery(query.str()))
 			return;
 
 		query.str("");
@@ -476,7 +478,7 @@ void IOGuild::finishWar(War_t war, bool finished)
 		query << "`guild_kills` = " << war.frags[WAR_GUILD] << ", `enemy_kills` = " << war.frags[WAR_ENEMY] << ",";
 
 	query << "`end` = " << time(NULL) << ", `status` = 5 WHERE `id` = " << war.war;
-	if(!db->query(query.str()))
+	if(!db->executeQuery(query.str()))
 		return;
 
 	for(AutoList<Player>::iterator it = Player::autoList.begin(); it != Player::autoList.end(); ++it)
@@ -567,6 +569,6 @@ void IOGuild::frag(Player* player, uint64_t deathId, const DeathList& list, bool
 
 	query << "INSERT INTO `guild_kills` (`guild_id`, `war_id`, `death_id`) VALUES ("
 		<< war.ids[war.type] << ", " << war.war << ", " << deathId << ");";
-	db->query(query.str());
+	db->executeQuery(query.str());
 }
 #endif

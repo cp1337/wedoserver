@@ -692,7 +692,7 @@ bool TalkAction::houseSubOwnerList(Creature* creature, const std::string& cmd, c
 	return false;
 }
 
-bool TalkAction::guildJoin(Creature* creature, const std::string& cmd, const std::string& param)
+bool TalkAction::guildJoin(Creature* creature, const std::string&, const std::string& param)
 {
 	Player* player = creature->getPlayer();
 	if(!player || !g_config.getBool(ConfigManager::INGAME_GUILD_MANAGEMENT))
