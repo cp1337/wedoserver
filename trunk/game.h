@@ -553,6 +553,9 @@ class Game
 		void internalCreatureChangeOutfit(Creature* creature, const Outfit_t& oufit, bool forced = false);
 		void internalCreatureChangeVisible(Creature* creature, Visible_t visible);
 		void updateCreatureSkull(Creature* creature);
+		void updateCreatureShield(Creature* creature);
+		void updateCreatureEmblem(Creature* creature);
+		void updateCreatureImpassable(Creature* creature);
 		void sendPublicSquare(Player* sender, SquareColor_t color);
 
 		GameState_t getGameState() const {return gameState;}

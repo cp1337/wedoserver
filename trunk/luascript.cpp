@@ -2340,10 +2340,10 @@ void LuaScriptInterface::registerFunctions()
 #ifdef __WAR_SYSTEM__
 
 	//doGuildAddEnemy(guild, enemy, war, type)
-	lua_register(m_luaState, "doGuildAddEnemy", LuaInterface::luaDoGuildAddEnemy);
+	lua_register(m_luaState, "doGuildAddEnemy", LuaScriptInterface::luaDoGuildAddEnemy);
 
 	//doGuildRemoveEnemy(guild, enemy)
-	lua_register(m_luaState, "doGuildRemoveEnemy", LuaInterface::luaDoGuildRemoveEnemy);
+	lua_register(m_luaState, "doGuildRemoveEnemy", LuaScriptInterface::luaDoGuildRemoveEnemy);
 #endif
 
 	//doUpdateHouseAuctions()
@@ -7769,6 +7769,104 @@ int32_t LuaScriptInterface::luaGetCreatureNoMove(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaGetCreatureGuildEmblem(lua_State* L)
+{
+	//getCreatureGuildEmblem(cid[, target])
+	uint32_t tid = 0;
+	if(lua_gettop(L) > 1)
+		tid = popNumber(L);
+
+	ScriptEnviroment* env = getEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+	{
+		if(!tid)
+			lua_pushnumber(L, creature->getEmblem());
+		else if(Creature* target = env->getCreatureByUID(tid))
+			lua_pushnumber(L, creature->getGuildEmblem(target));
+		else
+		{
+			errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+			lua_pushboolean(L, false);
+		}
+	}
+	else
+	{
+		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoCreatureSetGuildEmblem(lua_State* L)
+{
+	//doCreatureSetGuildEmblem(cid, emblem)
+	GuildEmblems_t emblem = (GuildEmblems_t)popNumber(L);
+	ScriptEnviroment* env = getEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+	{
+		creature->setEmblem(emblem);
+		g_game.updateCreatureEmblem(creature);
+		lua_pushboolean(L, true);
+	}
+	else
+	{
+		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaGetCreaturePartyShield(lua_State* L)
+{
+	//getCreaturePartyShield(cid[, target])
+	uint32_t tid = 0;
+	if(lua_gettop(L) > 1)
+		tid = popNumber(L);
+
+	ScriptEnviroment* env = getEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+	{
+		if(!tid)
+			lua_pushnumber(L, creature->getShield());
+		else if(Creature* target = env->getCreatureByUID(tid))
+			lua_pushnumber(L, creature->getPartyShield(target));
+		else
+		{
+			errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+			lua_pushboolean(L, false);
+		}
+	}
+	else
+	{
+		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaDoCreatureSetPartyShield(lua_State* L)
+{
+	//doCreatureSetPartyShield(cid, shield)
+	PartyShields_t shield = (PartyShields_t)popNumber(L);
+	ScriptEnviroment* env = getEnv();
+	if(Creature* creature = env->getCreatureByUID(popNumber(L)))
+	{
+		creature->setShield(shield);
+		g_game.updateCreatureShield(creature);
+		lua_pushboolean(L, true);
+	}
+	else
+	{
+		errorEx(getError(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaGetCreatureSkullType(lua_State* L)
 {
 	//getCreatureSkullType(cid[, target])
@@ -9780,7 +9878,7 @@ int32_t LuaScriptInterface::luaGetConfigFile(lua_State* L)
 }
 #ifdef __WAR_SYSTEM__
 
-int32_t LuaInterface::luaDoGuildAddEnemy(lua_State* L)
+int32_t LuaScriptInterface::luaDoGuildAddEnemy(lua_State* L)
 {
 	//doGuildAddEnemy(guild, enemy, war, type)
 	War_t war;
@@ -9802,7 +9900,7 @@ int32_t LuaInterface::luaDoGuildAddEnemy(lua_State* L)
 	return 1;
 }
 
-int32_t LuaInterface::luaDoGuildRemoveEnemy(lua_State* L)
+int32_t LuaScriptInterface::luaDoGuildRemoveEnemy(lua_State* L)
 {
 	//doGuildRemoveEnemy(guild, enemy)
 	uint32_t enemy = popNumber(L), guild = popNumber(L), count = 0;

@@ -1150,7 +1150,7 @@ bool IOLoginData::playerDeath(Player* player, const DeathList& dl)
 			if(player)
 			{
 #ifdef __WAR_SYSTEM__
-				if(_player->isEnemy(player, false))
+				if(player->isEnemy(player, false))
 					wl.push_back(*it);
 
 #endif
@@ -1178,7 +1178,7 @@ bool IOLoginData::playerDeath(Player* player, const DeathList& dl)
 #ifdef __WAR_SYSTEM__
 
 	if(!wl.empty())
-		IOGuild::getInstance()->frag(_player, deathId, wl, war);
+		IOGuild::getInstance()->frag(player, deathId, wl, war);
 #endif
 
 	return trans.commit();

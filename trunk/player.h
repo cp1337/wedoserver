@@ -192,6 +192,7 @@ class Player : public Creature, public Cylinder
 #ifdef __WAR_SYSTEM__
 		GuildEmblems_t getGuildEmblem(const Creature* creature) const;
 #endif
+
 		bool isInviting(const Player* player) const;
 		bool isPartner(const Player* player) const;
 		void sendPlayerPartyIcons(Player* player);
@@ -546,6 +547,10 @@ class Player : public Creature, public Cylinder
 			{if(client) client->sendCreatureLight(creature);}
 		void sendCreatureShield(const Creature* creature)
 			{if(client) client->sendCreatureShield(creature);}
+		void sendCreatureEmblem(const Creature* creature)
+			{if(client) client->sendCreatureEmblem(creature);}
+		void sendCreatureImpassable(const Creature* creature)
+			{if(client) client->sendCreatureImpassable(creature);}
 
 		//container
 		void sendAddContainerItem(const Container* container, const Item* item);

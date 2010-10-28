@@ -165,6 +165,17 @@ bool ChatChannel::talk(Player* player, SpeakClasses type, const std::string& tex
 	return true;
 }
 
+bool ChatChannel::talk(std::string nick, SpeakClasses type, std::string text)
+{
+	for(UsersMap::iterator it = m_users.begin(); it != m_users.end(); ++it)
+		it->second->sendChannelMessage(nick, text, type, m_id);
+
+	if(hasFlag(CHANNELFLAG_LOGGED) && m_file->is_open())
+		*m_file << "[" << formatDate() << "] " << nick << ": " << text << std::endl;
+
+	return true;
+}
+
 Chat::~Chat()
 {
 	for(GuildChannelMap::iterator it = m_guildChannels.begin(); it != m_guildChannels.end(); ++it)

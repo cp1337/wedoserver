@@ -701,6 +701,21 @@ PartyShields_t getPartyShield(std::string strValue)
 	return SHIELD_NONE;
 }
 
+GuildEmblems_t getEmblems(std::string strValue)
+{
+	std::string tmpStrValue = asLowerCaseString(strValue);
+	if(tmpStrValue == "blue" || tmpStrValue == "3")
+		return EMBLEM_BLUE;
+
+	if(tmpStrValue == "red" || tmpStrValue == "2")
+		return EMBLEM_RED;
+
+	if(tmpStrValue == "green" || tmpStrValue == "1")
+		return EMBLEM_GREEN;
+
+	return EMBLEM_NONE;
+}
+
 Direction getDirection(std::string string)
 {
 	if(string == "north" || string == "n" || string == "0")
