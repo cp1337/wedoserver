@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Killer Caiman" nameDescription="a kller caiman" race="blood" experience="800" speed="240" manacost="350">
 	<health now="1500" max="1500"/>
-	<look type="119" corpse="6046"/>
+	<look type="119" corpse="11756"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
 	<flags>

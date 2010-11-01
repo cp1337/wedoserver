@@ -284,7 +284,16 @@
 	<action itemid="6089" event="script" value="other/cultpiano.lua"/>
 	<action itemid="6090" event="script" value="other/cultpiano.lua"/>
 	<action itemid="9661" event="script" value="other/yalaharcrate.lua"/>
-	
+
+	<!-- Quests -->
+	<action itemid="1738" script="quests/quests.lua" />
+	<action itemid="1740" script="quests/quests.lua" />
+	<action itemid="1746" script="quests/quests.lua" />
+	<action itemid="1747" script="quests/quests.lua" />
+	<action itemid="1748" script="quests/quests.lua" />
+	<action itemid="1749" script="quests/quests.lua" />
+	<action itemid="1770" script="quests/quests.lua" />
+
 	<!-- Tools -->
 	<action itemid="2420" event="script" value="tools/machete.lua"/>
 	<action itemid="2550" event="script" value="tools/scythe.lua"/>
