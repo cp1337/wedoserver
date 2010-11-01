@@ -16953,6 +16953,10 @@ at knife">
 		<attribute key="description" value="It shines as beautifully as a good friendship." />
 		<attribute key="weight" value="520" />
 	</item>
+	<item id="10720" article="a" name="friendship amulet">
+		<attribute key="description" value="It shines as beautifully as a good friendship." />
+		<attribute key="weight" value="520" />
+	</item>
 	<item id="10728" article="a" name="dragonbone tree" />
 	<item id="10732" article="a" name="jade spike plant" />
 	<item id="10734" article="a" name="thornpeak grass" />
@@ -18431,16 +18435,16 @@ at knife">
 	</item>
 	<item id="11477" article="a" name="treasure chest">
 	</item>
-	<item id="11465" article="a" name="dead water elemental">
-		<attribute key="containerSize" value="8" />
-		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="600" />
-	</item>
 	<item id="11394" article="a" name="dragon goblet">
 		<attribute key="description" value="A goblet forged by the dragon Khax that represents all the knowledge and wisdom of TibiaVenezuela." />
 		<attribute key="weight" value="1800" />
 	</item>
 	<item id="11262" article="a" name="solitude charm">
 		<attribute key="weight" value="10000" />
+	</item>
+	<item id="11465" article="a" name="remains of a water elemental">
+		<attribute key="containerSize" value="8" />
+		<attribute key="decayTo" value="10500" />
+		<attribute key="duration" value="600" />
 	</item>
 </items>
