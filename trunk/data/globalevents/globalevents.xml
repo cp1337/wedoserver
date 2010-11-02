@@ -6,5 +6,4 @@
 	<globalevent name="playersrecord" type="record" event="script" value="record.lua"/>
 	<globalevent name="raid" interval="108000" event="script" value="raid.lua"/>
 	<globalevent name="serverstart" type="start" event="script" value="start.lua"/>
-	<globalevent name="saveplayer" interval="30" event="script" value="saveplayer.lua"/> 
 </globalevents>
