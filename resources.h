@@ -77,13 +77,13 @@
 #endif
 
 #define CLIENT_VERSION_MIN 861
-#define CLIENT_VERSION_MAX 861
-#define CLIENT_VERSION_STRING "Only clients with protocol 8.61 allowed!"
+#define CLIENT_VERSION_MAX 862
+#define CLIENT_VERSION_STRING "Only clients with protocol 8.61 or 8.62 allowed!"
 
 #define STATUS_SERVER_NAME "We do Server"
 #define STATUS_SERVER_VERSION "0.0.1"
 #define STATUS_SERVER_CODENAME "Open Beta"
-#define STATUS_SERVER_PROTOCOL "8.61"
+#define STATUS_SERVER_PROTOCOL "8.62"
 
 #define VERSION_CHECK ""
 #define VERSION_PATCH 0
