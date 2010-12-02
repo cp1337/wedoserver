@@ -8887,7 +8887,8 @@ at knife">
 		<attribute key="weight" value="600" />
 	</item>
 	<item id="5907" article="a" name="slingshot">
-		<attribute key="weight" value="1200" />
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
 	</item>
 	<item id="5908" article="an" name="obsidian knife">
 		<attribute key="description" value="Sharp and light, this is a useful tool for tanners, doctors and assassins." />
@@ -18447,4 +18448,133 @@ at knife">
 		<attribute key="decayTo" value="10500" />
 		<attribute key="duration" value="600" />
 	</item>
+	<item id="13410" article="a" name="carrot on a stick">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="13417" article="a" name="giant shrimp">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="13406" article="a" name="harness">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="13359" article="a" name="hunting horn">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="13405" article="a" name="leather whip">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="13403" article="a" name="maxilla maximus">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="13407" article="a" name="reins">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="13419" article="a" name="sweet smelling bait">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="13404" article="a" name="tin key">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="13409" article="a" name="haunch of boar">
+		<attribute key="weight" value="1400" />
+		<attribute key="showcount" value="0" />
+	</item>
+	<item id="13242" article="a" name="sweet, sugary substance">
+		<attribute key="description" value="It is incredibly sticky and too sweet to eat it." />
+		<attribute key="weight" value="65" />
+	</item>
+	<item id="13336" article="a" name="scum bag">
+		<attribute key="weight" value="900" />
+	</item>
+	<item id="13273" article="a" name="rabbit's foot lucky charm">
+		<attribute key="weight" value="98" />
+	</item>
+	<item id="13272" article="a" name="rabbit's foot lucky charm">
+		<attribute key="weight" value="98" />
+	</item>
+	<item id="13271" article="a" name="rabbit's foot">
+		<attribute key="weight" value="98" />
+	</item>
+	<item id="13270" article="a" name="handcrafted ribbon">
+		<attribute key="description" value="This ribbon was handcrafted by Rottin Wood and the Married Men of the forest." />
+		<attribute key="weight" value="7000" />
+	</item>
+	<item id="13140" article="a" name="frozen heart">
+		<attribute key="description" value="The eternal love is awarded to winners of TibiaTR contest." />
+		<attribute key="weight" value="2000" />
+	</item>
+	<item id="13141" article="a" name="frozen heart">
+		<attribute key="description" value="The eternal love is awarded to winners of TibiaTR contest." />
+		<attribute key="weight" value="2000" />
+	</item>
+	<item id="13142" article="a" name="draken doll">
+		<attribute key="description" value="It seems to be an favourite doll of emperor. It was rewarded by TibiaNation." />
+		<attribute key="weight" value="2000" />
+	</item>
+	<item id="13143" article="a" name="draken doll">
+		<attribute key="description" value="It seems to be an favourite doll of emperor. It was rewarded by TibiaNation." />
+		<attribute key="weight" value="2000" />
+	</item>
+	<item id="12908" article="a" name="wooden trunk">
+		<attribute key="containerSize" value="10" />
+		<attribute key="rotateTo" value="12909" />
+	</item>
+	<item id="12909" article="a" name="wooden trunk">
+		<attribute key="containerSize" value="10" />
+		<attribute key="rotateTo" value="12908" />
+	</item>
+	<item id="12806" name="stairs">
+		<attribute key="floorchange" value="north" />
+	</item>
+	<item id="12808" name="stairs">
+		<attribute key="floorchange" value="west" />
+	</item>
+	<item fromid="12869" toid="12884" name="lush grass" />
+	<item id="12913" article="a" name="barbecue" />
+	<item id="12910" article="a" name="barbecue" />
+	<item fromid="12888" toid="12889" name="small mudpit" />
+	<item fromid="12830" toid="12838" name="timber floor" />
+	<item fromid="12851" toid="12866" name="timber floor" />
+	<item id="12907" article="a" name="taboret" />
+	<item id="12905" article="a" name="stool">
+		<attribute key="rotateTo" value="12904" />
+	</item>
+	<item id="12903" article="a" name="stool">
+		<attribute key="rotateTo" value="12906" />
+	</item>
+	<item id="12904" article="a" name="stool">
+		<attribute key="rotateTo" value="12903" />
+	</item>
+	<item id="12906" article="a" name="stool">
+		<attribute key="rotateTo" value="12905" />
+	</item>
+	<item id="12911" article="a" name="timber wardrobe">
+		<attribute key="rotateTo" value="12912" />
+	</item>
+	<item id="12912" article="a" name="timber wardrobe">
+		<attribute key="rotateTo" value="12911" />
+	</item>
+	<item id="12901" article="a" name="timber chair">
+		<attribute key="rotateTo" value="12900" />
+	</item>
+	<item id="12899" article="a" name="timber chair">
+		<attribute key="rotateTo" value="12902" />
+	</item>
+	<item id="12900" article="a" name="timber chair">
+		<attribute key="rotateTo" value="12899" />
+	</item>
+	<item id="12902" article="a" name="timber chair">
+		<attribute key="rotateTo" value="12901" />
+	</item>
+	<item fromid="12896" toid="12899" name="big timber table" />
+	<item fromid="13119" toid="13120" name="big timber table" />
 </items>
