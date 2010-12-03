@@ -18525,11 +18525,11 @@ at knife">
 		<attribute key="weight" value="2000" />
 	</item>
 	<item id="12908" article="a" name="wooden trunk">
-		<attribute key="containerSize" value="10" />
+		<attribute key="containerSize" value="20" />
 		<attribute key="rotateTo" value="12909" />
 	</item>
 	<item id="12909" article="a" name="wooden trunk">
-		<attribute key="containerSize" value="10" />
+		<attribute key="containerSize" value="20" />
 		<attribute key="rotateTo" value="12908" />
 	</item>
 	<item id="12806" name="stairs">
@@ -18540,7 +18540,6 @@ at knife">
 	</item>
 	<item fromid="12869" toid="12884" name="lush grass" />
 	<item id="12913" article="a" name="barbecue" />
-	<item id="12910" article="a" name="barbecue" />
 	<item fromid="12888" toid="12889" name="small mudpit" />
 	<item fromid="12830" toid="12838" name="timber floor" />
 	<item fromid="12851" toid="12866" name="timber floor" />
@@ -18557,11 +18556,11 @@ at knife">
 	<item id="12906" article="a" name="stool">
 		<attribute key="rotateTo" value="12905" />
 	</item>
-	<item id="12911" article="a" name="timber wardrobe">
-		<attribute key="rotateTo" value="12912" />
+	<item id="12911" article="a" name="cabinet">
+		<attribute key="containerSize" value="8" />
 	</item>
-	<item id="12912" article="a" name="timber wardrobe">
-		<attribute key="rotateTo" value="12911" />
+	<item id="12912" article="a" name="cabinet">
+		<attribute key="containerSize" value="8" />
 	</item>
 	<item id="12901" article="a" name="timber chair">
 		<attribute key="rotateTo" value="12900" />
@@ -18577,4 +18576,149 @@ at knife">
 	</item>
 	<item fromid="12896" toid="12899" name="big timber table" />
 	<item fromid="13119" toid="13120" name="big timber table" />
+	<item id="12931" article="a" name="hanging deer" />
+	<item id="12933" article="a" name="hanging deer" />
+	<item id="12930" article="a" name="hanging wolf" />
+	<item id="12932" article="a" name="hanging wolf" />
+	<item fromid="13024" toid="13045" name="sandy tile" />
+	<item fromid="13313" toid="13324" name="sandy tile" />
+	<item fromid="12941" toid="12957" name="sandy tile" />
+	<item fromid="13046" toid="13049" name="sandy tile" />
+	<item fromid="12914" toid="12917" name="tattered curtain" />
+	<item fromid="13348" toid="13349" name="timber door" />
+	<item fromid="13132" toid="13135" name="timber door" />
+	<item fromid="13001" toid="13023" name="tomb wall" />
+	<item fromid="12997" toid="13000" name="tomb wall" />
+	<item fromid="12992" toid="12995" name="tomb wall" />
+	<item fromid="12969" toid="12981" name="tomb wall" />
+	<item fromid="12958" toid="12959" name="tomb wall" />
+	<item fromid="13289" toid="13292" name="tomb wall" />
+	<item fromid="13294" toid="13296" name="tomb wall" />
+	<item id="13298" article="a" name="tomb wall" />
+	<item id="13302" article="a" name="hole" />
+	<item id="13301" article="a" name="rope spot" />
+	<item id="12996" article="a" name="tomb pilar" />
+	<item fromid="12982" toid="12991" name="tomb pilar" />
+	<item fromid="12960" toid="12968" name="tomb pilar" />
+	<item id="13335" article="a" name="earth" />
+	<item id="13420" article="a" name="dead boar">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="13421" />
+		<attribute key="duration" value="900" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13421" article="a" name="dead boar">
+		<attribute key="decayTo" value="13422" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13422" article="a" name="dead boar">
+		<attribute key="decayTo" value="13423" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13423" article="a" name="dead boar">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13424" article="a" name="dead stampor">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="13427" />
+		<attribute key="duration" value="900" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13427" article="a" name="dead stampor">
+		<attribute key="decayTo" value="13425" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13425" article="a" name="dead stampor">
+		<attribute key="decayTo" value="13426" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13426" article="a" name="dead stampor">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13428" article="a" name="dead draptor">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="13429" />
+		<attribute key="duration" value="900" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13429" article="a" name="dead draptor">
+		<attribute key="decayTo" value="13430" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13430" article="a" name="dead draptor">
+		<attribute key="decayTo" value="13431" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13431" article="a" name="dead draptor">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13432" article="a" name="dead undead cavebear">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="13435" />
+		<attribute key="duration" value="900" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13435" article="a" name="dead undead cavebear">
+		<attribute key="decayTo" value="13433" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13433" article="a" name="dead undead cavebear">
+		<attribute key="decayTo" value="13434" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13434" article="a" name="dead undead cavebear">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13439" article="a" name="dead midnight panther">
+		<attribute key="containerSize" value="10" />
+		<attribute key="decayTo" value="13436" />
+		<attribute key="duration" value="900" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13436" article="a" name="dead midnight panther">
+		<attribute key="decayTo" value="13437" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13437" article="a" name="dead midnight panther">
+		<attribute key="decayTo" value="13438" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13438" article="a" name="dead midnight panther">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13440" article="a" name="dead titanica">
+		<attribute key="decayTo" value="13441" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13441" article="a" name="dead titanica">
+		<attribute key="decayTo" value="13442" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="13442" article="a" name="dead titanica">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="600" />
+		<attribute key="corpseType" value="blood" />
+	</item>
 </items>
