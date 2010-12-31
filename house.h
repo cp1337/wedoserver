@@ -155,7 +155,8 @@ class House
 			HOUSE_SYNC_SIZE = 1 << 2,
 			HOUSE_SYNC_GUILD = 1 << 3,
 			HOUSE_SYNC_PRICE = 1 << 4,
-			HOUSE_SYNC_RENT = 1 << 5
+			HOUSE_SYNC_RENT = 1 << 5,
+			HOUSE_SYNC_UPDATE = 1 << 6
 		};
 
 		House(uint32_t houseId);
@@ -181,7 +182,7 @@ class House
 		uint32_t getPrice() const {return price;}
 
 		void setLastWarning(time_t _lastWarning) {lastWarning = _lastWarning;}
-		time_t getLastWarning() {return lastWarning;}
+		time_t getLastWarning() const {return lastWarning;}
 
 		void setRentWarnings(uint32_t warnings) {rentWarnings = warnings;}
 		uint32_t getRentWarnings() const {return rentWarnings;}

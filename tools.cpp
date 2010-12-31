@@ -26,44 +26,44 @@
 #include "configmanager.h"
 extern ConfigManager g_config;
 
-std::string transformToSHA1(std::string plainText, bool upperCase)
-{
-	SHA1 sha1;
-	unsigned sha1Hash[5];
-	std::stringstream hexStream;
-
-	sha1.Input((const uint8_t*)plainText.c_str(), plainText.length());
-	sha1.Result(sha1Hash);
-
-	hexStream.flags(std::ios::hex | std::ios::uppercase);
-	for(uint32_t i = 0; i < 5; ++i)
-		hexStream << std::setw(8) << std::setfill('0') << (uint32_t)sha1Hash[i];
-
-	std::string hexStr = hexStream.str();
-	if(!upperCase)
-		toLowerCaseString(hexStr);
-
-	return hexStr;
-}
-
 std::string transformToMD5(std::string plainText, bool upperCase)
 {
-	MD5_CTX m_md5;
-	std::stringstream hexStream;
+        MD5_CTX m_md5;
+        std::stringstream hexStream;
 
-	MD5Init(&m_md5, 0);
-	MD5Update(&m_md5, (const uint8_t*)plainText.c_str(), plainText.length());
-	MD5Final(&m_md5);
+        MD5Init(&m_md5, 0);
+        MD5Update(&m_md5, (const uint8_t*)plainText.c_str(), plainText.length());
+        MD5Final(&m_md5);
 
-	hexStream.flags(std::ios::hex | std::ios::uppercase);
-	for(uint32_t i = 0; i < 16; ++i)
-		hexStream << std::setw(2) << std::setfill('0') << (uint32_t)m_md5.digest[i];
+        hexStream.flags(std::ios::hex | std::ios::uppercase);
+        for(uint32_t i = 0; i < 16; ++i)
+                hexStream << std::setw(2) << std::setfill('0') << (uint32_t)m_md5.digest[i];
 
-	std::string hexStr = hexStream.str();
-	if(!upperCase)
-		toLowerCaseString(hexStr);
+        std::string hexStr = hexStream.str();
+        if(!upperCase)
+                toLowerCaseString(hexStr);
 
-	return hexStr;
+        return hexStr;
+}
+
+std::string transformToSHA1(std::string plainText, bool upperCase)
+{
+        SHA1 sha1;
+        unsigned sha1Hash[5];
+        std::stringstream hexStream;
+
+        sha1.Input((const uint8_t*)plainText.c_str(), plainText.length());
+        sha1.Result(sha1Hash);
+
+        hexStream.flags(std::ios::hex | std::ios::uppercase);
+        for(uint32_t i = 0; i < 5; ++i)
+                hexStream << std::setw(8) << std::setfill('0') << (uint32_t)sha1Hash[i];
+
+        std::string hexStr = hexStream.str();
+        if(!upperCase)
+                toLowerCaseString(hexStr);
+
+        return hexStr;
 }
 
 void _encrypt(std::string& str, bool upperCase)

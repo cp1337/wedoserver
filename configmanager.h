@@ -51,6 +51,7 @@ class ConfigManager
 			#endif
 			SQL_FILE,
 			ENCRYPTION_TYPE,
+			ENCRYPTION_KEY,
 			MAP_AUTHOR,
 			RUNFILE,
 			OUT_LOG,
@@ -265,6 +266,8 @@ class ConfigManager
 			OPTIONAL_WAR_ATTACK_ALLY,
 #endif
 			UNIFIED_SPELLS,
+			ALLOW_MOUNTS,
+			ENABLE_COOLDOWNS,
 			LAST_BOOL_CONFIG /* this must be the last one */
 		};
 
@@ -275,6 +278,7 @@ class ConfigManager
 		const std::string& getString(uint32_t _what) const;
 		bool getBool(uint32_t _what) const;
 		int32_t getNumber(uint32_t _what) const;
+		bool getBoolean(uint32_t _what) const;
 		double getDouble(uint32_t _what) const;
 
 		bool setString(uint32_t _what, const std::string& _value);

@@ -115,12 +115,6 @@ enum GamemasterCondition_t
 	GAMEMASTER_TELEPORT = 2
 };
 
-enum Exhaust_t
-{
-	EXHAUST_COMBAT = 1,
-	EXHAUST_HEALING = 2
-};
-
 typedef std::set<uint32_t> VIPListSet;
 typedef std::vector<std::pair<uint32_t, Container*> > ContainerVector;
 typedef std::map<uint32_t, std::pair<Depot*, bool> > DepotMap;
@@ -245,8 +239,8 @@ class Player : public Creature, public Cylinder
 		void addContainer(uint32_t cid, Container* container);
 		void closeContainer(uint32_t cid);
 
-		virtual bool setStorage(const uint32_t key, const std::string& value);
-		virtual void eraseStorage(const uint32_t key);
+		virtual bool setStorage(const std::string& key, const std::string& value);
+		virtual void eraseStorage(const std::string& key);
 
 		void generateReservedStorage();
 		bool transferMoneyTo(const std::string& name, uint64_t amount);
@@ -273,6 +267,7 @@ class Player : public Creature, public Cylinder
 		uint16_t getAccess() const {return group ? group->getAccess() : 0;}
 		uint16_t getGhostAccess() const {return group ? group->getGhostAccess() : 0;}
 
+		bool isAccessPlayer() const {return accessLevel;}
 		bool isPremium() const;
 		int32_t getPremiumDays() const {return premiumDays;}
 #ifdef __WAR_SYSTEM__
@@ -466,7 +461,8 @@ class Player : public Creature, public Cylinder
 		virtual float getAttackFactor() const;
 		virtual float getDefenseFactor() const;
 
-		void addExhaust(uint32_t ticks, Exhaust_t type);
+		void addExhaust(uint32_t ticks);
+		void addSpellExhaust(SpellGroup_t group, uint32_t ticks);
 		void addInFightTicks(bool pzLock, int32_t ticks = 0);
 		void addDefaultRegeneration(uint32_t addTicks);
 
@@ -551,6 +547,8 @@ class Player : public Creature, public Cylinder
 			{if(client) client->sendCreatureEmblem(creature);}
 		void sendCreatureImpassable(const Creature* creature)
 			{if(client) client->sendCreatureImpassable(creature);}
+		void sendSpellCooldown(uint16_t spellId, uint32_t cooldown, bool isGroup)
+			{if(client) client->sendSpellCooldown(spellId, cooldown, isGroup);}
 
 		//container
 		void sendAddContainerItem(const Container* container, const Item* item);
@@ -566,6 +564,16 @@ class Player : public Creature, public Cylinder
 			{if(client) client->sendUpdateInventoryItem(slot, newItem);}
 		void sendRemoveInventoryItem(slots_t slot, const Item* item)
 			{if(client) client->sendRemoveInventoryItem(slot);}
+			
+		//mount
+		bool isMounted() const {return mounted;}
+		uint16_t getMountId() const {return mount;}
+		void setMountId(uint8_t mountId) {mount = mountId;}
+		void setMounted(bool value);
+		void dismount();
+		bool tameMount(uint8_t mountId);
+		bool untameMount(uint8_t mountId);
+		int64_t getLastMountStatusChange() const {return lastMountStatusChange; }
 
 		//event methods
 		virtual void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
@@ -812,6 +820,7 @@ class Player : public Creature, public Cylinder
 		bool requestedOutfit;
 		bool outfitAttributes;
 		bool addAttackSkillPoint;
+		bool mounted;
 
 		OperatingSystem_t operatingSystem;
 		AccountManager_t accountManager;
@@ -826,6 +835,7 @@ class Player : public Creature, public Cylinder
 		int16_t blessings;
 		uint16_t maxWriteLen;
 		uint16_t sex;
+		uint8_t mount;
 
 		int32_t premiumDays;
 		int32_t soul;
@@ -851,6 +861,7 @@ class Player : public Creature, public Cylinder
 		uint32_t levelPercent;
 		uint32_t magLevel;
 		uint32_t magLevelPercent;
+		bool accessLevel;
 		uint32_t damageImmunities;
 		uint32_t conditionImmunities;
 		uint32_t conditionSuppressions;
@@ -871,10 +882,12 @@ class Player : public Creature, public Cylinder
 		time_t skullEnd;
 		time_t lastLogin;
 		time_t lastLogout;
+		
 		int64_t lastLoad;
 		int64_t lastPong;
 		int64_t lastPing;
 		int64_t nextAction;
+		int64_t lastMountStatusChange;
 		uint64_t stamina;
 		uint64_t experience;
 		uint64_t manaSpent;
@@ -913,7 +926,6 @@ class Player : public Creature, public Cylinder
 #ifdef __WAR_SYSTEM__
 		WarMap warMap;
 #endif
-
 		friend class Game;
 		friend class LuaScriptInterface;
 		friend class Npc;

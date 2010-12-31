@@ -132,6 +132,8 @@ class MoveEvent : public Event
 		const std::string& getVocationString() const {return vocationString;}
 
 	protected:
+		MoveEvent_t m_eventType;
+
 		virtual std::string getScriptEventName() const;
 		virtual std::string getScriptEventParams() const;
 
@@ -140,7 +142,6 @@ class MoveEvent : public Event
 		static EquipFunction EquipItem;
 		static EquipFunction DeEquipItem;
 
-		MoveEvent_t m_eventType;
 		StepFunction* stepFunction;
 		MoveFunction* moveFunction;
 		EquipFunction* equipFunction;

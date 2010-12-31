@@ -24,6 +24,7 @@
 #include "town.h"
 #include "house.h"
 #include "beds.h"
+#include "mounts.h"
 
 #include "combat.h"
 #if defined(WINDOWS) && !defined(__CONSOLE__)
@@ -92,6 +93,10 @@ Player::Player(const std::string& _name, ProtocolGame* p):
 
 	setVocation(0);
 	setParty(NULL);
+	
+	mount = 0;
+	mounted = false;
+	lastMountStatusChange = 0;
 
 	transferContainer.setParent(NULL);
 	for(int32_t i = 0; i < 11; i++)
@@ -783,15 +788,15 @@ void Player::dropLoot(Container* corpse)
 	}
 }
 
-bool Player::setStorage(const uint32_t key, const std::string& value)
+bool Player::setStorage(const std::string& key, const std::string& value)
 {
-	if(!IS_IN_KEYRANGE(key, RESERVED_RANGE))
+	uint32_t numericKey = atol(key.c_str());
+	if(!IS_IN_KEYRANGE(numericKey, RESERVED_RANGE) || IS_IN_KEYRANGE(numericKey, MOUNTS_RANGE))
 		return Creature::setStorage(key, value);
 
-	if(IS_IN_KEYRANGE(key, OUTFITS_RANGE))
+	if(IS_IN_KEYRANGE(numericKey, OUTFITS_RANGE))
 	{
-		uint32_t lookType = atoi(value.c_str()) >> 16;
-		uint32_t addons = atoi(value.c_str()) & 0xFF;
+		uint32_t lookType = atoi(value.c_str()) >> 16, addons = atoi(value.c_str()) & 0xFF;
 		if(addons < 4)
 		{
 			Outfit outfit;
@@ -799,30 +804,29 @@ bool Player::setStorage(const uint32_t key, const std::string& value)
 				return addOutfit(outfit.outfitId, addons);
 		}
 		else
-			std::cout << "[Warning - Player::setStorage] Invalid addons value key: " << key
+			std::clog << "[Warning - Player::setStorage] Invalid addons value key: " << key
 				<< ", value: " << value << " for player: " << getName() << std::endl;
 	}
-	else if(IS_IN_KEYRANGE(key, OUTFITSID_RANGE))
+	else if(IS_IN_KEYRANGE(numericKey, OUTFITSID_RANGE))
 	{
-		uint32_t outfitId = atoi(value.c_str()) >> 16;
-		uint32_t addons = atoi(value.c_str()) & 0xFF;
+		uint32_t outfitId = atoi(value.c_str()) >> 16, addons = atoi(value.c_str()) & 0xFF;
 		if(addons < 4)
 			return addOutfit(outfitId, addons);
 		else
-			std::cout << "[Warning - Player::setStorage] Invalid addons value key: " << key
+			std::clog << "[Warning - Player::setStorage] Invalid addons value key: " << key
 				<< ", value: " << value << " for player: " << getName() << std::endl;
 	}
 	else
-		std::cout << "[Warning - Player::setStorage] Unknown reserved key: " << key << " for player: " << getName() << std::endl;
+		std::clog << "[Warning - Player::setStorage] Unknown reserved key: " << key << " for player: " << getName() << std::endl;
 
 	return false;
 }
 
-void Player::eraseStorage(const uint32_t key)
+void Player::eraseStorage(const std::string& key)
 {
 	Creature::eraseStorage(key);
-	if(IS_IN_KEYRANGE(key, RESERVED_RANGE))
-		std::cout << "[Warning - Player::eraseStorage] Unknown reserved key: " << key << " for player: " << name << std::endl;
+	if(IS_IN_KEYRANGE(atol(key.c_str()), RESERVED_RANGE))
+		std::clog << "[Warning - Player::eraseStorage] Unknown reserved key: " << key << " for player: " << name << std::endl;
 }
 
 bool Player::canSee(const Position& pos) const
@@ -1548,7 +1552,7 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 		int32_t ticks = g_config.getNumber(ConfigManager::STAIRHOP_DELAY);
 		if(ticks > 0)
 		{
-			addExhaust(ticks, EXHAUST_COMBAT);
+			addExhaust(ticks);
 			if(Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_PACIFIED, ticks))
 				addCondition(condition);
 		}
@@ -2337,9 +2341,16 @@ Item* Player::createCorpse(DeathList deathList)
 	return corpse;
 }
 
-void Player::addExhaust(uint32_t ticks, Exhaust_t type)
+void Player::addExhaust(uint32_t ticks)
 {
-	if(Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_EXHAUST, ticks, 0, false, type))
+	if(Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT,
+		CONDITION_EXHAUST, ticks, 0, false))
+		addCondition(condition);
+}
+void Player::addSpellExhaust(SpellGroup_t group, uint32_t ticks)
+{
+	if(Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT,
+		(ConditionType_t)(1 << (20 + group)), ticks, 0, false))
 		addCondition(condition);
 }
 
@@ -3323,7 +3334,7 @@ void Player::doAttacking(uint32_t interval)
 		{
 			SchedulerTask* task = createSchedulerTask(getNextActionTime(), boost::bind(&Game::checkCreatureAttack, &g_game, getID()));
 		}
-		else if((!weapon->hasExhaustion() || !hasCondition(CONDITION_EXHAUST, EXHAUST_COMBAT)) && weapon->useWeapon(this, tool, attackedCreature))
+		else if((!weapon->hasExhaustion() || !hasCondition(CONDITION_EXHAUST)) && weapon->useWeapon(this, tool, attackedCreature))
 			lastAttack = OTSYS_TIME();
 	}
 	else if(Weapon::useFist(this, attackedCreature))
@@ -3919,11 +3930,25 @@ bool Player::canWearOutfit(uint32_t outfitId, uint32_t addons)
 		|| ((it->second.addons & addons) != addons && !hasCustomFlag(PlayerCustomFlag_CanWearAllAddons)))
 		return false;
 
-	if(!it->second.storageId)
+	if(it->second.storageId.empty())
 		return true;
 
 	std::string value;
-	return getStorage(it->second.storageId, value) && value == it->second.storageValue;
+	getStorage(it->second.storageId, value);
+
+	bool ret = value == it->second.storageValue;
+	if(ret)
+		return ret;
+
+	int32_t tmp = atoi(value.c_str());
+	if(!tmp && value != "0")
+		return ret;
+
+	tmp = atoi(it->second.storageValue.c_str());
+	if(!tmp && it->second.storageValue != "0")
+		return ret;
+
+	return tmp >= atoi(value.c_str());
 }
 
 bool Player::addOutfit(uint32_t outfitId, uint32_t addons)
@@ -3957,7 +3982,7 @@ bool Player::removeOutfit(uint32_t outfitId, uint32_t addons)
 
 void Player::generateReservedStorage()
 {
-	uint32_t baseKey = PSTRG_OUTFITSID_RANGE_START + 1;
+	uint32_t key = PSTRG_OUTFITSID_RANGE_START + 1;
 	const OutfitMap& defaultOutfits = Outfits::getInstance()->getOutfits(sex);
 	for(OutfitMap::const_iterator it = outfits.begin(); it != outfits.end(); ++it)
 	{
@@ -3966,15 +3991,15 @@ void Player::generateReservedStorage()
 			& it->second.addons) == it->second.addons))
 			continue;
 
-		std::stringstream ss;
-		ss << ((it->first << 16) | (it->second.addons & 0xFF));
-		storageMap[baseKey] = ss.str();
+		std::stringstream k, v;
+		k << key++; // this may not work as intended, revalidate it
+		v << ((it->first << 16) | (it->second.addons & 0xFF));
 
-		baseKey++;
-		if(baseKey <= PSTRG_OUTFITSID_RANGE_START + PSTRG_OUTFITSID_RANGE_SIZE)
+		storageMap[k.str()] = v.str();
+		if(key <= PSTRG_OUTFITSID_RANGE_START + PSTRG_OUTFITSID_RANGE_SIZE)
 			continue;
 
-		std::cout << "[Warning - Player::genReservedStorageRange] Player " << getName() << " with more than 500 outfits!" << std::endl;
+		std::clog << "[Warning - Player::genReservedStorageRange] Player " << getName() << " with more than 500 outfits!" << std::endl;
 		break;
 	}
 }
@@ -5070,4 +5095,91 @@ void Player::sendCritical() const
 {
 	if(g_config.getBool(ConfigManager::DISPLAY_CRITICAL_HIT))
 		g_game.addAnimatedText(getPosition(), COLOR_DARKRED, "CRITICAL!");
+}
+void Player::setMounted(bool doMount)
+{
+	if(doMount)
+	{
+		if(_tile->hasFlag(TILESTATE_PROTECTIONZONE))
+                        sendCancelMessage(RET_ACTIONNOTPERMITTEDINPROTECTIONZONE);
+		else if(!isPremium())
+			sendCancelMessage(RET_YOUNEEDPREMIUMACCOUNT);
+                else if(mount == 0)
+                        sendOutfitWindow();
+                else if(!isMounted())
+                {
+			Mount* myMount = Mounts::getInstance()->getMountById(mount);
+			if(myMount)
+            {	
+				mounted = true;
+		                defaultOutfit.lookMount = myMount->getClientId();
+		                
+		                if(myMount->getSpeed())
+		                        g_game.changeSpeed(this, myMount->getSpeed());
+			
+		                g_game.internalCreatureChangeOutfit(this, defaultOutfit);
+		                        lastMountStatusChange = OTSYS_TIME();
+			}
+                }
+        }
+        else
+		dismount();
+}
+
+void Player::dismount()
+{
+	if(isMounted()) {
+		Mount* myMount = Mounts::getInstance()->getMountById(mount);
+		if(myMount && myMount->getSpeed() > 0)
+			g_game.changeSpeed(this, -myMount->getSpeed());
+
+		mounted = false;
+		defaultOutfit.lookMount = 0;
+		g_game.internalCreatureChangeOutfit(this, defaultOutfit);
+	}
+}
+bool Player::tameMount(uint8_t mountId)
+{
+        if(!Mounts::getInstance()->getMountById(mountId))
+                return false;
+
+        mountId--;
+        int key = PSTRG_MOUNTS_RANGE_START + (mountId / 31);
+        int32_t value = 0;
+	std::string tmp = "";
+        if(getStorage(boost::lexical_cast<std::string>(key), tmp))
+        {
+		value = atoi(tmp.c_str());
+                value |= static_cast<int32_t>(pow(2, mountId % 31));
+        }
+        else
+                value = static_cast<int32_t>(pow(2, mountId % 31));
+
+
+        setStorage(boost::lexical_cast<std::string>(key), boost::lexical_cast<std::string>(value));
+        return true;
+}
+
+bool Player::untameMount(uint8_t mountId)
+{
+        if(!Mounts::getInstance()->getMountById(mountId))
+                return false;
+
+        mountId--;
+        int key = PSTRG_MOUNTS_RANGE_START + (mountId / 31);
+        int32_t value = 0;
+	std::string tmp = "";
+        if(!getStorage(boost::lexical_cast<std::string>(key), tmp))
+                return true;
+
+	value = atoi(tmp.c_str());
+        value ^= (int32_t)pow(2, mountId % 31);
+        setStorage(boost::lexical_cast<std::string>(key), boost::lexical_cast<std::string>(value));
+        
+        // If it's our current mount, unmount it
+        if(mount == (mountId + 1)) {
+                 dismount();
+                 mount = 0;
+        }
+        return true;
 }

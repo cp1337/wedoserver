@@ -34,6 +34,7 @@ class Spell;
 
 typedef std::map<uint32_t, RuneSpell*> RunesMap;
 typedef std::map<std::string, InstantSpell*> InstantsMap;
+typedef std::map<SpellGroup_t, uint32_t> SpellGroup;
 
 class Spells : public BaseEvents
 {
@@ -68,6 +69,8 @@ class Spells : public BaseEvents
 		InstantsMap instants;
 
 		friend class CombatSpell;
+		
+		uint32_t currentSpellId;
 };
 
 typedef bool (InstantSpellFunction)(const InstantSpell* spell, Creature* creature, const std::string& param);
@@ -118,8 +121,8 @@ class Spell : public BaseSpell
 		bool configureSpell(xmlNodePtr xmlspell);
 		const std::string& getName() const {return name;}
 
-		void postCastSpell(Player* player, bool isFinished = true, bool payCost = true) const;
-		void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const;
+		void postSpell(Player* player) const;
+		void postSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const;
 
 		int32_t getManaCost(const Player* player) const;
 		int32_t getSoulCost() const {return soul;}
@@ -128,6 +131,11 @@ class Spell : public BaseSpell
 		int32_t getMana() const {return mana;}
 		int32_t getManaPercent() const {return manaPercent;}
 		uint32_t getExhaustion() const {return exhaustion;}
+		Spells_t getIcon() const {return icon;}
+		SpellGroup getGroupExhaustions() const {return groupExhaustions;}
+		uint16_t getId() const {return spellId;}
+		void setId(uint16_t id) {spellId = id;}
+		
 		const bool isEnabled() const {return enabled;}
 		const bool isPremium() const {return premium;}
 
@@ -139,6 +147,7 @@ class Spell : public BaseSpell
 		static ReturnValue CreateIllusion(Creature* creature, uint32_t itemId, int32_t time);
 
 	protected:
+		uint16_t spellId;
 		bool playerSpellCheck(Player* player) const;
 		bool playerInstantSpellCheck(Player* player, Creature* creature);
 		bool playerInstantSpellCheck(Player* player, const Position& toPos);
@@ -146,6 +155,8 @@ class Spell : public BaseSpell
 
 		int32_t level;
 		int32_t magLevel;
+		
+		uint8_t speedId;
 		bool premium;
 		bool learnable;
 		bool enabled;
@@ -166,6 +177,8 @@ class Spell : public BaseSpell
 		VocationMap vocSpellMap;
 		typedef std::vector<std::string> VocStringVec;
 		VocStringVec vocStringVec;
+		Spells_t icon;
+		SpellGroup groupExhaustions;
 
 	private:
 		std::string name;
@@ -271,7 +284,6 @@ class RuneSpell : public Action, public Spell
 
 		//scripting
 		bool executeCastSpell(Creature* creature, const LuaVariant& var);
-
 		virtual bool isInstant() const {return false;}
 		uint32_t getRuneItemId(){return runeId;}
 
@@ -281,6 +293,7 @@ class RuneSpell : public Action, public Spell
 
 		static RuneSpellFunction Illusion;
 		static RuneSpellFunction Convince;
+		static RuneSpellFunction Soulfire;
 
 		bool internalCastSpell(Creature* creature, const LuaVariant& var);
 

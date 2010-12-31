@@ -38,6 +38,7 @@ extern ConfigManager g_config;
 Spells::Spells():
 m_interface("Spell Interface")
 {
+	currentSpellId = 0;
 	m_interface.initState();
 }
 
@@ -116,6 +117,7 @@ void Spells::clear()
 		delete it->second;
 
 	instants.clear();
+	currentSpellId = 0;
 	m_interface.reInitState();
 }
 
@@ -139,6 +141,8 @@ bool Spells::registerEvent(Event* event, xmlNodePtr p, bool override)
 	if(InstantSpell* instant = dynamic_cast<InstantSpell*>(event))
 	{
 		InstantsMap::iterator it = instants.find(instant->getWords());
+		instant->setId(currentSpellId++);
+		
 		if(it == instants.end())
 		{
 			instants[instant->getWords()] = instant;
@@ -159,6 +163,8 @@ bool Spells::registerEvent(Event* event, xmlNodePtr p, bool override)
 	if(RuneSpell* rune = dynamic_cast<RuneSpell*>(event))
 	{
 		RunesMap::iterator it = runes.find(rune->getRuneItemId());
+		rune->setId(currentSpellId++);
+		
 		if(it == runes.end())
 		{
 			runes[rune->getRuneItemId()] = rune;
@@ -460,6 +466,7 @@ bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 
 Spell::Spell()
 {
+	spellId = 0;
 	level = 0;
 	magLevel = 0;
 	mana = 0;
@@ -476,6 +483,7 @@ Spell::Spell()
 	premium = false;
 	isAggressive = true;
 	learnable = false;
+	icon = SPELL_NONE;
 }
 
 bool Spell::configureSpell(xmlNodePtr p)
@@ -497,14 +505,14 @@ bool Spell::configureSpell(xmlNodePtr p)
 		{
 			if(!strcasecmp(reservedList[i], name.c_str()))
 			{
-				std::cout << "Error: [Spell::configureSpell] Spell is using a reserved name: " << reservedList[i] << std::endl;
+				std::clog << "Error: [Spell::configureSpell] Spell is using a reserved name: " << reservedList[i] << std::endl;
 				return false;
 			}
 		}
 	}
 	else
 	{
-		std::cout << "Error: [Spell::configureSpell] Spell without name." << std::endl;
+		std::clog << "Error: [Spell::configureSpell] Spell without name." << std::endl;
 		return false;
 	}
 
@@ -560,18 +568,44 @@ bool Spell::configureSpell(xmlNodePtr p)
 		else if(tmpStrValue == "creature")
 			blockingCreature = true;
 		else
-			std::cout << "[Warning - Spell::configureSpell] Blocktype \"" <<strValue << "\" does not exist." << std::endl;
+			std::clog << "[Warning - Spell::configureSpell] Blocktype \"" <<strValue << "\" does not exist." << std::endl;
 	}
 
 	if(readXMLString(p, "aggressive", strValue))
 		isAggressive = booleanString(strValue);
 
+	if(readXMLInteger(p, "icon", intValue))
+		icon = (Spells_t)intValue;
+
+	if(readXMLString(p, "groups", strValue)) {
+		std::vector<std::string> split = explodeString(strValue, ",");
+		for(std::vector<std::string>::iterator it = split.begin(); it != split.end(); ++it)
+			groupExhaustions[(SpellGroup_t)atoi((*it).c_str())] = 0;
+		
+	}
+	
+	if(readXMLString(p, "groupexhaustions", strValue)) {
+		std::vector<std::string> split = explodeString(strValue, ",");
+		int i = 0;
+		for(std::map<SpellGroup_t, uint32_t>::iterator it = groupExhaustions.begin(); it != groupExhaustions.end(); ++it)
+			groupExhaustions[it->first] = atoi(split[i].c_str());
+	}
+	
+	if(groupExhaustions.empty()){
+                          if(isAggressive){
+                          groupExhaustions[SPELLGROUP_ATTACK] = 1;
+                          }
+                          else{
+                          groupExhaustions[SPELLGROUP_HEALING] = 2;
+                          }
+ }
+	
 	std::string error = "";
 	xmlNodePtr vocationNode = p->children;
 	while(vocationNode)
 	{
 		if(!parseVocationNode(vocationNode, vocSpellMap, vocStringVec, error))
-			std::cout << "[Warning - Spell::configureSpell] " << error << std::endl;
+			std::clog << "[Warning - Spell::configureSpell] " << error << std::endl;
 
 		vocationNode = vocationNode->next;
 	}
@@ -581,38 +615,48 @@ bool Spell::configureSpell(xmlNodePtr p)
 
 bool Spell::playerSpellCheck(Player* player) const
 {
-	if(player->hasFlag(PlayerFlag_CannotUseSpells))
-		return false;
+        if(player->hasFlag(PlayerFlag_CannotUseSpells))
+                return false;
 
-	if(player->hasFlag(PlayerFlag_IgnoreSpellCheck))
-		return true;
+        if(player->hasFlag(PlayerFlag_IgnoreSpellCheck))
+                return true;
 
-	if(!isEnabled())
-		return false;
+        if(!isEnabled())
+                return false;
 
-	bool exhausted = false;
-	if(isAggressive)
-	{
-		if(!player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION)
-		{
-			player->sendCancelMessage(RET_ACTIONNOTPERMITTEDINPROTECTIONZONE);
-			return false;
-		}
+        if(isAggressive)
+        {
+                if(!player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION)
+                {
+                        player->sendCancelMessage(RET_ACTIONNOTPERMITTEDINPROTECTIONZONE);
+                        return false;
+                }
+        }
 
-		if(player->hasCondition(CONDITION_EXHAUST, EXHAUST_COMBAT))
-			exhausted = true;
-	}
-	else if(player->hasCondition(CONDITION_EXHAUST, EXHAUST_HEALING))
-		exhausted = true;
+        if(!player->hasFlag(PlayerFlag_HasNoExhaustion))
+        {
+                bool exhausted = player->hasCondition(CONDITION_SPELLCOOLDOWN, spellId);
+                if(!exhausted)
+                {
+                        for(SpellGroup::const_iterator it = groupExhaustions.begin(); it != groupExhaustions.end(); it++)
+                        {
+                                if(!player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, it->first))
+                                        continue;
 
-	if(exhausted && !player->hasFlag(PlayerFlag_HasNoExhaustion))
-	{
-		player->sendCancelMessage(RET_YOUAREEXHAUSTED);
-		if(isInstant())
-			g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
+                                exhausted = true;
+                                break;
+                        }
+                }
 
-		return false;
-	}
+                if(exhausted)
+                {
+                        player->sendCancelMessage(RET_YOUAREEXHAUSTED);
+                        if(isInstant())
+                                g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
+
+                        return false;
+                }
+        }
 
 	if(isPremium() && !player->isPremium())
 	{
@@ -939,33 +983,37 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 	return true;
 }
 
-void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool payCost /*= true*/) const
+void Spell::postSpell(Player* player) const
 {
-	if(finishedCast)
-	{
-		if(!player->hasFlag(PlayerFlag_HasNoExhaustion) && exhaustion > 0)
-			player->addExhaust(exhaustion, isAggressive ? EXHAUST_COMBAT : EXHAUST_HEALING);
+        if(!player->hasFlag(PlayerFlag_HasNoExhaustion) && exhaustion > 0) {
+                for(std::map<SpellGroup_t, uint32_t>::const_iterator it = groupExhaustions.begin(); it != groupExhaustions.end(); it++) {
+                        player->addSpellExhaust(it->first, it->second);
+                        player->sendSpellCooldown(uint16_t(it->first), it->second, true);
+                }
 
-		if(isAggressive && !player->hasFlag(PlayerFlag_NotGainInFight))
-			player->addInFightTicks(false);
-	}
+                player->addCondition(Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, exhaustion, 0, false, spellId));
+                player->sendSpellCooldown(uint16_t(icon), exhaustion, false);
+        }
 
-	if(payCost)
-		postCastSpell(player, (uint32_t)getManaCost(player), (uint32_t)getSoulCost());
+
+        if(isAggressive && !player->hasFlag(PlayerFlag_NotGainInFight))
+                player->addInFightTicks(false);
+
+        postSpell(player, (uint32_t)getManaCost(player), (uint32_t)getSoulCost());
 }
 
-void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const
+void Spell::postSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const
 {
-	if(manaCost > 0)
-	{
-		player->changeMana(-(int32_t)manaCost);
-		if(!player->hasFlag(PlayerFlag_NotGainMana) && (player->getZone() != ZONE_PVP
-			|| g_config.getBool(ConfigManager::PVPZONE_ADDMANASPENT)))
-			player->addManaSpent(manaCost);
-	}
+        if(manaCost > 0)
+        {
+                player->changeMana(-(int32_t)manaCost);
+                if(!player->hasFlag(PlayerFlag_NotGainMana) && (player->getZone() != ZONE_HARDCORE
+                        || g_config.getBool(ConfigManager::PVPZONE_ADDMANASPENT)))
+                        player->addManaSpent(manaCost);
+        }
 
-	if(soulCost > 0)
-		player->changeSoul(-(int32_t)soulCost);
+        if(soulCost > 0)
+                player->changeSoul(-(int32_t)soulCost);
 }
 
 int32_t Spell::getManaCost(const Player* player) const
@@ -1182,7 +1230,7 @@ bool InstantSpell::playerCastInstant(Player* player, const std::string& param)
 	if(!internalCastSpell(player, var))
 		return false;
 
-	Spell::postCastSpell(player);
+	Spell::postSpell(player);
 	return true;
 }
 
@@ -1386,7 +1434,7 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 	ReturnValue ret = g_game.placeSummon(creature, param);
 	if(ret == RET_NOERROR)
 	{
-		spell->postCastSpell(player, (uint32_t)manaCost, (uint32_t)spell->getSoulCost());
+		spell->postSpell(player, (uint32_t)manaCost, (uint32_t)spell->getSoulCost());
 		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_WRAPS_BLUE);
 	}
 	else
@@ -1584,69 +1632,39 @@ ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId
 	return RET_YOUNEEDAMAGICITEMTOCASTSPELL;
 }
 
-bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, const std::string& param)
+bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, const std::string&)
 {
-	Player* player = creature->getPlayer();
-	if(!player)
-		return false;
+        Player* player = creature->getPlayer();
+        if(!player)
+                return false;
 
-	if(!player->hasFlag(PlayerFlag_IgnoreSpellCheck) && player->getZone() == ZONE_PVP)
-	{
-		player->sendCancelMessage(RET_CANNOTCONJUREITEMHERE);
-		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
-		return false;
-	}
+        if(!player->hasFlag(PlayerFlag_IgnoreSpellCheck) && player->getZone() == ZONE_HARDCORE)
+        {
+                player->sendCancelMessage(RET_CANNOTCONJUREITEMHERE);
+                g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
+                return false;
+        }
 
-	ReturnValue result = RET_NOERROR;
-	if(spell->getReagentId() != 0)
-	{
-		ReturnValue resLeft = internalConjureItem(player, spell->getConjureId(), spell->getConjureCount(),
-			true, spell->getReagentId(), SLOT_LEFT, true);
-		if(resLeft == RET_NOERROR)
-		{
-			resLeft = internalConjureItem(player, spell->getConjureId(), spell->getConjureCount(),
-				true, spell->getReagentId(), SLOT_LEFT);
-			if(resLeft == RET_NOERROR)
-				spell->postCastSpell(player, false);
-		}
+        ReturnValue result = RET_NOTPOSSIBLE;
+        if(spell->getReagentId() != 0)
+        {
+                if((result = internalConjureItem(player, spell->getConjureId(), spell->getConjureCount(), true, spell->getReagentId())) == RET_NOERROR)
+                {
+                        spell->postSpell(player);
+                        g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_WRAPS_RED);
+                        return true;
+                }
+        }
+        else if((result = internalConjureItem(player, spell->getConjureId(), spell->getConjureCount())) == RET_NOERROR)
+        {
+                spell->postSpell(player);
+                g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_WRAPS_RED);
+                return true;
+        }
 
-		ReturnValue resRight = internalConjureItem(player, spell->getConjureId(), spell->getConjureCount(),
-			true, spell->getReagentId(), SLOT_RIGHT, true);
-		if(resRight == RET_NOERROR)
-		{
-			if(resLeft == RET_NOERROR && !spell->playerSpellCheck(player))
-				return false;
-
-			resRight = internalConjureItem(player, spell->getConjureId(), spell->getConjureCount(),
-				true, spell->getReagentId(), SLOT_RIGHT);
-			if(resRight == RET_NOERROR)
-				spell->postCastSpell(player, false);
-		}
-
-		if(resLeft == RET_NOERROR || resRight == RET_NOERROR)
-		{
-			spell->postCastSpell(player, true, false);
-			g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_WRAPS_RED);
-			return true;
-		}
-
-		result = resLeft;
-		if((result == RET_NOERROR && resRight != RET_NOERROR) ||
-			(result == RET_YOUNEEDAMAGICITEMTOCASTSPELL && resRight == RET_YOUNEEDTOSPLITYOURSPEARS))
-			result = resRight;
-	}
-	else if(internalConjureItem(player, spell->getConjureId(), spell->getConjureCount()) == RET_NOERROR)
-	{
-		spell->postCastSpell(player);
-		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_WRAPS_RED);
-		return true;
-	}
-
-	if(result != RET_NOERROR)
-		player->sendCancelMessage(result);
-
-	g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
-	return false;
+        player->sendCancelMessage(result);
+        g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
+        return false;
 }
 
 bool ConjureSpell::ConjureFood(const ConjureSpell* spell, Creature* creature, const std::string& param)
@@ -1671,7 +1689,7 @@ bool ConjureSpell::ConjureFood(const ConjureSpell* spell, Creature* creature, co
 		if(random_range(0, 100) > 50)
 			internalConjureItem(player, foodType[random_range(0, (sizeof(foodType) / sizeof(uint32_t)) - 1)], 1);
 
-		spell->postCastSpell(player);
+		spell->postSpell(player);
 		g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_WRAPS_GREEN);
 		return true;
 	}
@@ -1745,7 +1763,8 @@ bool RuneSpell::loadFunction(const std::string& functionName)
 		function = Illusion;
 	else if(tmpFunctionName == "convince")
 		function = Convince;
-	else
+	else if(tmpFunctionName == "soulfire")
+		function = Soulfire;
 	{
 		std::cout << "[Warning - RuneSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
@@ -1847,9 +1866,43 @@ bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item* item,
 		return false;
 	}
 
-	spell->postCastSpell(player, (uint32_t)manaCost, (uint32_t)spell->getSoulCost());
+	spell->postSpell(player, (uint32_t)manaCost, (uint32_t)spell->getSoulCost());
 	g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_WRAPS_RED);
 	return true;
+}
+
+bool RuneSpell::Soulfire(const RuneSpell* spell, Creature* creature, Item*, const Position&, const Position& posTo)
+{
+     Player* player = creature->getPlayer();
+     if(!player){
+                 return false;
+     }
+     
+     Thing* thing = g_game.internalGetThing(player, posTo, 0, 0, STACKPOS_LOOK);
+     if(!thing){
+                player->sendCancelMessage(RET_NOTPOSSIBLE);
+                g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
+                return false;
+     }
+     
+     Creature* hitCreature = thing->getCreature();
+     if(!hitCreature){
+                      player->sendCancelMessage(RET_NOTPOSSIBLE);
+                      g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
+                      return false;
+     }
+     
+     ConditionDamage* soulfireCondition = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_FIRE, false, 0);
+     soulfireCondition->setParam(CONDITIONPARAM_SUBID, 1);
+     soulfireCondition->addDamage(static_cast<int32_t>(std::ceil((player->getLevel()+player->getMagicLevel()) / 3.)), 9000, -10);
+     if(!hitCreature->addCondition(soulfireCondition)){
+                                                       player->sendCancelMessage(RET_NOTPOSSIBLE);
+                                                       g_game.addMagicEffect(player->getPosition(), MAGIC_EFFECT_POFF);
+                                                       return false;
+     }
+     
+     spell->postSpell(player, true, false);
+     return true;
 }
 
 ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& toPos)
@@ -1901,7 +1954,7 @@ bool RuneSpell::executeUse(Player* player, Item* item, const PositionEx& posFrom
 
 	if(result)
 	{
-		Spell::postCastSpell(player);
+		Spell::postSpell(player);
 		if(hasCharges && item && g_config.getBool(ConfigManager::REMOVE_RUNE_CHARGES))
 			g_game.transformItem(item, item->getID(), std::max((int32_t)0, ((int32_t)item->getItemCount()) - 1));
 	}

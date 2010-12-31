@@ -28,6 +28,7 @@
 #include "creature.h"
 #include "combat.h"
 #include "tile.h"
+#include "mounts.h"
 
 #include "database.h"
 #include "iologindata.h"
@@ -93,7 +94,6 @@ Game::Game()
 Game::~Game()
 {
 	blacklist.clear();
-	if(map)
 		delete map;
 }
 
@@ -1482,7 +1482,8 @@ ReturnValue Game::internalMoveItem(Creature* actor, Cylinder* fromCylinder, Cyli
 	if(retMaxCount != RET_NOERROR && !maxQueryCount)
 		return retMaxCount;
 
-	uint32_t m = maxQueryCount, n = 0;
+	uint32_t m = maxQueryCount;
+	uint8_t n = 0;
 	if(item->isStackable())
 		m = std::min((uint32_t)count, m);
 
@@ -3799,7 +3800,7 @@ bool Game::playerSpeakToNpc(Player* player, const std::string& text)
 	getSpectators(list, player->getPosition());
 
 	//send to npcs only
-	Npc* tmpNpc = NULL;
+	Npc* tmpNpc;
 	for(it = list.begin(); it != list.end(); ++it)
 	{
 		if((tmpNpc = (*it)->getNpc()))
@@ -4048,6 +4049,8 @@ void Game::checkCreatures()
 
 void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 {
+      if(!creature)
+              return;
 	int32_t varSpeed = creature->getSpeed() - creature->getBaseSpeed();
 	varSpeed += varSpeedDelta;
 	creature->setSpeed(varSpeed);
@@ -4059,7 +4062,7 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 	Player* tmpPlayer = NULL;
 	for(it = list.begin(); it != list.end(); ++it)
 	{
-		if((tmpPlayer = (*it)->getPlayer()))
+		if((*it) && (tmpPlayer = (*it)->getPlayer()))
 			tmpPlayer->sendChangeSpeed(creature, creature->getStepSpeed());
 	}
 }
@@ -4088,13 +4091,13 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 	Player* tmpPlayer = NULL;
 	for(it = list.begin(); it != list.end(); ++it)
 	{
-		if((tmpPlayer = (*it)->getPlayer()))
+		if((*it) && (tmpPlayer = (*it)->getPlayer()))
 			tmpPlayer->sendCreatureChangeOutfit(creature, outfit);
 	}
 
 	//event method
 	for(it = list.begin(); it != list.end(); ++it)
-		(*it)->onCreatureChangeOutfit(creature, outfit);
+		 if((*it)) (*it)->onCreatureChangeOutfit(creature, outfit);
 }
 
 void Game::internalCreatureChangeVisible(Creature* creature, Visible_t visible)

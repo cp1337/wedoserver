@@ -288,6 +288,8 @@ bool ConfigManager::load()
 	m_confDouble[RATE_MONSTER_MANA] = getGlobalDouble("rateMonsterMana", 1);
 	m_confDouble[RATE_MONSTER_ATTACK] = getGlobalDouble("rateMonsterAttack", 1);
 	m_confDouble[RATE_MONSTER_DEFENSE] = getGlobalDouble("rateMonsterDefense", 1);
+	m_confBool[ALLOW_MOUNTS] = getGlobalBool("useMounts", true);
+	m_confBool[ENABLE_COOLDOWNS] = getGlobalBool("enableCooldowns", false);
 #ifdef __WAR_SYSTEM__
 	m_confBool[OPTIONAL_WAR_ATTACK_ALLY] = getGlobalBool("optionalWarAttackableAlly", false);
 #endif

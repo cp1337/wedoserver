@@ -584,6 +584,9 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, const std::st
 
 					if(readXMLInteger(tmpNode, "addons", intValue))
 						outfit.lookAddons = intValue;
+						
+					if(readXMLInteger(tmpNode, "mount", intValue))
+					        outfit.lookMount = intValue;
 
 					outfits.push_back(outfit);
 				}
@@ -592,6 +595,8 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, const std::st
 				{
 					Outfit_t outfit;
 					outfit.lookTypeEx = intValue;
+					if(readXMLInteger(tmpNode, "mount", intValue))
+					       outfit.lookMount = intValue;
 					outfits.push_back(outfit);
 				}
 
@@ -1131,6 +1136,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 			}
 			else if(readXMLInteger(p, "typeex", intValue))
 				mType->outfit.lookTypeEx = intValue;
+				
 			else
 				SHOW_XML_WARNING("Missing look type/typeex");
 
