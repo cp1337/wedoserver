@@ -102,6 +102,7 @@ class ProtocolGame : public Protocol
 
 		void parseRequestOutfit(NetworkMessage& msg);
 		void parseSetOutfit(NetworkMessage& msg);
+		void parseMountStatus(NetworkMessage& msg);
 		void parseSay(NetworkMessage& msg);
 		void parseLookAt(NetworkMessage& msg);
 		void parseFightModes(NetworkMessage& msg);
@@ -224,6 +225,8 @@ class ProtocolGame : public Protocol
 		void sendVIPLogIn(uint32_t guid);
 		void sendVIPLogOut(uint32_t guid);
 		void sendVIP(uint32_t guid, const std::string& name, bool isOnline);
+		
+		void sendSpellCooldown(uint16_t spellId, uint32_t cooldown, bool isGroup);
 
 		void sendCreatureLight(const Creature* creature);
 		void sendWorldLight(const LightInfo& lightInfo);

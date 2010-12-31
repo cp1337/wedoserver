@@ -58,14 +58,14 @@ Position NetworkMessage::GetPosition()
 
 void NetworkMessage::AddString(const char* value)
 {
-	uint32_t stringLen = (uint32_t)strlen(value);
-	if(!canAdd(stringLen + 2) || stringLen > 8192)
-		return;
+        uint32_t stringlen = (uint32_t)strlen(value);
+        if(!canAdd(stringlen+2) || stringlen > 8192)
+                return;
 
-	AddU16(stringLen);
-	strcpy((char*)(m_MsgBuf + m_ReadPos), value);
-	m_ReadPos += stringLen;
-	m_MsgSize += stringLen;
+        AddU16(stringlen);
+        strcpy((char*)(m_MsgBuf + m_ReadPos), value);
+        m_ReadPos += stringlen;
+        m_MsgSize += stringlen;
 }
 
 void NetworkMessage::AddBytes(const char* bytes, uint32_t size)

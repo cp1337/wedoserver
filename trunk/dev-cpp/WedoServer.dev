@@ -1,7 +1,7 @@
 [Project]
 FileName=WedoServer.dev
-Name=We do
-UnitCount=171
+Name=We Do Server
+UnitCount=173
 Type=0
 Ver=1
 ObjFiles=
@@ -12,7 +12,7 @@ ResourceIncludes=
 MakeIncludes=
 Compiler=
 CppCompiler=-D__USE_MYSQL___@@_-D__USE_SQLITE___@@_-D__ENABLE_SERVER_DIAGNOSTIC___@@_
-Linker=-O1_@@_-lboost_system_@@_-lgmp_@@_-llua5.1_@@_-lmysql_@@_-lboost_regex_@@_-lsqlite3_@@_-lwsock32_@@_-lxml2_@@_-lmysql_@@_-lws2_32_@@_-s_@@_-lboost_filesystem_@@_-lboost_thread_@@_
+Linker=-O1_@@_-lboost_system_@@_-lgmp_@@_-llua5.1_@@_-lmysql_@@_-lboost_regex_@@_-lsqlite3_@@_-lwsock32_@@_-lxml2_@@_-lmysql_@@_-lws2_32_@@_-s_@@_-lboost_filesystem_@@_-lboost_thread_@@_-lmsvcrt_@@_
 IsCpp=1
 Icon=WedoServer.ico
 ExeOutput=
@@ -960,26 +960,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit99]
-FileName=..\playerbox.cpp
-CompileCpp=1
-Folder=WedoServer
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit100]
-FileName=..\playerbox.h
-CompileCpp=1
-Folder=WedoServer
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit101]
 FileName=..\position.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -989,7 +969,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit102]
+[Unit100]
 FileName=..\position.h
 CompileCpp=1
 Folder=WedoServer
@@ -999,7 +979,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit103]
+[Unit101]
 FileName=..\protocol.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1009,7 +989,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit104]
+[Unit102]
 FileName=..\protocol.h
 CompileCpp=1
 Folder=WedoServer
@@ -1019,7 +999,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit105]
+[Unit103]
 FileName=..\protocolgame.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1029,7 +1009,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit106]
+[Unit104]
 FileName=..\protocolgame.h
 CompileCpp=1
 Folder=WedoServer
@@ -1039,7 +1019,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit107]
+[Unit105]
 FileName=..\protocollogin.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1049,7 +1029,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit108]
+[Unit106]
 FileName=..\protocollogin.h
 CompileCpp=1
 Folder=WedoServer
@@ -1059,7 +1039,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit109]
+[Unit107]
 FileName=..\quests.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1069,7 +1049,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit110]
+[Unit108]
 FileName=..\quests.h
 CompileCpp=1
 Folder=WedoServer
@@ -1079,7 +1059,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit111]
+[Unit109]
 FileName=..\raids.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1089,7 +1069,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit112]
+[Unit110]
 FileName=..\raids.h
 CompileCpp=1
 Folder=WedoServer
@@ -1099,7 +1079,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit113]
+[Unit111]
 FileName=..\resources.h
 CompileCpp=1
 Folder=WedoServer
@@ -1109,7 +1089,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit114]
+[Unit112]
 FileName=..\rsa.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1119,7 +1099,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit115]
+[Unit113]
 FileName=..\rsa.h
 CompileCpp=1
 Folder=WedoServer
@@ -1129,7 +1109,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit116]
+[Unit114]
 FileName=..\scheduler.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1139,7 +1119,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit117]
+[Unit115]
 FileName=..\scheduler.h
 CompileCpp=1
 Folder=WedoServer
@@ -1149,7 +1129,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit118]
+[Unit116]
 FileName=..\scriptmanager.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1159,7 +1139,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit119]
+[Unit117]
 FileName=..\scriptmanager.h
 CompileCpp=1
 Folder=WedoServer
@@ -1169,7 +1149,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit120]
+[Unit118]
 FileName=..\server.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1179,7 +1159,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit121]
+[Unit119]
 FileName=..\server.h
 CompileCpp=1
 Folder=WedoServer
@@ -1189,7 +1169,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit122]
+[Unit120]
 FileName=..\sha1.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1199,7 +1179,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit123]
+[Unit121]
 FileName=..\sha1.h
 CompileCpp=1
 Folder=WedoServer
@@ -1209,7 +1189,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit124]
+[Unit122]
 FileName=..\spawn.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1219,7 +1199,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit125]
+[Unit123]
 FileName=..\spawn.h
 CompileCpp=1
 Folder=WedoServer
@@ -1229,7 +1209,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit126]
+[Unit124]
 FileName=..\spells.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1239,7 +1219,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit127]
+[Unit125]
 FileName=..\spells.h
 CompileCpp=1
 Folder=WedoServer
@@ -1249,7 +1229,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit128]
+[Unit126]
 FileName=..\status.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1259,7 +1239,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit129]
+[Unit127]
 FileName=..\status.h
 CompileCpp=1
 Folder=WedoServer
@@ -1269,7 +1249,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit130]
+[Unit128]
 FileName=..\talkaction.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1279,7 +1259,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit131]
+[Unit129]
 FileName=..\talkaction.h
 CompileCpp=1
 Folder=WedoServer
@@ -1289,7 +1269,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit132]
+[Unit130]
 FileName=..\tasks.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1299,7 +1279,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit133]
+[Unit131]
 FileName=..\tasks.h
 CompileCpp=1
 Folder=WedoServer
@@ -1309,7 +1289,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit134]
+[Unit132]
 FileName=..\teleport.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1319,7 +1299,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit135]
+[Unit133]
 FileName=..\teleport.h
 CompileCpp=1
 Folder=WedoServer
@@ -1329,7 +1309,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit136]
+[Unit134]
 FileName=..\templates.h
 CompileCpp=1
 Folder=WedoServer
@@ -1339,7 +1319,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit137]
+[Unit135]
 FileName=..\textlogger.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1349,7 +1329,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit138]
+[Unit136]
 FileName=..\textlogger.h
 CompileCpp=1
 Folder=WedoServer
@@ -1359,7 +1339,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit139]
+[Unit137]
 FileName=..\thing.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1369,7 +1349,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit140]
+[Unit138]
 FileName=..\thing.h
 CompileCpp=1
 Folder=WedoServer
@@ -1379,7 +1359,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit141]
+[Unit139]
 FileName=..\tile.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1389,7 +1369,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit142]
+[Unit140]
 FileName=..\tile.h
 CompileCpp=1
 Folder=WedoServer
@@ -1399,7 +1379,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit143]
+[Unit141]
 FileName=..\tools.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1409,7 +1389,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit144]
+[Unit142]
 FileName=..\tools.h
 CompileCpp=1
 Folder=WedoServer
@@ -1419,7 +1399,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit145]
+[Unit143]
 FileName=..\town.h
 CompileCpp=1
 Folder=WedoServer
@@ -1429,7 +1409,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit146]
+[Unit144]
 FileName=..\trashholder.cpp
 CompileCpp=1
 Folder=TheForgottenServdr
@@ -1439,7 +1419,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit147]
+[Unit145]
 FileName=..\trashholder.h
 CompileCpp=1
 Folder=WedoServer
@@ -1449,7 +1429,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit148]
+[Unit146]
 FileName=..\vocation.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1459,7 +1439,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit149]
+[Unit147]
 FileName=..\vocation.h
 CompileCpp=1
 Folder=WedoServer
@@ -1469,7 +1449,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit150]
+[Unit148]
 FileName=..\waitlist.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1479,7 +1459,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit151]
+[Unit149]
 FileName=..\waitlist.h
 CompileCpp=1
 Folder=WedoServer
@@ -1489,7 +1469,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit152]
+[Unit150]
 FileName=..\weapons.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1499,7 +1479,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit153]
+[Unit151]
 FileName=..\weapons.h
 CompileCpp=1
 Folder=WedoServer
@@ -1509,7 +1489,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit154]
+[Unit152]
 FileName=..\ioban.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1519,7 +1499,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit155]
+[Unit153]
 FileName=..\ioban.h
 CompileCpp=1
 Folder=WedoServer
@@ -1529,7 +1509,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit156]
+[Unit154]
 FileName=..\gameservers.h
 CompileCpp=1
 Folder=WedoServer
@@ -1539,7 +1519,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit157]
+[Unit155]
 FileName=..\globalevent.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1549,7 +1529,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit158]
+[Unit156]
 FileName=..\globalevent.h
 CompileCpp=1
 Folder=WedoServer
@@ -1559,7 +1539,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit159]
+[Unit157]
 FileName=..\gameservers.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1569,7 +1549,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit160]
+[Unit158]
 FileName=..\databasemanager.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1579,7 +1559,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit161]
+[Unit159]
 FileName=..\databasemanager.h
 CompileCpp=1
 Folder=WedoServer
@@ -1589,7 +1569,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit162]
+[Unit160]
 FileName=..\admin.cpp
 CompileCpp=1
 Folder=WedoServer
@@ -1599,7 +1579,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit163]
+[Unit161]
 FileName=..\admin.h
 CompileCpp=1
 Folder=WedoServer
@@ -1609,7 +1589,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit164]
+[Unit162]
 FileName=..\databaseodbc.cpp
 CompileCpp=0
 Folder=WedoServer
@@ -1619,8 +1599,28 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit165]
+[Unit163]
 FileName=..\databaseodbc.h
+CompileCpp=0
+Folder=WedoServer
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit164]
+FileName=..\databasepgsql.cpp
+CompileCpp=0
+Folder=WedoServer
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit165]
+FileName=..\databasepgsql.h
 CompileCpp=0
 Folder=WedoServer
 Compile=0
@@ -1670,24 +1670,24 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit166]
-FileName=..\databasepgsql.cpp
-CompileCpp=0
+FileName=..\itemattributes.cpp
+CompileCpp=1
 Folder=WedoServer
-Compile=0
-Link=0
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=
+BuildCmd=0
 
 [Unit167]
-FileName=..\databasepgsql.h
-CompileCpp=0
+FileName=..\itemattributes.h
+CompileCpp=1
 Folder=WedoServer
-Compile=0
-Link=0
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=
+BuildCmd=0
 
 [Unit1]
 FileName=..\waypoints.h
@@ -1720,7 +1720,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit168]
-FileName=..\itemattributes.cpp
+FileName=..\mounts.cpp
 CompileCpp=1
 Folder=WedoServer
 Compile=1
@@ -1730,7 +1730,47 @@ OverrideBuildCmd=0
 BuildCmd=0
 
 [Unit169]
-FileName=..\itemattributes.h
+FileName=..\mounts.h
+CompileCpp=1
+Folder=WedoServer
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=0
+
+[Unit170]
+FileName=..\playerbox.cpp
+CompileCpp=1
+Folder=WedoServer
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=0
+
+[Unit171]
+FileName=..\playerbox.h
+CompileCpp=1
+Folder=WedoServer
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=0
+
+[Unit172]
+FileName=..\group.cpp
+CompileCpp=1
+Folder=WedoServer
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=0
+
+[Unit173]
+FileName=..\group.h
 CompileCpp=1
 Folder=WedoServer
 Compile=1
@@ -1742,8 +1782,8 @@ BuildCmd=0
 [VersionInfo]
 Major=0
 Minor=0
-Release=0
-Build=139
+Release=2
+Build=440
 LanguageID=1046
 CharsetID=1250
 CompanyName=xtibia.com

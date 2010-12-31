@@ -34,6 +34,7 @@
 #include <boost/thread.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <stddef.h>
 #include <stdlib.h>

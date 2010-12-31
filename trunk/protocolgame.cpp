@@ -40,6 +40,7 @@
 #include "actions.h"
 #include "creatureevent.h"
 #include "quests.h"
+#include "mounts.h"
 
 #include "chat.h"
 #include "configmanager.h"
@@ -772,6 +773,11 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 					&& (g_config.getBool(ConfigManager::ALLOW_CHANGECOLORS) || g_config.getBool(ConfigManager::ALLOW_CHANGEOUTFIT)))
 				parseSetOutfit(msg);
 				break;
+				
+			case 0xD4: // Mount/unmount 
+				if(g_config.getBool(ConfigManager::ALLOW_MOUNTS))
+					parseMountStatus(msg);
+				break;
 
 			case 0xDC:
 				parseAddVip(msg);
@@ -1077,19 +1083,20 @@ void ProtocolGame::parseOpenPriv(NetworkMessage& msg)
 
 void ProtocolGame::parseProcessRuleViolation(NetworkMessage& msg)
 {
-	const std::string reporter = msg.GetString();
+	 /*const std::string reporter = msg.GetString();
 	addGameTask(&Game::playerProcessRuleViolation, player->getID(), reporter);
+	*/
 }
 
 void ProtocolGame::parseCloseRuleViolation(NetworkMessage& msg)
 {
-	const std::string reporter = msg.GetString();
-	addGameTask(&Game::playerCloseRuleViolation, player->getID(), reporter);
+	/*const std::string reporter = msg.GetString();
+	addGameTask(&Game::playerCloseRuleViolation, player->getID(), reporter);*/
 }
 
 void ProtocolGame::parseCancelRuleViolation(NetworkMessage& msg)
 {
-	addGameTask(&Game::playerCancelRuleViolation, player->getID());
+	/*addGameTask(&Game::playerCancelRuleViolation, player->getID());*/
 }
 
 void ProtocolGame::parseCloseNpc(NetworkMessage& msg)
@@ -1190,7 +1197,50 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 	else
 		msg.SkipBytes(1);
 
+	if(g_config.getBool(ConfigManager::ALLOW_MOUNTS)) {
+		// Do we have an id? 0 usully means no mount
+		uint16_t mountId = msg.GetU16();
+		bool sendMount = false;
+		
+		if(mountId) {
+                    Mount* myMount = Mounts::getInstance()->getMountByCid(mountId);
+                    
+                    // Can we use this mount?
+                    if(myMount && myMount->isTamed(player)) {
+                               // Set the new mount
+                               player->setMountId(myMount->getId());
+                               // Lets change mount now if hes mounted
+                               if(player->isMounted()) {
+                               player->dismount();
+                               player->setMounted(1);
+                               sendMount = true;
+                    }
+                    }
+  }
+		// Should we send the new lookMount?
+		if(sendMount)
+		newOutfit.lookMount = mountId;
+		else
+		newOutfit.lookMount = 0;
+		
+	}
+	
+	else
+		msg.SkipBytes(2);
+
 	addGameTask(&Game::playerChangeOutfit, player->getID(), newOutfit);
+}
+
+void ProtocolGame::parseMountStatus(NetworkMessage& msg)
+{
+	bool status = msg.GetByte() != 0;
+	if(!status || (OTSYS_TIME() - player->getLastMountStatusChange()) >= 2000) {
+		player->setMounted(status);
+	} else {
+		if(status)
+			player->sendCancel("Please wait 2 seconds before trying to mount again.");
+	}
+	
 }
 
 void ProtocolGame::parseUseItem(NetworkMessage& msg)
@@ -1667,6 +1717,7 @@ void ProtocolGame::sendReLoginWindow()
 	{
 		TRACK_MESSAGE(msg);
 		msg->AddByte(0x28);
+		msg->AddByte(0x64); // damage percentage (fair fight rules), disabled for now
 	}
 }
 
@@ -2537,7 +2588,7 @@ void ProtocolGame::sendOutfitWindow()
 		{
 			msg->AddByte((size_t)std::min((size_t)OUTFITS_MAX_NUMBER, outfitList.size()));
 			std::list<Outfit>::iterator it = outfitList.begin();
-			for(int32_t i = 0; it != outfitList.end() && i < OUTFITS_MAX_NUMBER; ++it, ++i)
+			for(uint8_t i = 0; it != outfitList.end() && i < OUTFITS_MAX_NUMBER; ++it, ++i)
 			{
 				msg->AddU16(it->lookType);
 				msg->AddString(it->name);
@@ -2553,9 +2604,33 @@ void ProtocolGame::sendOutfitWindow()
 		{
 			msg->AddByte(1);
 			msg->AddU16(player->getDefaultOutfit().lookType);
-			msg->AddString("Outfit");
+			msg->AddString("Your outfit");
 			msg->AddByte(player->getDefaultOutfit().lookAddons);
 		}
+
+		if(g_config.getBool(ConfigManager::ALLOW_MOUNTS) && player->isPremium()) {
+			std::list<Mount*> mountList;
+			MountList::const_iterator it = Mounts::getInstance()->getFirstMount();
+			for(uint8_t i = 0; it != Mounts::getInstance()->getLastMount() && i < OUTFITS_MAX_NUMBER; ++it, ++i)
+			{
+				if((*it)->isTamed(player))
+					mountList.push_back((*it));
+
+			}
+			if (mountList.size()) {
+				msg->AddByte(mountList.size());
+				std::list<Mount*>::iterator it = mountList.begin();
+				for(; it != mountList.end(); ++it)
+				{
+					msg->AddU16((*it)->getClientId());
+					msg->AddString((*it)->getName());
+				}				
+			} else {
+				msg->AddByte(0);
+			}
+		} else {
+			msg->AddByte(0);
+		}		
 
 		player->hasRequestedOutfit(true);
 	}
@@ -2635,6 +2710,20 @@ void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, bool isOnline
 		msg->AddU32(guid);
 		msg->AddString(name);
 		msg->AddByte(isOnline ? 1 : 0);
+	}
+}
+
+void ProtocolGame::sendSpellCooldown(uint16_t spellId, uint32_t cooldown, bool isGroup)
+{
+	if(!spellId)
+		return;
+	NetworkMessage_ptr msg = getOutputBuffer();
+	if(msg)
+	{
+		TRACK_MESSAGE(msg);
+		msg->AddByte((isGroup)?0xA5:0xA4);
+		msg->AddByte(spellId);
+		msg->AddU32(cooldown);
 	}
 }
 
@@ -2745,24 +2834,20 @@ void ProtocolGame::AddCreature(NetworkMessage_ptr msg, const Creature* creature,
 
 void ProtocolGame::AddPlayerStats(NetworkMessage_ptr msg)
 {
-	msg->AddByte(0xA0);
-	msg->AddU16(player->getHealth());
-	msg->AddU16(player->getPlayerInfo(PLAYERINFO_MAXHEALTH));
-	msg->AddU32(uint32_t(player->getFreeCapacity() * 100));
-	uint64_t experience = player->getExperience();
-	if(experience > 0x7FFFFFFF) // client debugs after 2,147,483,647 exp
-		msg->AddU32(0x7FFFFFFF);
-	else
-		msg->AddU32(experience);
+        msg->AddByte(0xA0);
 
-	msg->AddU16(player->getPlayerInfo(PLAYERINFO_LEVEL));
-	msg->AddByte(player->getPlayerInfo(PLAYERINFO_LEVELPERCENT));
-	msg->AddU16(player->getPlayerInfo(PLAYERINFO_MANA));
-	msg->AddU16(player->getPlayerInfo(PLAYERINFO_MAXMANA));
-	msg->AddByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVEL));
-	msg->AddByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVELPERCENT));
-	msg->AddByte(player->getPlayerInfo(PLAYERINFO_SOUL));
-	msg->AddU16(player->getStaminaMinutes());
+        msg->AddU16(player->getHealth());
+        msg->AddU16(player->getPlayerInfo(PLAYERINFO_MAXHEALTH));
+        msg->AddU32(uint32_t(player->getFreeCapacity() * 100));
+        msg->AddU64(player->getExperience());
+        msg->AddU16(player->getPlayerInfo(PLAYERINFO_LEVEL));
+        msg->AddByte(player->getPlayerInfo(PLAYERINFO_LEVELPERCENT));
+        msg->AddU16(player->getMana());
+        msg->AddU16(player->getPlayerInfo(PLAYERINFO_MAXMANA));
+        msg->AddByte(player->getMagicLevel());
+        msg->AddByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVELPERCENT));
+        msg->AddByte(player->getPlayerInfo(PLAYERINFO_SOUL));
+        msg->AddU16(0xD20); //stamina minutes
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage_ptr msg)
@@ -2898,6 +2983,8 @@ void ProtocolGame::AddCreatureOutfit(NetworkMessage_ptr msg, const Creature* cre
 			msg->AddItemId(outfit.lookTypeEx);
 		else
 			msg->AddU16(outfit.lookTypeEx);
+			
+		msg->AddByte(outfit.lookMount);
 	}
 	else
 		msg->AddU32(0x00);

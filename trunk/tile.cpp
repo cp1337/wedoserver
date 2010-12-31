@@ -508,7 +508,7 @@ void Tile::moveCreature(Creature* actor, Creature* creature, Cylinder* toCylinde
 	newTile->postAddNotification(actor, creature, this, newStackpos);
 }
 
-ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
+ReturnValue Tile::__queryAdd(int32_t, const Thing* thing, uint32_t,
 	uint32_t flags) const
 {
 	const CreatureVector* creatures = getCreatures();
@@ -537,7 +537,7 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 
 			if(monster->canPushCreatures() && !monster->isSummon())
 			{
-				if(creatures)
+				if(creatures && !creatures->empty())
 				{
 					Creature* tmp = NULL;
 					for(uint32_t i = 0; i < creatures->size(); ++i)
@@ -546,9 +546,7 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 						if(creature->canWalkthrough(tmp))
 							continue;
 
-						if(!tmp->getMonster() || !tmp->isPushable() ||
-							(tmp->getMonster()->isSummon() &&
-							tmp->getMonster()->isPlayerSummon()))
+						if(!tmp->getMonster() || !tmp->isPushable() || tmp->isPlayerSummon())
 							return RET_NOTPOSSIBLE;
 					}
 				}
@@ -558,7 +556,7 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 				for(CreatureVector::const_iterator cit = creatures->begin(); cit != creatures->end(); ++cit)
 				{
 					if(!creature->canWalkthrough(*cit))
-						return RET_NOTENOUGHROOM;
+						return RET_NOTENOUGHROOM; //NOTPOSSIBLE
 				}
 			}
 
@@ -572,59 +570,67 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 				&& (!(monster->canPushItems() || hasBitSet(FLAG_IGNOREBLOCKITEM, flags))))
 				return RET_NOTPOSSIBLE;
 
+			if(!items) // Do not seek for fields if there are no items
+				return RET_NOERROR;
+
 			MagicField* field = getFieldItem();
-			if(field && !field->isBlocking(monster))
-			{
-				CombatType_t combatType = field->getCombatType();
-				//There is 3 options for a monster to enter a magic field
-				//1) Monster is immune
-				if(!monster->isImmune(combatType))
-				{
-					//1) Monster is "strong" enough to handle the damage
-					//2) Monster is already afflicated by this type of condition
-					if(!hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags))
-						return RET_NOTPOSSIBLE;
+			if(!field)
+				return RET_NOERROR;
 
-					if(!monster->canPushItems() && !monster->hasCondition(
-						Combat::DamageToConditionType(combatType), false))
-						return RET_NOTPOSSIBLE;
-				}
-			}
+			if(field->isBlocking(creature))
+				return RET_NOTPOSSIBLE;
 
-			return RET_NOERROR;
+			CombatType_t combatType = field->getCombatType();
+			//There is 3 options for a monster to enter a magic field
+			//1) Monster is immune
+			if(monster->isImmune(combatType))
+				return RET_NOERROR;
+
+			//1) Monster is "strong" enough to handle the damage
+			//2) Monster is already afflicated by this type of condition
+			if(!hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags))
+				return RET_NOTPOSSIBLE;
+
+			return !monster->hasCondition(Combat::DamageToConditionType(combatType), -1, false)
+				&& !monster->canPushItems() ? RET_NOTPOSSIBLE : RET_NOERROR;
 		}
-		else if(const Player* player = creature->getPlayer())
+
+		if(const Player* player = creature->getPlayer())
 		{
 			if(creatures && !creatures->empty() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags))
 			{
 				for(CreatureVector::const_iterator cit = creatures->begin(); cit != creatures->end(); ++cit)
 				{
 					if(!creature->canWalkthrough(*cit))
-						return RET_NOTENOUGHROOM; //RET_NOTPOSSIBLE
+						return RET_NOTENOUGHROOM; //NOTPOSSIBLE
 				}
 			}
 
 			if(!player->getParent() && hasFlag(TILESTATE_NOLOGOUT)) //player is trying to login to a "no logout" tile
 				return RET_NOTPOSSIBLE;
 
-			if(player->isPzLocked() && !player->getTile()->hasFlag(TILESTATE_PVPZONE) && hasFlag(TILESTATE_PVPZONE)) //player is trying to enter a pvp zone while being pz-locked
+			if(player->isPzLocked() && !player->getTile()->hasFlag(TILESTATE_HARDCOREZONE) && hasFlag(TILESTATE_HARDCOREZONE)) //player is trying to enter a pvp zone while being pz-locked
 				return RET_PLAYERISPZLOCKEDENTERPVPZONE;
 
-			if(player->isPzLocked() && player->getTile()->hasFlag(TILESTATE_PVPZONE) && !hasFlag(TILESTATE_PVPZONE)) //player is trying to leave a pvp zone while being pz-locked
+			if(player->isPzLocked() && player->getTile()->hasFlag(TILESTATE_HARDCOREZONE) && !hasFlag(TILESTATE_HARDCOREZONE)) //player is trying to leave a pvp zone while being pz-locked
 				return RET_PLAYERISPZLOCKEDLEAVEPVPZONE;
 
-			if(hasFlag(TILESTATE_NOPVPZONE) && player->isPzLocked())
+			if(hasFlag(TILESTATE_OPTIONALZONE) && player->isPzLocked())
 				return RET_PLAYERISPZLOCKED;
 
-			if(hasFlag(TILESTATE_PROTECTIONZONE) && player->isPzLocked())
-				return RET_PLAYERISPZLOCKED;
+			if(hasFlag(TILESTATE_PROTECTIONZONE)) {
+				if(player->isMounted())
+					((Player*)player)->dismount();
+				if(player->isPzLocked())
+					return RET_PLAYERISPZLOCKED;
+			}
 		}
 		else if(creatures && !creatures->empty() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags))
 		{
 			for(CreatureVector::const_iterator cit = creatures->begin(); cit != creatures->end(); ++cit)
 			{
 				if(!creature->canWalkthrough(*cit))
-					return RET_NOTENOUGHROOM;
+					return RET_NOTENOUGHROOM; //NOTPOSSIBLE
 			}
 		}
 
@@ -634,45 +640,37 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 			if(field && field->isBlocking(creature))
 				return RET_NOTPOSSIBLE;
 
-			if(!hasBitSet(FLAG_IGNOREBLOCKITEM, flags))
-			{
-				//If the FLAG_IGNOREBLOCKITEM bit isn't set we dont have to iterate every single item
-				if(hasFlag(TILESTATE_BLOCKSOLID))
-					return RET_NOTENOUGHROOM;
-			}
-			else
+			if(hasBitSet(FLAG_IGNOREBLOCKITEM, flags)) //if the FLAG_IGNOREBLOCKITEM bit isn't set we dont have to iterate every single item
 			{
 				//FLAG_IGNOREBLOCKITEM is set
 				if(ground)
 				{
 					const ItemType& iType = Item::items[ground->getID()];
 					if(ground->isBlocking(creature) && (!iType.moveable || (ground->isLoadedFromMap() &&
-						(ground->getUniqueId() || (ground->getActionId()
-						&& ground->getContainer())))))
+						(ground->getUniqueId() || (ground->getActionId() && ground->getContainer())))))
 						return RET_NOTPOSSIBLE;
 				}
 
 				if(const TileItemVector* items = getItemList())
 				{
-					Item* iItem = NULL;
 					for(ItemVector::const_iterator it = items->begin(); it != items->end(); ++it)
 					{
-						iItem = (*it);
-						const ItemType& iType = Item::items[iItem->getID()];
-						if(iItem->isBlocking(creature) && (!iType.moveable || (iItem->isLoadedFromMap() &&
-							(iItem->getUniqueId() || (iItem->getActionId()
-							&& iItem->getContainer())))))
+						const ItemType& iType = Item::items[(*it)->getID()];
+						if((*it)->isBlocking(creature) && (!iType.moveable || ((*it)->isLoadedFromMap() &&
+							((*it)->getUniqueId() || ((*it)->getActionId() && (*it)->getContainer())))))
 							return RET_NOTPOSSIBLE;
 					}
 				}
 			}
+			else if(hasFlag(TILESTATE_BLOCKSOLID))
+				return RET_NOTPOSSIBLE;
 		}
 	}
 	else if(const Item* item = thing->getItem())
 	{
 #ifdef __DEBUG__
 		if(thing->getParent() == NULL && !hasBitSet(FLAG_NOLIMIT, flags))
-			std::cout << "[Notice - Tile::__queryAdd] thing->getParent() == NULL" << std::endl;
+			std::clog << "[Notice - Tile::__queryAdd] thing->getParent() == NULL" << std::endl;
 
 #endif
 		if(items && items->size() >= 0xFFFF)
@@ -690,16 +688,14 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 			for(CreatureVector::const_iterator cit = creatures->begin(); cit != creatures->end(); ++cit)
 			{
 				if(!(*cit)->isGhost() && item->isBlocking(*cit))
-					return RET_NOTENOUGHROOM;
+					return RET_NOTENOUGHROOM; //NOTPOSSIBLE
 			}
 		}
 
-		if(hasFlag(TILESTATE_PROTECTIONZONE))
-		{
-			const uint32_t itemLimit = g_config.getNumber(ConfigManager::ITEMLIMIT_PROTECTIONZONE);
-			if(itemLimit && getThingCount() > itemLimit)
-				return RET_TILEISFULL;
-		}
+		const uint32_t itemLimit = g_config.getNumber(
+				hasFlag(TILESTATE_PROTECTIONZONE) ? ConfigManager::ITEMLIMIT_PROTECTIONZONE : ConfigManager::ITEMLIMIT_HOUSETILE);
+		if(itemLimit && getThingCount() > itemLimit)
+			return RET_TILEISFULL;
 
 		bool hasHangable = false, supportHangable = false;
 		if(items)
@@ -719,16 +715,16 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 
 					if(itemIsHangable && (iType.isHorizontal || iType.isVertical))
 						continue;
-					else if(iType.blockSolid)
+					else if(iItem->isBlocking(NULL))
 					{
 						if(!item->isPickupable())
-							return RET_NOTENOUGHROOM;
+							return RET_NOTPOSSIBLE;
 
 						if(iType.allowPickupable)
 							continue;
 
 						if(!iType.hasHeight || iType.pickupable || iType.isBed())
-							return RET_NOTENOUGHROOM;
+							return RET_NOTPOSSIBLE;
 					}
 				}
 			}
@@ -741,8 +737,8 @@ ReturnValue Tile::__queryAdd(int32_t index, const Thing* thing, uint32_t count,
 	return RET_NOERROR;
 }
 
-ReturnValue Tile::__queryMaxCount(int32_t index, const Thing* thing, uint32_t count, uint32_t& maxQueryCount,
-	uint32_t flags) const
+ReturnValue Tile::__queryMaxCount(int32_t, const Thing*, uint32_t count, uint32_t& maxQueryCount,
+	uint32_t ) const
 {
 	maxQueryCount = std::max((uint32_t)1, count);
 	return RET_NOERROR;

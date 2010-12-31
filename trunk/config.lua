@@ -185,6 +185,8 @@
 	separateViplistPerCharacter = false
 	maximumDoorLevel = 500
 	maxMessageBuffer = 4
+	enableCooldowns = 0
+	useMounts = 0
 
 	-- Saving
 	saveGlobalStorage = true

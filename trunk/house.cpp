@@ -603,7 +603,6 @@ bool AccessList::addExpression(const std::string& expression)
 
 Door::~Door()
 {
-	if(accessList)
 		delete accessList;
 }
 

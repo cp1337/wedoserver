@@ -4340,7 +4340,7 @@ at knife">
 	<item id="2721" name="old rush wood" />
 	<item id="2722" article="an" name="old tree" />
 	<item fromid="2723" toid="2724" article="a" name="cactus" />
-	<item id="2725" article="a" name="palm" />
+	<item id="2725" article="a" name="banana palm" />
 	<item id="2726" article="a" name="coconut palm" />
 	<item fromid="2727" toid="2736" article="a" name="cactus" />
 	<item id="2737" name="wheat">
@@ -15763,8 +15763,11 @@ at knife">
 	<item id="9742" article="a" name="charged ghost charm">
 		<attribute key="weight" value="900" />
 	</item>
+	<item id="9745" article="a" name="box ramp">
+		<attribute key="floorchange" value="north" />
+	</item>
 	<item id="9746" article="a" name="box ramp">
-		<attribute key="floorchange" value="west" />
+		<attribute key="floorchange" value="east" />
 	</item>
 	<item fromid="9747" toid="9750" article="a" name="lit wall lamp" />
 	<item fromid="9751" toid="9752" article="a" name="statue" />
@@ -16362,7 +16365,7 @@ at knife">
 	</item>
 	<!-- 10093 is empty -->
 	<!-- 10124 to 10142 are tophies & medals -->
-	<item id="10143" article="a" name="cherry blossom tree" />
+	<item id="10143" article="a" name="cherry blossom" />
 	<item id="10150" article="a" name="cocktail glass">
 		<attribute key="weight" value="2000" />
 	</item>
@@ -18011,11 +18014,15 @@ at knife">
 		<attribute key="magiclevelpoints" value="3" />
 		<attribute key="weaponType" value="shield" />
 	</item>
-	<item id="12767" name="draken boots">
+	<item id="11745" name="draken boots">
 		<attribute key="weight" value="2500" />
 		<attribute key="armor" value="3" />
 		<attribute key="speed" value="15" />
 		<attribute key="slotType" value="feet" />
+	</item>
+	<item id="12767" name="trashed draken boots">
+		<attribute key="description" value="They will expire within a short time, sell them back to Esrik before they do." />
+		<attribute key="weight" value="2500" />
 	</item>
 	<item id="5801" article="a" name="jewelled backpack">
 		<attribute key="weight" value="1700" />
@@ -18532,10 +18539,10 @@ at knife">
 		<attribute key="containerSize" value="20" />
 		<attribute key="rotateTo" value="12908" />
 	</item>
-	<item id="12806" name="stairs">
+	<item id="12806" name="timber stairs">
 		<attribute key="floorchange" value="north" />
 	</item>
-	<item id="12808" name="stairs">
+	<item id="12808" name="timber stairs">
 		<attribute key="floorchange" value="west" />
 	</item>
 	<item fromid="12869" toid="12884" name="lush grass" />
@@ -18587,6 +18594,10 @@ at knife">
 	<item fromid="12914" toid="12917" name="tattered curtain" />
 	<item fromid="13348" toid="13349" name="timber door" />
 	<item fromid="13132" toid="13135" name="timber door" />
+	<item id="12813" article="a" name="timber door" />
+	<item id="12815" article="a" name="timber door" />
+	<item id="12804" article="a" name="timber door" />
+	<item id="12807" article="a" name="timber door" />
 	<item fromid="13001" toid="13023" name="tomb wall" />
 	<item fromid="12997" toid="13000" name="tomb wall" />
 	<item fromid="12992" toid="12995" name="tomb wall" />
@@ -18720,5 +18731,73 @@ at knife">
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="600" />
 		<attribute key="corpseType" value="blood" />
+	</item>
+	<item id="10733" article="a" name="blooming jade spike plant" />
+	<item id="13418" article="a" name="inoperative tin lizzard" />
+	<item fromid="12794" toid="12796" name="broken wall" />
+	<item fromid="12790" toid="12791" name="broken wall" />
+	<item id="12801" article="a" name="broken wall" />
+	<item id="13288" article="a" name="captured merchant" />
+	<item id="13144" article="a" name="music box">
+		<attribute key="description" value="The song inside is made of love. It was rewarded by fansite TibiaSpace." />
+		<attribute key="weight" value="2700" />
+	</item>
+	<item id="13145" article="a" name="music box">
+		<attribute key="description" value="The song inside is made of love. It was rewarded by fansite TibiaSpace." />
+		<attribute key="weight" value="2700" />
+	</item>
+	<item id="12782" article="a" name="magical measurement device">
+		<attribute key="description" value="The spirit meter consists of a large handle combined with a green crystal full of magical markings." />
+		<attribute key="weight" value="2550" />
+	</item>
+	<item id="13285" article="a" name="net">
+		<attribute key="weight" value="98" />
+	</item>
+	<item id="13286" article="a" name="net">
+		<attribute key="weight" value="98" />
+	</item>
+	<item id="13350" article="a" name="shapechanger">
+		<attribute key="description" value="It might do some funny things to you." />
+		<attribute key="weight" value="200" />
+	</item>
+	<item id="12783" article="a" name="spirit cage">
+		<attribute key="description" value="This ecto-magical device was designed and calibrated (but not tested) by Spectulus and Sinclair." />
+		<attribute key="weight" value="700" />
+	</item>
+	<item id="13328" article="a" name="screaming cherry">
+		<attribute key="description" value="This fruit was gathered from the Screaming Cherry Tree." />
+		<attribute key="weight" value="50" />
+	</item>
+	<item id="13329" article="a" name="meaty vortex">
+		<attribute key="description" value="This fruit was gathered from a Carnivortex." />
+		<attribute key="weight" value="50" />
+	</item>
+	<item id="13333" article="a" name="sprocketwhip cone">
+		<attribute key="description" value="This cone was gathered from a Sprocketwhip." />
+		<attribute key="weight" value="50" />
+	</item>
+	<item id="13330" article="a" name="tonguefruit">
+		<attribute key="description" value="This fruit was gathered from a Wraithtongue." />
+		<attribute key="weight" value="50" />
+	</item>
+	<item id="13332" article="a" name="toxi tulip seed">
+		<attribute key="description" value="This seed was gathered from a Toxic Tulip." />
+		<attribute key="weight" value="50" />
+	</item>
+	<item id="13334" article="a" name="witherblossom">
+		<attribute key="description" value="This blossom was gathered from a Witherstem." />
+		<attribute key="weight" value="50" />
+	</item>
+	<item id="13331" article="a" name="rotten witches cauldron seed">
+		<attribute key="description" value="This seed was gathered from the Rotten Witches Cauldron Plant." />
+		<attribute key="weight" value="50" />
+	</item>
+	<item id="7967" article="a" name="shapeshifter ring">
+		<attribute key="description" value="It will only work for a few days after the challenge of Kurik has been won." />
+		<attribute key="weight" value="80" />
+	</item>
+	<item id="7968" article="a" name="shapeshifter ring">
+		<attribute key="description" value="It will only work for a few days after the challenge of Kurik has been won." />
+		<attribute key="weight" value="80" />
 	</item>
 </items>
